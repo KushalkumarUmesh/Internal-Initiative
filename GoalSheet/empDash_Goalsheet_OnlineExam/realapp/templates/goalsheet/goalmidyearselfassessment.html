@@ -1,0 +1,186 @@
+{% extends "basegoals.html" %} {% block styles %}
+<style type="text/css">
+  .backgroundImage {
+    background-image: none !important;
+  }
+
+  .table>tbody>tr>td {
+    padding: 2px;
+  }
+</style>
+<script language="javascript">
+  var target_id='';
+  function targetset() {
+    // $("#Emp_table").html('<h3><center>List of all Employee</center></h3><table class="table table-border table-striped"><thead><tr><td style="width:40px">Id<td style="width:40px">Name</td><td style="width:40px">First Name</td><td style="width:40px">Middle Name</td><td style="width:40px">Last Name</td><td style="width:40px">Emp_Id</td><td style="width:40px">Personal Email</td><td style="width:40px">Gender</td><td style="width:40px">DOB</td><td style="width:40px">Contact No</td><td style="width:40px">Designation</td><td style="width:40px">Department</td><td style="width:40px">DC Lead</td><td style="width:40px">Manager Name</td><td style="width:40px">Manager Email</td><td style="width:40px">Manager Emp_id</td><td style="width:40px">Aadhar No</td><td style="width:40px">Pan No</td><td style="width:40px">UAN </td><td style="width:40px">PF_No</td><td style="width:40px">Passport</td><td style="width:40px">Aadhar No Doc</td><td style="width:40px">Pan No Doc</td><td style="width:40px">Passport Doc</td><td style="width:40px"></td><td style="width:40px">Home Address</td><td style="width:40px">City</td></tr></thead><tbody><tr><td>1.</td><td>Shubham</td></tr></tbody></table>');
+         
+    // var target=document.getElementById("targetdata").value;
+    console.log('in submit',target_id);
+    var target_val =
+      {
+        "target": document.getElementById("targetdata").value,
+        "id" :  target_id
+      };
+    // $("#targetcolumn").insertAfter(target_val);
+    $.ajax({
+      contentType : 'application/json; charset=utf-8',
+      url: "{{ url_for('goalTargetUpdate') }}",
+      data: target_val,
+      async:false,
+      success: function (data) {
+        $('#targetcolumn').replaceWith(data);
+        window.location.reload();
+      }
+      
+    });
+
+    document.getElementById('targetdata').value = "";
+
+  }
+  function edit(id,title){
+    console.log(id);
+    target_id = id;
+    //modal id i.e TargetSet
+    $('#TargetSet').modal('show');
+     //modal inputfield id i.e targetdata
+    $('#targetdata').attr('placeholder',title);
+  }
+  
+</script>
+{% endblock %} {% block content %}
+<div>
+  <h4><strong>Employee Details</h4>
+			<table class="table table-border table-striped">
+				<tr>
+					
+					<td>EmployeeID: {{empInfo["EmployeeID"]}}</td>
+					<td>Current Role: {{empInfo["Current Role"]}}</td>
+					<td>Designation: {{empInfo["Designation"]}}</td>
+					
+				</tr>
+				<tr>
+					
+					<td>Current Project: {{empInfo["Project/Department"]}}</td>
+					<td>Assessing Manager: {{empInfo["Manager"]}}</td>
+					<td>Assessment Year: {{empInfo["Assessment Year"]}}</td>
+					
+				</tr>
+				<tr>					
+					<td>GoalSheet Status: {{goalSheet.status}}</td>
+					{% if goalSheet.status == "Assigned" or goalSheet.status == "Returned" -%}
+					<td><a href ='/goals/goalrequestapproval/{{goalSheet.id}}'>Request Approval</a></td>
+					{% else -%}
+					<td></td>
+					{% endif -%}					
+					<td></td>
+				
+					
+				</tr>
+				  
+			</table>
+	</div>
+				
+				<h4><a>Goal Details</a></h4>
+				<table class="table table-border" >
+					
+					<tr>
+						{% for i in range(0, num) -%} 
+						{% set item = goalSections[i] -%} 
+						<tr   style=" background-color:black; color:white">
+							<td style="width:120px"><b><i>Goal Section:</i></b></td>
+							<td>{{item.title}}</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<tr style=" background-color:#A9A9A9">
+								<td></td>
+								<td><b>Goal Title</b></td>
+								<td></td>
+								<td>Mandatory</td>
+								<td>Start Date</td>
+								<td>End Date</td>
+								<td>Rating</td>
+								<td>Upload File</td>
+							</tr>
+							{% for g in goals[i] -%}
+								<tr style=" background-color:wheat">
+									<td style="margin-right:5px; width:50px"><b>Goal:</b></td>
+									<td style="width:450px">{{g.title}}</td>
+									<td></td>
+									<center><td style="width:100px">{{g.manadator}}</td></center>
+									<td style="width:100px">{{g.dateStart.strftime('%m-%d-%y')}}</td>
+									<td style="width:100px">{{g.dateEnd.strftime('%m-%d-%y')}}</td>
+										<!--taken from goalsheetlist.html-->
+									<td>{{form1.templateList(class="btn btn-primary")}}</td>
+									<td><input type=file class="uplPadding" name=file></td>
+									
+								</tr>
+								<tr>
+									{% for t in alltasks[g.id] -%}
+										<tr  style=" background-color: rgba(245, 222, 179, 0.61);">
+											<td style="text-align:center"><b>Task:</b></td>
+											<td>{{t.description}}</td>
+											<td></td>
+											<td>{{t.manadator}}</td>
+											<td>{{t.dateStart.strftime('%m-%d-%y')}}</td>
+											<td>{{t.dateEnd.strftime('%m-%d-%y')}}</td>
+											
+												<!--taken from taskshow list.html-->
+											<td>{{form.description(class="form-control restrictsize req",placeholder="Remark")}}</td>
+												<!--taken from goalsheetlist.html-->
+												<td><input type=file class="uplPadding" name=file></td>
+										</tr>
+										<tr style=" background-color: rgba(245, 222, 179, 0.29);">
+												<td style="text-align:right;"><b>Activity:</b></td>
+												<td>{{t.personalNotes}}</td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												
+												<!--taken from taskshow list.html-->
+												<td>{{form.description(class="form-control restrictsize req")}}</td>	
+											
+												<td></td>
+										</tr>
+											
+									{%- endfor %}			
+								</tr>
+							{%- endfor %}			
+						</tr>
+						
+					{%- endfor %}
+				</tr>
+	</table>
+				<!--taken from goalsheetlist.html-->
+			</br><center><input type=submit class="btn btn-success" value=Upload></center>
+
+				 <!-- Modal -->
+									<div id="TargetSet" class="modal fade" role="dialog">
+ 									 <div class="modal-dialog">
+	 									 <!-- Modal content-->
+   											 <div class="modal-content">
+     											 <div  style="background-color: darkgrey;"class="modal-header">
+       												 <button type="button" class="close" data-dismiss="modal">&times;</button>
+       												 <h4 class="modal-title">Target-Set </h4>
+     											 </div>
+     											 <div class="modal-body">
+      												  <div>
+															<form >
+																 <input type="text" class="form-control input-xs" id="targetdata" placeholder="" >
+       				
+															</form>
+
+     													 </div>
+     											 <div class="modal-footer">
+      												  <button type="button" class="btn btn-success" data-dismiss="modal" onclick="targetset()">Submit</button>
+       													 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+     											 </div>
+    										</div>
+
+ 										 </div>
+									</div>				 
+
+{% endblock %}

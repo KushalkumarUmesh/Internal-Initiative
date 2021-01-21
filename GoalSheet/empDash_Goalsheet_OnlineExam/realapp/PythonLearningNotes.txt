@@ -1,0 +1,97 @@
+IMP SQL statements
+select * from goal_calendar where assessmentYear='2018-2019' and phaseType=3 and authLevel=0;
+git checkout <branchname>
+
+Update Active Employees from Null to Active
+UPDATE `hrms`.`employee` SET `Status`='Active' WHERE  `Status` is Null
+
+
+This is the directory Structure we going with:
+OnlineExamV1 - This is the top level directory, used ONLY to start the Flask container
+	appflask.py - This the main "logic or controller" kind of level
+	templates - directory contain ALL the .html/jinja templates
+	modules  - This is directory structure based on functionality
+		assingtest
+			models.py - contains data models for this module
+			view.py - contains views for this module
+		masterdata - This is a separate module only to deal with master data
+	KISS-Principle: As this is a small application, keeping the director structure shallow
+		for a bigger application, or if this one grows, deeper dir-struct is needed
+			
+
+
+https://github.com/yaoelvon/flask-sqlalchemy-datetime-example/blob/master/sqlalchemy_datetime.py
+https://www.tutorialspoint.com/flask/flask_sqlalchemy.htm
+CRUD-frame-work: Flask-Alchemy-Jinja
+https://medium.com/python-flask-django-tutorials-and-tips/how-to-build-a-crud-application-using-flask-python-framework-3a398b04c3c6
+
+For setting up the  Project Structure with flask_sqlalchemy
+https://github.com/sean-/flask-skeleton/blob/master/skeleton/__init__.py
+Others ones- also worth reading
+https://stackoverflow.com/questions/14415500/common-folder-file-structure-in-flask-app
+https://www.digitalocean.com/community/tutorials/how-to-structure-large-flask-applications
+
+for Jinja-Templates
+https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-ii-templates
+
+Using Blueprints: This will for future, not using in OnlineExam
+http://exploreflask.com/en/latest/blueprints.html
+
+HTML-Forms - useful for WTForms
+https://www.w3schools.com/html/html_forms.asp
+
+Packages installed
+pip install flask -- Already part of 
+pip install mysqlclient
+pip install flask_login (or is it flask-login)
+flask_wtf
+flask_sqlalchemy
+flask_login
+openpyxl
+pandas
+xlrd
+requests 
+wtforms --- Is this required--installed automatically with flask_wtf
+Python 3.6.1 :: Anaconda 4.4.0 (64-bit)
+
+venv :
+pip freeze > requirements.txt 
+pip install -r requirements.txt
+TODO:
+pip install requests (for making REST calls) --- Not required part of Anaconda
+
+git clone -b srini_new https://gitlab.msg-global.com/kambhs/OnlineExam.git
+git clone -b RC2 https://gitlab.msg-global.com/kambhs/OnlineExam.git
+
+
+
+22-Mar-2018
+UAT Set-up is in
+cd c:\onlineexam
+
+0) git clone https://gitlab.msg-global.com/kambhs/OnlineExam.git - Done
+a) ReadConfig - remove capitalization in the path - source fix onetime - Done
+c) OnlineExamConfig.xls Path to be relative to root-folder in __init__.py -Done
+d) Update onlineExamconfig file CONTENTs to be relative-path - this needs to be tested - Done
+e) DB - add is_* columns, update workflow.app_user set is_active - 1;
+b) Fix DB user-name and passwords in realapp/__init__.py -> Create ks+password to match mine
+	- Create Database :alchemy1 => Rename to online_exam
+f) app.run(host = '0.0.0.0') => in runapp.py to allow access from where - Done
+
+26-Mar-2018
+Set-up on PROD:10.144.0.21 : E:\onlineexam
+27-Mar-2018:
+Export as SQL online_exam table and import into PROD-DB
+cd E:\onlineexam
+[Delete everthing]
+git clone https://gitlab.msg-global.com/kambhs/OnlineExam.git
+python -m venv "directory"
+cd onlinexam
+scripts\activate.bat
+pip install -r requirements.txt
+python runapp.py
+
+#To Run PIP on my damaged environment
+python -m pip 
+
+

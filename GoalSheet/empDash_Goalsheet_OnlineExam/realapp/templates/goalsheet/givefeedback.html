@@ -1,0 +1,244 @@
+{% extends "basegoals.html" %} {% block styles %}
+<!-- <falg implemented code> -->
+<style type="text/css">
+    .backgroundImage {
+        background-image: none;
+    }
+
+    .table>tbody>tr>td {
+        padding: 2px;
+    }
+
+    .btnspacing {
+        margin-left: 125px;
+        width: 242px;
+        margin-top: 9px;
+        margin-bottom: 10px;
+    }
+
+    .restrictsize {
+        resize: none !important;
+    }
+
+    #tableborder {
+        border: 2px solid gray;
+        padding: 10px;
+        border-radius: 15px;
+    }
+
+    .tableborderinstruction {
+        border: 2px solid black;
+        padding: 10px;
+        border-radius: 70px;
+        box-shadow: 10px 10px;
+    }
+</style>
+<script language="javascript">
+    $(window).on("load", function () {
+        var anchorLinkClick = sessionStorage.getItem("requestLink");
+        var submitaction = sessionStorage.getItem("submitflag");
+        if (submitaction) {
+            toastr.success('Feedback Saved Successfully');
+            sessionStorage.setItem("submitflag", "");
+        }
+        if (anchorLinkClick) {
+            $('#feedbackfieldid').attr('disabled', false);
+            sessionStorage.setItem("requestLink", "");
+        }
+    })
+    function feedbackfield() {
+
+        $('#submitbtn').prop('disabled', false);
+
+    }
+    function submitform() {
+        sessionStorage.setItem("submitflag", true);
+
+    }
+    function req_link() {
+        sessionStorage.setItem("requestLink", true);
+
+    }
+    function countChar(val) {
+             
+        var len = val.value.length;
+        if (len >= 350){
+            $("#charcountdiv").css("color","red");
+        }else{
+            $("#charcountdiv").css("color","black");
+        }
+        if (len >= 401) {
+          val.value = val.value.substring(0, 401);
+        } else {
+          $('#charNum').text(400 - len);
+        }
+      };
+</script>
+{% endblock %} {% block content %}
+</br>
+<div class="divMargin " id="tableborder" style="color:black;background-color: rgba(211, 211, 211, 0.23921568627450981);">
+    <h3><strong>
+            <center>Give Feedback</center>
+        </strong></h3>
+    <table class="table table-border">
+        <tr style="background-color:#A9A9A9">
+            <td style="width:1%">ID</td>
+            <td style="width:25%;text-align:center">Task</td>
+            <td style="width:13%;text-align:center">Relation</td>
+            <td style="width:14%;text-align:center">From</td>
+            <td style="width:20%;text-align:center">Comment</td>
+            <td style="width:3%;">Status</td>
+            <td style="width:20%;text-align:center">Feedback</td>
+
+
+
+        </tr>
+        {% for item in itemSet -%}
+        <tr style="background-color: rgba(245, 222, 179, 0.29)">
+
+            <td>{{item.id}}</td>
+            <td><a href="/goals/givefeedback/{{item.id}}" data-toggle="tooltip" data-placement="bottom" title="Click Here To Give Feedback"
+                    onclick="req_link()">{{item.taskdescription }}</a></td>
+            <td>{{item.relationship}}</td>
+            <td>{{item.receiverEmail}}</td>
+            <td>{{item.comment}}</td>
+
+            <td style="text-align:center">{{item.status}}</td>
+            <td>{{item.feedback}}</td>
+
+        </tr>
+        {%- endfor %}
+
+
+
+    </table>
+    <p style="text-align:center;margin:0%"><b>FG :</b>Feedback Given , <b>RQ :</b>Feedback Requested</p>
+</div>
+</br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <form id="form_1333" class="appnitro " method="post" action="">
+                {{ form.hidden_tag() }}
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8 col-sm-8 col-xs-8 col-lg-8">
+                            <div class="row" style="padding: 5px">
+
+                                <div class="col-md-3 col-sm-3 col-xs-3" style="text-align: center;">
+                                    <label>From </label>
+                                </div>
+                                <div class="col-md-1 col-sm-1 col-xs-1">:</div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-6">{{form.giverEmail(class="form-control
+                                    input-sm",readonly=true)}}</div>
+                               
+                            </div>
+
+
+                            <div class="row" style="padding: 5px">
+
+
+                                <div class="col-md-3 col-sm-3 col-xs-3" style="text-align: center;">
+                                    <label>Relation </label>
+                                </div>
+                                <div class="col-md-1 col-sm-1 col-xs-1">:</div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">{{form.relationship(class="form-control
+                                    input-sm",readonly=true)}}</div>
+                               
+                            </div>
+
+                            <!--                     
+                            <div class="row"  style="padding: 5px">
+                    
+                                <div class="col-md-2 col-sm-2 col-xs-2" style="text-align: center;">
+                                    <label>Role </label>
+                                </div>
+                                <div class="col-md-1 col-sm-1 col-xs-1">:</div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">{{form.role(class="form-control input-sm",style="width:64%",readonly=true)}}</div>
+                                <div class="col-md-3 col-sm-3 col-xs-3"></div>
+                            </div> -->
+
+
+                            <div class="row" style="padding: 5px">
+
+                                <div class="col-md-3 col-sm-3 col-xs-3" style="text-align: center;">
+                                    <label>Task </label>
+                                </div>
+                                <div class="col-md-1 col-sm-1 col-xs-1">:</div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">{{form.task(class="form-control
+                                    input-sm",readonly=true)}}</div>
+                               
+                            </div>
+
+
+                            <div class="row" style="padding: 5px">
+
+                                <div class="col-md-3 col-sm-3 col-xs-3" style="text-align: center;">
+                                    <label>Comments </label>
+                                </div>
+                                <div class="col-md-1 col-sm-1 col-xs-1">:</div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">{{form.comment(class="form-control
+                                    input-sm",readonly=true)}}</div>
+                               
+                            </div>
+                           
+
+
+                            <div class="row" style="padding: 5px">
+
+                                <div class="col-md-3 col-sm-3 col-xs-3" style="text-align: center;">
+                                    <label>Your Feedback </label>
+                                </div>
+                                <div class="col-md-1 col-sm-1 col-xs-1">:</div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">{{form.feedback(class="form-control
+                                    input-sm",onfocus="feedbackfield()",onchange="feedbackfield()",disabled=true,id="feedbackfieldid",onkeyup="countChar(this)",maxlength="400")}}</div>
+                               
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2 col-sm-2 col-xs-2" style="text-align: center;">
+                                   
+                                </div>
+                                <div class="col-md-1 col-sm-1 col-xs-1"></div>
+                                <div class="col-md-6 col-sm-6 col-xs-6" style="margin-left: 61%; width: 34%;padding: 0%;" id="charcountdiv">
+                                    <p><span  id="charNum">400</span> characters remaining</p>
+                                </div>
+                                <div class="col-md-3 col-sm-3 col-xs-3"></div>
+    
+                            </div>
+
+
+
+                            <div class="row" style="padding:2%;margin-left: 33%">
+                                {{form.submit(class="btn
+                                btn-success",id="submitbtn",disabled=true,onclick="submitform()")}}
+                            </div>
+                        </div>
+                        
+                         <!-- <div class="col-md-3 col-sm-3 col-xs-3 col-lg-3" style="float: right;">
+                                <h5 ><b>NOTE</b></h5>
+                                <p style="margin-left: 20%;"><b>FG :</b>Feedback Given</p>
+                                <p style="margin-left: 20%;"><b>RQ :</b>Feedback Requested</p>
+                        </div> -->
+                    </div>
+                </div>
+
+
+
+            </form>
+
+        </div>
+        <!-- 	 		<div class="col-md-6 tableborderinstruction">
+                <p style="text-align: center"><i>A task is an activity or piece of work which you plan to do towards achieving this goal. e.g. Create Design Document</i></p>
+                </div>
+    
+    </div>
+</div>
+
+<br>
+<br>
+<script type="text/javascript">
+
+
+</script>
+{% endblock %}

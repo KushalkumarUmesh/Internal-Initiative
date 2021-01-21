@@ -1,0 +1,331 @@
+{% extends "basehrms.html" %}
+{% block styles %}
+ <script src="https://code.jquery.com/jquery-1.12.4.js"></script> 
+ <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> 
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<style type="text/css">
+   .backgroundImage{
+		background-image: none !important;
+        height:-webkit-fill-available;
+		
+	}
+</style>
+<script language="javascript">
+   $(function () {
+    var $chk = $("#grpChkBox input:checkbox"); 
+    var $tbl = $("#Emp_Table");
+    var $tblhead = $("#Emp_Table th");
+ 
+    $chk.prop('checked', true); 
+ 
+    $chk.click(function () {
+        var colToHide = $tblhead.filter("." + $(this).attr("name"));
+        var index = $(colToHide).index();
+        $tbl.find('tr :nth-child(' + (index + 1) + ')').toggle();
+    });
+    
+});
+ function columncheck() {
+    // $("#Emp_table").html('<h3><center>List of all Employee</center></h3><table class="table table-border table-striped"><thead><tr><td style="width:40px">Id<td style="width:40px">Name</td><td style="width:40px">First Name</td><td style="width:40px">Middle Name</td><td style="width:40px">Last Name</td><td style="width:40px">Emp_Id</td><td style="width:40px">Personal Email</td><td style="width:40px">Gender</td><td style="width:40px">DOB</td><td style="width:40px">Contact No</td><td style="width:40px">Designation</td><td style="width:40px">Department</td><td style="width:40px">DC Lead</td><td style="width:40px">Manager Name</td><td style="width:40px">Manager Email</td><td style="width:40px">Manager Emp_id</td><td style="width:40px">Aadhar No</td><td style="width:40px">Pan No</td><td style="width:40px">UAN </td><td style="width:40px">PF_No</td><td style="width:40px">Passport</td><td style="width:40px">Aadhar No Doc</td><td style="width:40px">Pan No Doc</td><td style="width:40px">Passport Doc</td><td style="width:40px"></td><td style="width:40px">Home Address</td><td style="width:40px">City</td></tr></thead><tbody><tr><td>1.</td><td>Shubham</td></tr></tbody></table>');
+      debugger
+    var checked_arr = []   
+    $('#Column_select').find('input:checked').each(function(){
+      checked_arr.push($(this)[0].name)
+     
+    });
+    $('th').each(function(){
+      $(this).addClass('hide');
+    })
+    $('td').each(function(){
+      $(this).addClass('hide');
+    })
+    checked_arr.forEach(function(item){
+      $('.'+item).removeClass('hide');
+    });
+  }
+
+    
+</script>
+{% endblock %}
+{% block content %}
+	<div id="form_container" style="margin-top:30px">	
+		<h3><center>All Employee Details</center></h3>
+		<p><i>Please Select Required Column From Below Button</i></p>
+		<button class="btn btn-primary btn-xl" data-toggle="modal" data-target="#Column_select" >Filter Table</button>
+	
+ 
+<table class="table table-border table-striped" id="Emp_Table">
+  <thead style="background-color:gray">
+    <tr>
+       <th class="fName" style="width:40px">First Name</th>
+      <th class="mName" style="width:40px">Middle Name</th>
+      <th class="lName" style="width:40px">Last Name</th>
+      <th class="empId" style="width:40px">Emp_Id</th>
+      <th class="pEmail" style="width:40px">Personal Email</th>
+      <th class="gender" style="width:40px">Gender</th>
+      <th class="dob" style="width:40px">DOB</th>
+       <th class="doj" style="width:40px">DOJ</th>
+      <th class="mobileNo" style="width:40px">Contact No</th>
+      <th class="designation" style="width:40px">Designation</th>
+      <th class="department" style="width:40px">Department</th>
+      <th class="dcLead" style="width:40px">DC Lead</th>
+      <th class="MgrName" style="width:40px">Manager Name</th>
+      <th class="mgrEmail" style="width:40px">Manager Email</th>
+      <th class="mgrEmpId" style="width:40px">Manager Emp_id</th>
+      <th class="fnaadharNOame" style="width:40px">Aadhar No</th>
+      <th class="panNo" style="width:40px">Pan No</th>
+      <th class="uan" style="width:40px">UAN </th>
+      <th class="pfNo" style="width:40px">PF_No</th>
+      <th class="passportNo" style="width:40px">Passport</th>
+      <th class="aadharDoc" style="width:40px">Aadhar No Doc</th>
+      <th class="panDoc" style="width:40px">Pan No Doc</th>
+      <th class="passportDoc" style="width:40px">Passport Doc</th>
+      <th class="homeAddress" style="width:40px">Home Address</th>
+      <th class="city" style="width:40px">City</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+      <td style="width:40px"  class="fName" >shubham</td>
+      <td style="width:40px" class="mName">Shamrao</td>
+      <td style="width:40px" class="lName">Bankar</td>
+      <td style="width:40px" class="empId">537</td>
+      <td style="width:40px" class="pEmail">abc@gmail.com</td>
+      <td style="width:40px" class="gender">m</td>
+      <td style="width:40px" class="dob">6493/34/3</td>
+       <td style="width:40px" class="doj">GSDJFG</td>
+      <td style="width:40px" class="mobileNo">33333</td>
+      <td style="width:40px" class="designation"> UI</td>
+      <td style="width:40px" class="department">Dev</td>
+      <td style="width:40px" class="dcLead">Kalyan</td>
+      <td style="width:40px" class="MgrName">Srinivas</td>
+      <td style="width:40px" class="mgrEmail">xyz@gmail.com</td>
+      <td style="width:40px" class="mgrEmpId">34324</td>
+      <td style="width:40px" class="fnaadharNOame">GDDG7587</td>
+      <td style="width:40px" class="panNo">HIAIUD578</td>
+      <td style="width:40px"  class="uan">FDUSH47 </td>
+      <td style="width:40px" class="pfNo">0987654321</td>
+      <td style="width:40px" class="passportNo">TRE987654</td>
+      <td style="width:40px" class="aadharDoc">FKGLDSFLDc</td>
+      <td style="width:40px" class="panDoc">DJFSDLFI</td>
+      <td style="width:40px"  class="passportDoc">YFYSDFYI</td>
+      <td style="width:40px"  class="homeAddress">mARATHALLI</td>
+      <td style="width:40px" class="city">BANGALORE</td></tr>
+         
+        </tr>
+    </tbody>
+</table>
+<div id="Emp_table">
+</div>
+		
+
+		
+  </div>
+    
+
+
+	<div id="Column_select" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+ <!-- Modal content-->
+    <div class="modal-content">
+      <div  style="background-color: darkgrey;"class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Column Selection</h4>
+      </div>
+      <div class="modal-body">
+        <p style="color:darkred">Please Select The Checkbox </p>
+         <div class="container-fluid">
+           <div class="row">
+             <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input" name="fName" type="checkbox" value="1">
+                <label class="form-check-label">First Name</label>
+                </div>
+             </div>
+              <div class="col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input" name="mName" type="checkbox" value="1">
+                <label class="form-check-label">Middle Name</label>
+                </div>
+             </div>
+              <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input"  name="lName" type="checkbox" id="inlineCheckbox1" value="1">
+                <label class="form-check-label">Last Name</label>
+                </div>
+             </div>
+              <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input" name="empId" type="checkbox" id="inlineCheckbox1" value="1">
+                <label class="form-check-label">Employee Id</label>
+                </div>
+             </div>
+              <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input"  name="pEmail"type="checkbox" id="inlineCheckbox1" value="1">
+                <label class="form-check-label">Personal Email</label>
+                </div>
+             </div>
+              <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input" name="gender" type="checkbox" id="inlineCheckbox1" value="1">
+                <label class="form-check-label">Gender</label>
+                </div>
+             </div>
+              <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input" name="dob" type="checkbox" id="inlineCheckbox1" value="1">
+                <label class="form-check-label">DOB</label>
+                </div>
+             </div>
+              <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input"  name="doj" type="checkbox" id="inlineCheckbox1" value="1">
+                <label class="form-check-label">DOJ</label>
+                </div>
+             </div>
+               <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input"name="mobileNo" type="checkbox" id="inlineCheckbox1" value="1">
+                <label class="form-check-label">Mobile No</label>
+                </div>
+             </div>
+              <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input"name="designation" type="checkbox" id="inlineCheckbox1" value="1">
+                <label class="form-check-label">Designation</label>
+                </div>
+             </div>
+              <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input" name="department" type="checkbox" id="inlineCheckbox1" value="1">
+                <label class="form-check-label">Department</label>
+                </div>
+             </div>
+              <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input"  name="dcLead"type="checkbox" id="inlineCheckbox1" value="1">
+                <label class="form-check-label">DC_Lead</label>
+                </div>
+             </div>
+              <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input" name="MgrName"type="checkbox" id="inlineCheckbox1" value="1">
+                <label class="form-check-label">Manager Name</label>
+                </div>
+             </div>
+              <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input"name="mgrEmail" type="checkbox" id="inlineCheckbox1" value="1">
+                <label class="form-check-label">Manager Email</label>
+                </div>
+             </div>
+               <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input" name="mgrEmpId" type="checkbox" id="inlineCheckbox1" value="1">
+                <label class="form-check-label">Manager Emp_Id</label>
+                </div>
+             </div>
+              <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input" name="aadharNO" type="checkbox" id="inlineCheckbox1" value="1">
+                <label class="form-check-label">Aadhar No</label>
+                </div>
+             </div>
+              <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input" name="panNo"type="checkbox" id="inlineCheckbox1" value="1">
+                <label class="form-check-label">Pan No</label>
+                </div>
+             </div>
+              <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input" name="uan"type="checkbox" id="inlineCheckbox1" value="1">
+                <label class="form-check-label">UAN</label>
+                </div>
+             </div>
+              <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input" name="pfNo" type="checkbox" id="inlineCheckbox1" value="1">
+                <label class="form-check-label">PF No</label>
+                </div>
+             </div>
+              <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input" name="passportNo"type="checkbox" id="inlineCheckbox1" value="1">
+                <label class="form-check-label">Passport No</label>
+                </div>
+             </div>
+               <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input"name="aadharDoc" type="checkbox" id="inlineCheckbox1" value="1">
+                <label class="form-check-label">Aadhar No_DOC</label>
+                </div>
+             </div>
+              <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input" name="panDoc"type="checkbox" id="inlineCheckbox1" value="1">
+                <label class="form-check-label">Pan_NO_DOC</label>
+                </div>
+             </div>
+              <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input" name="passportDoc" type="checkbox" id="inlineCheckbox1" value="1">
+                <label class="form-check-label">Passport_DOC</label>
+                </div>
+             </div>
+              <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input" name="homeAddress"type="checkbox" id="inlineCheckbox1" value="1">
+                <label class="form-check-label">Home Address</label>
+                </div>
+             </div>
+              <div class=" col-xs-4" >
+                 <div class="form-check form-check-inline">
+
+                 <input class="form-check-input" name="city" type="checkbox" id="inlineCheckbox1" value="1">
+                <label class="form-check-label">City</label>
+                </div>
+             </div>
+              
+           </div>
+         </div>
+      
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="columncheck()">Ok</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

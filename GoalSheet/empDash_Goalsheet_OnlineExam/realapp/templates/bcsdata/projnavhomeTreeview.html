@@ -1,0 +1,357 @@
+{% extends "baseproj.html" %} {% block styles %}
+<link id="themecss" rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light/all.min.css"
+/>
+<script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+
+
+<style type="text/css">
+	.backgroundImage {
+
+		background-image: none !important;
+	}
+
+	.wrapper {
+		display: flex;
+		align-items: stretch;
+	}
+
+
+	#sidebar {
+		min-width: 250px;
+		max-width: 250px;
+		min-height: 100vh;
+	}
+
+	#sidebar.active {
+		margin-left: -250px;
+	}
+
+	a[data-toggle="collapse"] {
+		position: relative;
+	}
+
+	a[aria-expanded="false"]::before,
+	a[aria-expanded="true"]::before {
+		content: '\e259';
+		display: block;
+		position: absolute;
+		right: 20px;
+		font-family: 'Glyphicons Halflings';
+		font-size: 0.6em;
+	}
+
+	a[aria-expanded="true"]::before {
+		content: '\e260';
+	}
+
+	@media (max-width: 768px) {
+		#sidebar {
+			margin-left: -250px;
+		}
+		#sidebar.active {
+			margin-left: 0;
+		}
+	}
+
+	body {
+		font-family: 'Poppins', sans-serif;
+		background: #fafafa;
+	}
+
+	p {
+		font-family: 'Poppins', sans-serif;
+		font-size: 1.1em;
+		font-weight: 300;
+		line-height: 1.7em;
+		color: #999;
+	}
+
+	a,
+	a:hover,
+	a:focus {
+		color: inherit;
+		text-decoration: none;
+		transition: all 0.3s;
+	}
+
+	#sidebar {
+		/* don't forget to add all the previously mentioned styles here too */
+		background: #7386D5;
+		color: #fff;
+		transition: all 0.3s;
+	}
+
+	#sidebar .sidebar-header {
+		padding: 20px;
+		background: #6d7fcc;
+	}
+
+	#sidebar ul.components {
+		padding: 20px 0;
+		border-bottom: 1px solid #47748b;
+	}
+
+	#sidebar ul p {
+		color: #fff;
+		padding: 10px;
+	}
+
+	#sidebar ul li a {
+		padding: 10px;
+		font-size: 1.1em;
+		display: block;
+	}
+
+	#sidebar ul li a:hover {
+		color: #7386D5;
+		background: #fff;
+	}
+
+	#sidebar ul li.active>a,
+	a[aria-expanded="true"] {
+		color: #fff;
+		background: #6d7fcc;
+	}
+
+	ul ul a {
+		font-size: 0.9em !important;
+		padding-left: 30px !important;
+		background: #6d7fcc;
+	}
+
+	.container {
+		max-width: 400px;
+		margin: auto;
+	}
+
+	.tag-container {
+		display: inline-block;
+		clear: both;
+		width: 100%;
+		margin-top: 20px;
+	}
+
+	.doc-item {
+		margin: 5px;
+		padding-right: 0.3em;
+		padding-left: 0.3em;
+		padding-top: 0.1em;
+		padding-bottom: 0.1em;
+		background-color: white;
+		border: 1px solid black;
+		cursor: default;
+	}
+
+	.item-trash {
+		font-size: 48px;
+		float: right;
+	}
+
+	.item-trash-dropover {
+		color: red;
+	}
+</style>
+
+
+{% endblock %} {% block content %}
+<div class="wrapper">
+	<!-- Sidebar Holder -->
+	<nav id="sidebar">
+		<div class="sidebar-header">
+			<h3>Project Details</h3>
+		</div>
+		<div class="container-fluid">
+			<div id="treeview">
+				<!-- Data is populated here ie List-view or tree-view-->
+			</div>
+			<div >
+				<span class="doc-item">Accounts</span>
+				<span class="doc-item">Program</span>
+				<span class="doc-item">Tools</span>
+				<span class="fa fa-trash item-trash"></span>
+			</div>
+		</div>
+		<ul class="list-unstyled CTAs">
+			<li><a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a></li>
+			<li><a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a></li>
+		</ul>
+	</nav>
+
+	<!-- Page Content Holder -->
+	<div id="content">
+		<div class="container-fluid">
+			<div class="row">
+
+				<button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                                <i class="glyphicon glyphicon-align-left"></i>
+                                <span></span>
+		 			</button>
+
+
+				<div class="container-fluid" id="content1">
+					<div class="row">
+						<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12" id="content1"></div>
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+
+	</div>
+</div>
+<script type="text/javascript">
+	$('#sidebarCollapse').on('click', function () {
+		$('#sidebar').toggleClass('active');
+	});
+	function List_Mgr(num, id) {
+		debugger
+		var val = num;
+		switch (val) {
+			case 1:
+				$("#content1").load('/bcsproj/acctupdate/' + id);
+				break;
+			case 2:
+				$("#content1").load('/bcsproj/progaddupdate/' + id);
+				break;
+			case 3:
+				$("#content1").load('/bcsproj/projaddupdate/' + id);
+				break;
+			// case 4:
+			// 	$("#content1").load('/bcsproj/projroleaddupdate/' + id);
+			// 	break;
+			default:
+				break;
+		}
+	}
+	$(function ($) {
+		//call rest, get json
+		var textData = [
+					{
+						text: "Accounts", expanded: true, iconCls: "fa fa-folder", items: [
+							{
+								text: "Programs", expanded: true, items: [
+									{ text: "animation" },
+									{ text: "dragging" },
+									{ text: "type" },
+									{ text: "value" }
+								]
+							},
+							{
+								text: "Program1", items: [
+									{ text: "checkedd" },
+									{ text: "enabled" },
+									{ text: "selected" }
+								]
+							},
+							{
+								text: "Program2", items: [
+									{ text: "check" },
+									{ text: "click" },
+									{ text: "drag" }
+								]
+							}
+						]
+					},
+					{
+						text: "Account2", iconCls: "fa fa-book", expanded: true, items: new shield.DataSource({
+							data: [
+								{ text: "Getting Started" },
+								{ text: "Environment Setup" },
+								{ text: "Testing" },
+								{ text: "Coming Soon", disabled: true }
+							],
+							sort: { path: "text" }
+						}),
+						hasChildren: true
+					}
+				];
+		var viewData = {
+			dragDrop: true,
+			dragDropScope: "treeview-dd-scope",
+			dataSource: {
+				data: textData
+			},
+			events: {
+				droppableOver: function (e) {
+					if (!e.valid) {
+						// if an invalid draggable item is over a tree item,
+						// re-validate it - i.e. if it is a doc-item, allow the drop
+						if ($(e.draggable).hasClass('doc-item')) {
+							e.valid = true;
+						}
+					}
+				},
+				drop: function (e) {
+					var valid = e.valid;
+					if (!valid) {
+						// if not valid, it means something different than a tree node
+						// is being dropped - in this case, check for a doc item and 
+						// set valid to true if so
+						if ($(e.draggable).hasClass('doc-item')) {
+							valid = true;
+						}
+					}
+					if (valid) {
+						if (e.sourceNode) {
+							// dropping a treeview node - move it
+							this.append(e.sourceNode, e.targetNode);
+						}
+						else {
+							// dragging a doc item - insert a new one
+							// and remove the dragged element
+							this.append({ text: $(e.draggable).html() }, e.targetNode);
+							$(e.draggable).remove();
+						}
+						// disable the animation
+						e.skipAnimation = true;
+					}
+				}
+			}
+		};
+		$("#treeview").shieldTreeView(viewData);
+		// setup drag and drop handlers for the elements outside the treeview
+		$(".doc-item").shieldDraggable({
+			scope: "treeview-dd-scope",
+			helper: function () {
+				
+				return $(this.element).clone().appendTo(document.body);
+			},
+			events: {
+				stop: function (e) {
+					// always cancel the movement of the item;
+					// if a drop over a valid target ocurred, we will handle that 
+					// in the respective drop handler
+					e.preventDefault();
+				}
+			}
+		});
+		// handle drop on the trash can
+		$(".item-trash").shieldDroppable({
+			scope: "treeview-dd-scope",
+			hoverCls: "item-trash-dropover",
+			tolerance: "touch",
+			events: {
+				drop: function (e) {
+					if ($(e.draggable).hasClass('sui-treeview-item-text')) {
+						// dropped a treeview item - delete it
+						$("#treeview").swidget("TreeView").remove($(e.draggable).closest('.sui-treeview-item'));
+						alert(textData);
+					}
+					else {
+						// dropped a doc-item, just delete it from the DOM
+						$(e.draggable).remove();
+						alert(textData);
+					}
+					// disable animation of the droppable, so that it
+					// does not get animated if cancelled
+					e.skipAnimation = true;
+				}
+			}
+		});
+	});
+
+</script>
+{% endblock %}

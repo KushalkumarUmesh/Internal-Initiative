@@ -1,0 +1,25 @@
+{% extends "baseexam.html" %}
+{% block content %}
+<h3><strong>Test available for assignment</strong></h3>
+	<table class="table table-border">
+	<tr class="examlist-header">
+		<td>Test Name(Group Assign)</td>
+		<td>Difficulty Level</td>
+		<td>No. of Questions</td>
+		<td>Pass Score</td>
+		<td>Assign</td>
+		<td>Description</td>
+	</tr>
+
+	{% for i in tnames -%}
+	<tr class="each-exam ">
+		<td><a href="/assign/assigntesttogroup/{{tnames[loop.index0]}}" >{{tnames[loop.index0]}}</a></td>
+		<td style="text-align: center;width: 120px;">{{tdiff[loop.index0]}}</td>
+		<td style="text-align: center;width: 130px;">{{tnumq[loop.index0]}}</td>
+		<td style="text-align: center;width: 100px;">{{tpass[loop.index0]}}</td>
+		<td><a href="/assign/assigntest/{{tnames[loop.index0]}}" >Assign</a></td>
+		<td>{{tdesc[loop.index0]}}</td>
+	</tr>
+	{%- endfor %}
+	</table>		
+{% endblock %}

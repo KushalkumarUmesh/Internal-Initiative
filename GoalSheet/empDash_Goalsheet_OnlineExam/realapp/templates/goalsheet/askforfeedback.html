@@ -1,0 +1,263 @@
+{% extends "basegoals.html" %} {% block styles %}
+<!-- <falg implemented code> -->
+<style type="text/css">
+	.backgroundImage {
+		background-image: none;
+	}
+
+	.table>tbody>tr>td {
+		padding: 2px;
+	}
+
+	.btnspacing {
+		margin-left: 125px;
+		width: 242px;
+		margin-top: 9px;
+		margin-bottom: 10px;
+	}
+
+	.restrictsize {
+		resize: none !important;
+	}
+
+	#tableborder {
+		border: 2px solid gray;
+		padding: 10px;
+		border-radius: 15px;
+	}
+	.tableborderinstruction {
+		border: 2px solid black;
+		padding: 10px;
+		border-radius: 70px;
+		box-shadow: 10px 10px;
+	}
+</style>
+<script language="javascript">
+var updateflag = sessionStorage.getItem("flag");
+   
+$(document).ready(function(){
+    $('#relationfield').prop('disabled', true);
+        $('#task').prop('disabled', true);
+        $('#comment').prop('disabled', true);
+})
+    $(window).on("load", function () {
+
+         
+
+        if(updateflag){
+            $('#relationfield').prop('disabled', false);
+            $('#task').prop('disabled', false);
+            $('#comment').prop('disabled', false);
+
+            sessionStorage.setItem("flag", "");
+            updateflag=false;
+        }else{
+            
+            $('#relationfield').prop('disabled', true);
+            $('#task').prop('disabled', true);
+            $('#comment').prop('disabled', true);
+            $('#submitbtn').prop('disabled',true);
+        }
+
+        $('#empEmail').focus();
+        
+        
+    })
+   function test(){
+      var email = $("#empEmail").val();
+      var url_str="/goals/getRelationshipsJSON/"+email;
+      $.ajax({
+			contentType : 'application/json; charset=utf-8',
+			url: url_str,
+			async: false,
+			dataType: 'json',
+			success: function (response) {
+                var data=response;
+                console.log("ajax ",data)
+                $("#relationfield").html('');
+                for(let i=0;i<data.length;i++){
+                    $("#relationfield").append('<option value="'+data[i]+'">'+data[i]+'</option>');
+                }
+				
+			}
+
+
+		});
+        $('#relationfield').prop('disabled', false);
+   }
+
+   function relationfield1(){
+        
+        $('#task').prop('disabled', false);
+        
+   }
+   function taskfield1(){
+        $('#comment').prop('disabled', false);
+        $('#submitbtn').prop('disabled',false);
+   }
+   function updatefeedback(){
+    sessionStorage.setItem("flag", "true");
+    updateflag=true;
+   
+   }
+   function resetfunction(){
+     sessionStorage.setItem("flag", "");
+            window.location = "/goals/askfeedback";
+            var updateflag=false;
+        }
+        function countChar(val) {
+             
+        var len = val.value.length;
+        if (len >= 350){
+            $("#charcountdiv").css("color","red");
+        }else{
+            $("#charcountdiv").css("color","black");
+        }
+        if (len >= 401) {
+          val.value = val.value.substring(0, 401);
+        } else {
+          $('#charNum').text(400 - len);
+        }
+      };
+</script>
+{% endblock %} {% block content %}
+</br>
+<div class="divMargin " id="tableborder" style="color:black;background-color: rgba(211, 211, 211, 0.23921568627450981);">
+	<h3><strong><center>Ask For Feedback</center></strong></h3>
+	<table class="table table-border">
+		<tr style="background-color:#A9A9A9">
+			<td style="width:1%">ID</td>
+			<td style="width:25%;text-align:center">Task</td>
+			<td style="width:13%;text-align:center">Relation</td>
+			<td style="width:14%;text-align:center">From</td>
+			<td style="width:20%;text-align:center">Comments</td>
+			<td style="width:3%;">Status</td>
+            <td style="width:20%;text-align:center">Feedback</td>
+		</tr>
+        {% for item in itemSet -%}
+		<tr style="background-color: rgba(245, 222, 179, 0.29)">
+			
+			<td >{{item.id}}</td>
+			<td ><a href="/goals/askfeedback/{{item.id}}" data-toggle="tooltip" data-placement="bottom" title="Edit present comment" onclick="updatefeedback()">{{item.taskdescription }}</a></td>
+			<td >{{item.relationship}}</td>
+			<td >{{item.giverEmail}}</td>
+			<td >{{item.comment}}</td>
+
+			<td>{{item.status}}</td>
+            <td>{{item.feedback}}</td>
+            {%- endfor %}
+
+		</tr>
+		
+
+    </table>
+    <p style="text-align:center;margin:0%"><b>FG :</b>Feedback Given , <b>RQ :</b>Feedback Requested</p>
+</div>
+</br>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-6 col-xs-6 col-sm-6">
+			<form id="form_1333" class="appnitro " method="post" action="">
+				{{ form.hidden_tag() }}
+                <div class="container">
+                    <div class="row">
+                        <div class="row" style="    padding: 5px;">
+                
+                            <div class="col-md-2 col-sm-2 col-xs-2" style="text-align: center;">
+                                <label>From </label>
+                            </div>
+                            <div class="col-md-1 col-sm-1 col-xs-1">:</div>
+                
+                            <div class="col-md-6 col-sm-6 col-xs-6">{{form.fromEmail(class="btn btn-default",style="width:64%",onchange="test()",id="empEmail")}}</div>
+                            <div class="col-md-3 col-sm-3 col-xs-3"></div>
+                        </div>
+                      
+                
+                        <div class="row" style="    padding: 5px;">
+                
+                          
+                            <div class="col-md-2 col-sm-2 col-xs-2" style="text-align: center;">
+                                <label>Relation </label>
+                            </div>
+                            <div class="col-md-1 col-sm-1 col-xs-1">:</div>
+                            <div class="col-md-6 col-sm-6 col-xs-6">{{form.relationship(class="form-control input-sm",style="width:64%",id="relationfield",onchange="relationfield1()")}}</div>
+                            <div class="col-md-3 col-sm-3 col-xs-3"></div>
+                        </div>                        
+                
+                        <div class="row" style="    padding: 5px;">
+                
+                            <div class="col-md-2 col-sm-2 col-xs-2" style="text-align: center;">
+                                <label>Task </label>
+                            </div>
+                            <div class="col-md-1 col-sm-1 col-xs-1">:</div>
+                            <div class="col-md-6 col-sm-6 col-xs-6">{{form.task(class="form-control input-sm",style="width:64%",id="task",onchange="taskfield1()")}}</div>
+                            <div class="col-md-3 col-sm-3 col-xs-3"></div>
+                        </div>
+                      
+                
+                        <div class="row" style="    padding: 5px;">
+                
+                            <div class="col-md-2 col-sm-2 col-xs-2" style="text-align: center;">
+                                <label>Comments </label>
+                            </div>
+                            <div class="col-md-1 col-sm-1 col-xs-1">:</div>
+                            <div class="col-md-6 col-sm-6 col-xs-6">{{form.comment(class="form-control input-sm",style="width:64%",id="comment",onkeyup="countChar(this)",maxlength="400")}}</div>
+                           
+                            <div class="col-md-3 col-sm-3 col-xs-3"></div>
+                           
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2 col-sm-2 col-xs-2" style="text-align: center;">
+                               
+                            </div>
+                            <div class="col-md-1 col-sm-1 col-xs-1"></div>
+                            <div class="col-md-6 col-sm-6 col-xs-6" style="margin-left: 43%; width: 34%;padding: 0%;" id="charcountdiv">
+                                <p><span  id="charNum">500</span> characters remaining</p>
+                            </div>
+                            <div class="col-md-3 col-sm-3 col-xs-3"></div>
+
+                        </div>
+                       
+                
+                        <div class="row" style="    padding: 5px;">
+                
+                            <div class="col-md-2 col-sm-2 col-xs-2" style="text-align: center;">
+                                <label>Status</label>
+                            </div>
+                            <div class="col-md-1 col-sm-1 col-xs-1">:</div>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                {{form.status(class="btn btn-link", style="width:25%;text-align: left;text-decoration-color: black;text-decoration-line: none;cursor: text;color: rgba(0, 0, 0, 0.64);",readonly=true)}}
+                            </div>
+                            <div class="col-md-3 col-sm-3 col-xs-3"></div>
+                        </div>
+                        
+                        <div class="row" style="margin-left: 26%;margin-top: 1%; margin-bottom: 1%;">
+                            <div class="col-md-5" style="padding: inherit;">
+                                {{form.submit(class="btn btn-success",onclick="resetfunction()",id="submitbtn")}}
+                                <button type="button" style="margin-left: 3%;" class="btn btn-primary" onclick="resetfunction()">Reset</button>
+                            </div>
+                           
+                           
+                        </div>
+                    </div>
+                </div>
+                
+				
+
+			</form>
+		
+        </div>
+        <!-- <div class="col-md-6 col-xs-6 col-sm-6">
+            <h5 style="text-align: center"><b>NOTE</b></h5>
+            <p style="text-align: center"><b>FG :</b>Feedback Given</p>
+            <p style="text-align: center"><b>RQ :</b>Feedback Requested</p>
+        </div> -->
+		</div>
+</div>
+			
+<script type="text/javascript">
+	
+
+</script>
+{% endblock %}

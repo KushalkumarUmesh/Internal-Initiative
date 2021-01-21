@@ -1,0 +1,56 @@
+#TODO: Create a HRMS-Management Page with functionality list
+#TODO: Check and remove unused ones
+#TODO: Fix the "getprofile" to be used for "my Profile" on various applications
+#TODO: Update "sendDataMissingMsg" to add the new fields: Emergency COntact, Passport dates
+#TODO: Add Happy-B'day e-mail method
+getDCmembers                                       HEAD,OPTIONS,GET     /hrms/getDCmembers/<id>
+getEmpInfo                                         HEAD,POST,OPTIONS,GET /hrms/getempinfo
+getMgr                                             HEAD,POST,OPTIONS,GET /hrms/getmgr
+getProfile                                         HEAD,POST,OPTIONS,GET /hrms/getprofile/<email>
+getReporteesbyManagerEmail                         HEAD,OPTIONS,GET     /hrms/getreportees/<email>
+hrmslist                                           HEAD,POST,OPTIONS,GET /hrms/hrmslist
+listElementsAndAdd                                 HEAD,POST,OPTIONS,GET /hrms/listadd/<table>
+listElementsAndUpdate                              HEAD,POST,OPTIONS,GET /hrms/listupdate/resp
+notifyAllEmployees                                 HEAD,POST,OPTIONS,GET /hrms/notifyAllEmployees
+sendDataMissingMsg                                 HEAD,POST,OPTIONS,GET /hrms/senddatamissingmsgtoall
+
+#TODO: Delete
+listadd                                            HEAD,POST,OPTIONS,GET /hrms/deptlistadd
+listedit                                           HEAD,POST,OPTIONS,GET /hrms/deptlistedit
+listedit                                           HEAD,POST,OPTIONS,GET /hrms/deptlistedit/<int:id>
+listupdate                                         HEAD,POST,OPTIONS,GET /hrms/deptlistupdate
+listupdate                                         HEAD,POST,OPTIONS,GET /hrms/deptlistupdate/<int:id>
+
+# TODO: Change to add /notify in the path
+deleteemailfromgroup                               HEAD,POST,OPTIONS,GET /deleteemail/<id>/<email>
+deletegroup                                        HEAD,POST,OPTIONS,GET /deletegroup/<id>
+listEmailsIngroup                                  HEAD,POST,OPTIONS,GET /listemailsingroup/<id>
+listgroups                                         HEAD,POST,OPTIONS,GET /listgroups
+
+# TODO: House Keeping, no action
+home                                               HEAD,OPTIONS,GET     /
+home                                               HEAD,OPTIONS,GET     /home
+home                                               HEAD,OPTIONS,GET     /index.html
+list_routes                                        HEAD,OPTIONS,GET     /showroutes
+login                                              HEAD,POST,OPTIONS,GET /login
+logout                                             HEAD,OPTIONS,GET     /logout
+
+#TODO: Set-up Schedules for Happy-B'days
+#TODO: Set-up Schedules for HRMS weekly Nag : sendDataMissingMsg
+#TODO: Set-up Schedules for OLE exam due
+scheduletask                                       HEAD,OPTIONS,GET     /schedule
+makeNormal                                         HEAD,OPTIONS,GET     /makenormal
+static                                             HEAD,OPTIONS,GET     /static/<path:filename>
+
+#TODO: Block a person assigning a test to himself/herself
+#TODO: Look for is_admin and move it to the authorization domain
+assignTestToGroup                                  HEAD,POST,OPTIONS,GET /assign/assigntesttogroup/<testname>
+assigntest                                         HEAD,POST,OPTIONS,GET /assign/assigntest/<testname>
+
+#TODO: Add Timer for exams (next phase)
+listtests                                          HEAD,OPTIONS,GET     /exam/listtests
+listassignments                                    HEAD,POST,OPTIONS,GET /exam/listassignments
+showAnswerPaper                                    HEAD,OPTIONS,GET     /exam/showtest/<int:id>
+startexam                                          HEAD,POST,OPTIONS,GET /exam/startexam/<int:id>
+startexam                                          HEAD,POST,OPTIONS,GET /exam/startexam/resp
+taketest                                           HEAD,POST,OPTIONS,GET /exam/taketest

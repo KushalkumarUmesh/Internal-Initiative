@@ -1,0 +1,164 @@
+{% extends "basebase.html" %} {% block styles %}
+
+
+<style type="text/css">
+    .backgroundImage {
+        background-image: none;
+    }
+
+    .table>tbody>tr>td {
+        padding: 2px;
+    }
+
+
+    .btnspacing {
+        margin-left: 100px;
+    }
+
+    .restrictsize {
+        resize: none !important;
+    }
+    #tableborder {
+		border: 2px solid gray;
+		padding: 10px;
+		border-radius: 25px;
+		box-shadow: 5px 10px;
+	}
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#viewtable').DataTable();
+    });
+
+</script>
+
+{% endblock %} {% block content %}
+<h3 style="  margin-top: 0px;"><strong><center>Calendar-module of goal-sheet</center></strong></h3>
+<table id="viewtable" class="display" style="width:100%">
+    <thead style="background-color: rgb(99, 65, 77) !important;color: white;">
+        <tr>
+            <td>ID</td>
+            <td>Phase</td>
+            <td>Description</td>
+            <td>Assessment Year</td>
+            <td>Emp-Email</td>
+
+            <td>Start-Date</td>
+            <td>End-Date</td>
+            <td>Auth-level</td>
+            <td>Gs-enable-assignment</td>
+
+            <td>Gs-enable-MidYear-Self</td>
+            <td>Gs-enable-MidYear-dc-approve</td>
+            <td>Gs-enable-EndYear-Self</td>
+            <td>Gs-enable-EndYear-dc-approve</td>
+            <td>Gs-enable-EndYear-closure</td>
+            <td>Goal-enable-Task-approve</td>
+            <td>Goal-enable-edit</td>
+            <td>Goal-enable-approve</td>
+            <td>Task-enable-approve</td>
+            <td>Task-enable-update</td>
+            <td>Task-enable-delete</td>
+            <td>Task-enable-Activity-edit</td>
+            <td>Task-enable-Status-change</td>
+            <td>Phase Type</td>
+        </tr>
+    </thead>
+    <tbody>
+
+        <tr>
+            <td style="text-align:center;width:34px">ID</td>
+            <td style="width:132px">Name(Program)</td>
+            <td style="width:77px">Start Date</td>
+            <td style="width:77px">End Date</td>
+            <td style="width:298px">Manager-Email</td>
+
+            <td style="width:129px">Contract-Company</td>
+            <td style="width:115px">Contract-Region</td>
+            <td style="width:110px">Contract-Entity</td>
+            <td style="width:154px">Description</td>
+
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+       
+
+
+    </tbody>
+    <tfoot>
+        <tr>
+            <td>ID</td>
+            <td>Phase</td>
+            <td>Description</td>
+            <td>Assessment Year</td>
+            <td>Emp-Email</td>
+
+            <td>Start-Date</td>
+            <td>End-Date</td>
+            <td>Auth-level</td>
+            <td>Gs-enable-assignment</td>
+
+            <td>Gs-enable-MidYear-Self</td>
+            <td>Gs-enable-MidYear-dc-approve</td>
+            <td>Gs-enable-EndYear-Self</td>
+            <td>Gs-enable-EndYear-dc-approve</td>
+            <td>Gs-enable-EndYear-closure</td>
+            <td>Goal-enable-Task-approve</td>
+            <td>Goal-enable-edit</td>
+            <td>Goal-enable-approve</td>
+            <td>Task-enable-approve</td>
+            <td>Task-enable-update</td>
+            <td>Task-enable-delete</td>
+            <td>Task-enable-Activity-edit</td>
+            <td>Task-enable-Status-change</td>
+            <td>Phase Type</td>
+        </tr>
+    </tfoot>
+
+
+</table>
+</br>
+</br>
+<form>
+    <div class="divMargin " id="tableborder" style="color: black">
+    <div class="container" style="">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>ID</label>
+                    </div>
+                     <div class="col-md-6">
+                         <input type="text" placeholder="ID"/>
+                     </div>
+                </div>
+            </div>
+             <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Phase</label>
+                    </div>
+                     <div class="col-md-6">
+                         <input type="text" placeholder="Phase"/>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</form>
+
+
+{% endblock %}

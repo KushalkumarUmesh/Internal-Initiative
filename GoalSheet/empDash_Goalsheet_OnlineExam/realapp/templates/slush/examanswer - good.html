@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+<h1><a>Question Paper</a></h1>
+<div class="row">
+	<div class="col-lg-2">
+		<b>Total Marks: 50</b>
+	</div>
+	<div class="col-lg-2">
+		<b>Qualifying marks:30 </b>
+	</div>
+	<div class="col-lg-3">
+		<b>Welcome : srini@msg-global.com</b>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-2">
+		<b>Test Name: {{exam.testName}}</b>
+	</div>
+	<div class="col-lg-2">
+		<b>Candidate Name:{{exam.candidateEmail}} </b>
+	</div>
+	<div class="col-lg-2">
+		<b>Number of Questions:{{exam.numQuestions}}</b>
+	</div>
+</div>
+
+<form id="form_1333" class="appnitro"  method="post" action="">
+		{{ form.hidden_tag() }}
+		<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th colspan="2">
+					Questions
+				</th>
+			</tr>
+		</thead>
+		
+		<tbody>
+			{% for q in form.questions -%}
+			<tr>
+				<td>
+					Q {{loop.index}}
+				</td>
+				<td>
+					{{q.ques}}
+				</td>						
+			</tr>
+			<tr>
+				<td>
+					Ans
+				</td>
+				<td>
+					{{q.answer}}
+				</td>						
+			</tr>
+		
+			{%- endfor %}
+		</tbody>
+		
+	</table>	
+	{{ form.submit() }}
+</form>	
+
+{% endblock %}

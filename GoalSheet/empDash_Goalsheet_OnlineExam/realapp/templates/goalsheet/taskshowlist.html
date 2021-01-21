@@ -1,0 +1,277 @@
+{% extends "basegoals.html" %} {% block styles %}
+<!-- <falg implemented code> -->
+<style type="text/css">
+	.backgroundImage {
+		background-image: none;
+	}
+
+	.table>tbody>tr>td {
+		padding: 2px;
+	}
+
+	.btnspacing {
+		margin-left: 125px;
+		width: 242px;
+		margin-top: 9px;
+		margin-bottom: 10px;
+	}
+
+	.restrictsize {
+		resize: none !important;
+	}
+
+	#tableborder {
+		border: 2px solid gray;
+		padding: 10px;
+		border-radius: 15px;
+	}
+	.tableborderinstruction {
+		border: 2px solid black;
+		padding: 10px;
+		border-radius: 70px;
+		box-shadow: 10px 10px;
+	}
+</style>
+{% endblock %} {% block content %}
+</br>
+<div class="divMargin " id="tableborder" style="color:black;background-color: rgba(211, 211, 211, 0.23921568627450981);">
+	<h3><strong><center>{{goalTitle}}:Task List, Update, Delete and Add</center></strong></h3>
+	<table class="table table-border">
+		<tr style="background-color:#A9A9A9">
+			<td style="width:3%">ID</td>
+			<td style="width:30%;text-align:center">Task Title</td>
+			<td style="width:7%;text-align:center">Mandatory</td>
+			<td style="width:7%;text-align:center">Start Date</td>
+			<td style="width:7%;text-align:center">End Date</td>
+			<td style="width:30%;text-align:center">Activity</td>
+			<td style="width:8%;text-align:center">Status</td>
+			<td></td>
+			<td></td>
+
+		</tr>
+		{% for item in itemSet -%}
+		<tr style="background-color: rgba(245, 222, 179, 0.29)">
+			<td>{{item.id}}</td>
+			<td >{{item.description}}</td>
+			<td style="text-align:center">{{item.manadator}}</td>
+			<td style="text-align:center">{{item.dateStart.strftime('%d-%m-%y')}}</td>
+			<td style="text-align:center">{{item.dateEnd.strftime('%d-%m-%y')}}</td>
+			<td style="text-align:center">{{item.personalNotes}}</td>
+			<td style="text-align:center">{{item.completionstatus}}</td>
+
+			<td style="text-align:center">{% if item.enable_update %}<a href="/goals/tasksupdate/{{item.id}}" method='GET' class="btn btn-success btn-xs" onclick="resetbtnhide()">Update</a>				
+				{% elif item.enable_activity_edit %}<a href="/goals/tasksupdate/{{item.id}}" method='GET' class="btn btn-success btn-xs" onclick="resetbtnhide()">Update Activity</a>				
+				{% else %}<a href="#" method='GET' class="btn btn-default btn-xs"  disabled>View Only</a> 
+				{% endif %}</td>
+			<td>{% if item.enable_delete %}<a href="/goals/taskdelete/{{item.id}}" method='POST' class="btn btn-danger btn-xs">Delete</a>				
+				{% else %}<a href="#" method='POST' class="btn btn-danger btn-xs" disabled>Delete</a> 
+				{% endif %}</td>
+
+		</tr>
+		{%- endfor %}
+
+	</table>
+</div>
+</br>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-6">
+			<form id="form_1333" class="appnitro " method="post" action="">
+				{{ form.hidden_tag() }}
+
+				<table>
+					<tr>
+						<td>Task Title:</td>
+						<td class="restrictsize" style="width:400px">
+							{% if form.enable_edit %}
+							</br>
+
+							{{form.description(class="form-control restrictsize req",id="desc")}} (Max 400 characters) {% elif form.enable_activity_edit
+							%}
+							</br>
+							{{form.description(class="form-control restrictsize req",id="desc",readonly=true)}} {% else %}
+							</br>
+							{{form.description(class="form-control restrictsize req",id="desc",readonly=true)}} {% endif %}
+						</td>
+					</tr>
+				</table>
+				<table>
+					<tr>
+						<td>
+							</br>Mandatory:</td>
+						<td class="restrictsize">
+							{% if form.enable_edit %}
+							</br>{{form.manadator(id="manad")}} {% elif form.enable_activity_edit %}
+							</br>{{form.manadator(id="manad",disabled=true)}} {{form.manadator(id="manad",style="display:none")}}{% else %}
+							</br>{{form.manadator(id="manad",disabled=true)}} {% endif %}
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							</br>Start Date:</td>
+						<td class="restrictsize">
+							{% if form.enable_edit %}
+							</br>{{form.dateStart(class="form-control input-sm datepicker req",id="startdt",autocomplete="off",pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])-(0[1-9]|1[012])-[0-9]{2}")}} 
+							{% elif form.enable_activity_edit %}
+							</br>{{form.dateStart(class="form-control input-sm req",id="startdt",readonly=true)}} {% else %}
+							</br>{{form.dateStart(class="form-control input-sm req",id="startdt",readonly=true)}} {% endif %}
+
+						</td>
+					</tr>
+					<tr>
+						<td>
+							</br>End Date:</td>
+						<td>
+							{% if form.enable_edit %}
+							</br>
+							{{form.dateEnd(class="form-control input-sm datepicker req",id="enddt",autocomplete="off",pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])-(0[1-9]|1[012])-[0-9]{2}")}} {% elif form.enable_activity_edit
+							%}
+							</br>
+							{{form.dateEnd(class="form-control input-sm req",id="enddt",readonly=true)}} {% else %}
+							</br>
+							{{form.dateEnd(class="form-control input-sm req",id="enddt",readonly=true)}} {% endif %}
+						</td>
+					</tr>
+				</table>
+				<table>
+
+					<tr>
+						<td>
+							</br>Activity:</td>
+						<td style="width:418px ; padding-left:18px">
+
+							{% if form.enable_edit %}
+							</br>{{form.personalNotes(class="form-control restrictsize ",id="activity")}} {% elif form.enable_activity_edit %}
+							</br>{{form.personalNotes(class="form-control restrictsize ",id="activity")}} {% else %}
+							</br>{{form.personalNotes(class="form-control restrictsize ",readonly=true)}} {% endif %}
+						</td>
+					</tr>
+				</table>
+				{% if form.enable_activity_edit %}
+				<table id="createtask">
+					<tr>
+						<td style="width: 71px;">
+							{% if form.enable_status_change %}
+								</br>Status:
+							{% elif not form.enable_status_change and form.enable_activity_edit and not form.enable_edit %}
+								</br>Status:
+							{% else %}
+							{% endif %}
+						</td>
+						<td>
+							{% if form.enable_status_change %}
+
+							</br>{{form.completionstatus(class="form-control restrictsize ")}} 
+							{% elif not form.enable_status_change and form.enable_activity_edit and not form.enable_edit %}
+							</br>{{form.completionCheckBox(id="completionCheckBox")}}Completed
+							</br>{{form.completionstatus(class="form-control restrictsize ",style="display:none")}}
+							{% else %}
+							
+							</br>{{form.completionstatus(class="form-control restrictsize ",style="display:none")}} 
+							{% endif %}
+
+						</td>
+					</tr>
+					<tr>
+						<td>
+							</br>{{form.id(style="display:none",id="idinput")}}</td>
+
+					</tr>
+				</table>
+
+				{% endif %}
+				
+			{% if form.enable_edit %}
+				</br>{{ form.submit(class="btn btn-success btnspacing") }} 
+			{% elif form.enable_activity_edit %}
+				</br>{{ form.submit(class="btn btn-success btnspacing",value="Update Activity") }}
+			{% else %}
+				</br>{{ form.submit(class="btn btn-success btnspacing",disabled=true) }} 
+			{% endif %}
+
+				
+			{% if form.enable_activity_edit %}
+				</br>	<button class="btn btn-primary btnspacing" onclick="myownreset()" id="elsereset">Reset</button>
+			{% else %}
+				</br> <button class="btn btn-primary btnspacing" onclick="myownreset()" id="elsereset"> Reset</button>
+			{% endif %}
+				
+
+
+			</form>
+			<button class="btn btn-primary btnspacing" id="resetbtn" onclick="myownreset1()">Reset</button>
+		</div>
+<!-- 	 		<div class="col-md-6 tableborderinstruction">
+			<p style="text-align: center"><i>A task is an activity or piece of work which you plan to do towards achieving this goal. e.g. Create Design Document</i></p>
+			</div>
+ -->		</div>
+</div>
+			
+<script type="text/javascript">
+	var flag = sessionStorage.getItem("flag");
+	var resetflag = sessionStorage.getItem("resetflag");;
+	$(function () {
+		$(".datepicker").datepicker({
+
+			dateFormat: 'dd-mm-y',
+			timeFormat: 'HH:mm',
+			onSelect: function (dateText, inst) {
+				$('#' + inst.id).attr('value', dateText);
+			}
+		})
+	});
+	function resetbtnhide(){
+//		 
+		sessionStorage.setItem("resetflag", "true");
+		
+	}
+
+	function myownreset1() {
+//		 
+		// window.location = "/goals/tasksaddupdate/{{parentid.id}}";
+		
+		$('#enddt').val('');
+		$('#startdt').val('');
+		$('#manad').val('');
+		$('#desc').val('');
+		$('#activity').val('');
+	}
+	
+
+	$(".req").attr("required", true);
+
+	function myownreset() {
+		$("#form_1333").reset();
+	
+
+		sessionStorage.setItem("flag", "true");
+
+	}
+
+	$(window).on("load", function () {
+		$("#elsereset").hide();
+
+		var id = document.getElementById("idinput").value
+
+
+		if (id <= 0) {
+
+			$("#createtask").hide();
+
+
+
+		}
+		if(resetflag){
+			$("#resetbtn").hide();
+			$("#elsereset").show();
+			resetflag = false;
+			
+			
+		}
+		
+	})
+
+</script>
+{% endblock %}

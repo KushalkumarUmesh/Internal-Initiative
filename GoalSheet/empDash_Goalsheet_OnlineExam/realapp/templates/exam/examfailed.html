@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+	<h1><a>Please revise your study material and try again!!</a></h1>
+	<h3><a>Test Name: {{exam.testName}}</a></h3>
+	<h3><a>Score: {{rights}} out of {{numq}} [Pass Score:{{exam.passNum}}]</a></h3>
+	<h3><a>You have {{attempts}} attempts left.</a></h3>
+
+{% endblock %}
+	

@@ -1,0 +1,115 @@
+{% extends "baseproj.html" %}
+
+{% block styles %}
+<style type="text/css">
+.backgroundImage {
+		background-image: none;
+	}
+.butMargin{
+       width: 365px;
+    height: 30px;
+}
+
+.addButMar{
+    margin-left: 30px;
+    height: 31px;
+    width: 67px;
+}
+</style>
+{% endblock %}
+{% block content %}
+	<h3><center style="padding-top:25px">Upload BCS Data</center></h3>
+	<form action = "/bcsproj/loadbcsdata" method = "POST" 
+		enctype = "multipart/form-data">
+		{{ form.hidden_tag() }}
+		
+		
+	
+		
+	<div class="container">
+		<div class="row" style="margin-top: 5%;">
+				
+			<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" style="background-color:   rgba(161, 178, 194, 0.34);box-shadow:5px 10px;border-radius:5px;">
+				<div class="card" style="height:100%">
+				 
+				  <div class="card-body">
+					<h4 class="card-title">BCS Claim File</h4>
+					<p class="card-text">For upload file please click below button</p>
+					<input type=file class="uplPadding" name=file1 style="margin-bottom: 2%;"  required>
+				  </div>
+				</div>
+			  </div>
+			  <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+			  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" style="background-color:   rgba(161, 178, 194, 0.34);box-shadow:5px 10px ;border-radius:5px">
+				<div class="card" style="height:100%">
+				 
+				  <div class="card-body">
+					<h4 class="card-title">BCS Leave File</h4>
+					<p class="card-text">For upload file please click below button</p>
+					<input type=file class="uplPadding" name=file2 style="margin-bottom: 2%;" required>
+				  </div>
+				</div>
+			  </div>
+			  <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+			  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" style="background-color: rgba(161, 178, 194, 0.34);box-shadow:5px 10px;border-radius:5px">
+				<div class="card" style="height:100%">
+				 
+				  <div class="card-body">
+					<h4 class="card-title">BCS Org File</h4>
+					<p class="card-text">For upload file please click below button</p>
+					<input type=file class="uplPadding" name=file3 style="margin-bottom: 1%;" required>
+				  </div>
+				</div>
+			  </div>
+			  <br>
+			  <br>
+			 
+		</div>
+		<div class="row" style="margin-top: 1%;">
+				
+			<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" >
+				
+				</div>
+<!--
+			  <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+			  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" style="background-color:   rgba(161, 178, 194, 0.34);box-shadow:5px 10px ;border-radius:5px">
+				<div class="card" style="height:100%">
+				 
+ 				  <div class="card-body">
+					<h4 class="card-title">Date</h4>
+					<p class="card-text">Please select date from below</p>
+					<input type=date class="form-control input-md"  id="date" style="margin-bottom: 2%;text-align:center;" required>
+				  </div>
+ 				</div>
+			  </div>
+			  <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+			  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" >
+			
+			  </div>
+-->			
+			<br>
+			<br>
+			<div class="row">
+				<div class="col-md-12">{{form.updateProjs}}Update Projects and Roles</div>
+			</div>
+
+			  <div class="col-md-12 col-sm-12 col-lg-12" style="text-align:center;margin-top: 5%;">
+				<h4 class="card-title" style="color:red">NOTE: Full month data-load takes about 5-10 minutes. Please wait.</h4>
+				<p class="card-text" style="color:red"> a) Existing Data of the month(found in the Booking Data) is deleted before reloading. </p>
+				<p class="card-text" style="color:red">b) All existing Leave data is deleted (and reloaded) </p>
+				<p class="card-text" style="color:red">c) Orgnization file is used for linking BCS-data to e-mails. Please use the latest one. </p>
+				<input type=submit class="btn btn-success" value=Upload>
+			  </div>
+		</div>
+	</div>
+		
+	</form>
+	<script type="text/javascript">
+	$(document).ready( function() {
+		document.getElementById('date').valueAsDate = new Date();
+})
+	
+	
+	</script>
+
+{% endblock %}

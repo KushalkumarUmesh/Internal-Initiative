@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<form id="form_1333" class="appnitro"  method="post" action="">
+	{{ form.hidden_tag() }}
+	{{ form.questions[0].answer() }}
+	{{ form.submit() }}
+</form>	
+
+{% endblock %}
