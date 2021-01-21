@@ -1,0 +1,48 @@
+{% extends "basegoals.html" %}
+{% block styles %}
+<style type="text/css">
+    .backgroundImage{
+		background-image: none;
+    }
+	
+	
+</style>
+{% endblock %}
+
+{% block content %}
+	<center><h1>Add Goals to {{tempObj.title}}</h1></center>
+	<table class="table table-border  table-striped" style="border: 1px solid black;">
+			<tr style=" background-color:#A9A9A9">
+			<td style="width:50px">ID</td>
+			<td style="width:270px">Goal Section Title</td>
+			<td style="width:530px">Goal Title</td>
+			<td style="width:100px;text-align:center">Delete Goal</td>
+			</tr>
+			{% for item in tempList -%}
+			<tr>
+				<td>{{item.goalId}}</td>
+				<td>{{item.sectionTitle}}</td>
+				<td>{{item.title}}</td>
+				<td style="text-align:center"><a href="/goals/templategoaldelete/{{item.tempListId}}"class="btn btn-danger btn-sm" >Delete</a></td>
+			</tr>
+			{%- endfor %}
+	</table>
+	<p><b>Available Goals Are below. Please check on Add button to add it to this template.</b></p>		
+	<table class="table table-border  table-striped" style="border: 1px solid black;">
+		<tr style=" background-color:#A9A9A9">
+		<td style="width:50px">Goal ID</td>
+		<td style="width:265px">GoalSection</td>
+		<td style="width:520px">Goal</td>
+		<td  style="text-align:center;width:100px">Add To Template</td>
+		</tr>
+		{% for goal in goals -%}
+		<tr>
+			<td>{{goal.goalId}}</td>
+			<td>{{goal.sectionTitle}}</td>
+			<td>{{goal.title}}</td>
+			<td  style="text-align:center"><a href="/goals/templategoals/addgoal?id={{tempObj.id}}&goalId={{goal.goalId}}" class="btn btn-success btn-sm">Add</a></td>
+		</tr>
+		{%- endfor %}
+</table>		
+
+{% endblock %}

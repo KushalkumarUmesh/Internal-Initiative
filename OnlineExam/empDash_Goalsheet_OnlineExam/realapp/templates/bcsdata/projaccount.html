@@ -1,0 +1,158 @@
+{% extends "baseproj.html" %} {% block styles %}
+
+<style type="text/css">
+	.backgroundImage {
+		background-image: none;
+	}
+	.table>tbody>tr>td {
+		padding: 2px;
+	}
+	
+
+	.btnspacing {
+		margin-left: 100px;
+	}
+
+	.restrictsize {
+		resize: none !important;
+	}
+</style>
+<script>
+$(document).ready(function(){
+	
+    $("tr:even").css("background-color", "rgba(140, 137, 138, 0.53);");
+	 $("tr:odd").css("background-color", " rgba(35, 29, 30, 0.52);");
+	 
+
+
+});
+</script>
+
+{% endblock %} {% block content %}
+<h3 style="  margin-top: 0px;"><strong><center>Account of  account(s) </center></strong></h3>
+<table class="table table-border" >
+	<thead style="background-color:  rgb(7, 7, 7) !important;color: white;" >
+		<td style="text-align:center;width:34px" >ID</td>
+		<td style="width:132px">Name(Program)</td>
+		<td style="width:77px">Start Date</td>
+		<td style="width:77px">End Date</td>
+		<td style="width:298px">Manager-Email</td>
+		
+		<td style="width:129px">Contract-Company</td>
+		<td style="width:115px">Contract-Region</td>
+		<td style="width:110px">Contract-Entity</td>
+		<td style="width:154px">Description</td>
+		
+		<td></td>
+		<td></td>
+		
+	</thead>
+	{% for item in itemSet -%}
+	<tr style="background-color: rgba(245, 222, 179, 0.29)">
+		<td style="text-align:center">{{item.id}}</td>
+		<td><a href="/bcsproj/progaddupdate/{{item.id}}">{{item.accountName}}</a></td>
+		<td>{{item.dateStart.strftime('%m-%d-%y')}}</td>
+		<td>{{item.dateEnd.strftime('%m-%d-%y')}}</td>
+		<td>{{item.managerEmail}}</td>
+		<td>{{item.contractCompany}}</td>
+		<td>{{item.contractRegion}}</td>
+		<td>{{item.contractEntity}}</td>
+		<td>{{item.discription}}</td>
+		
+		<td ><a  href="/bcsproj/acctupdate/{{item.id}}" method='GET' class="btn btn-success btn-xs" onclick="disabledfun()">Update</a></td>
+		<td><a  href="/bcsproj/acctdelete/{{item.id}}" method='POST' class="btn btn-danger btn-xs">Delete</a></td>
+		</tr>
+	{%- endfor %}
+	
+</table>
+<form id="form_1333" class="appnitro " method="post" action="">
+	{{ form.hidden_tag() }}
+	<div class="container-fluid">
+		<div class="row ">
+			<div class="col-md-2">Account-Name :</div>
+			<div class="col-md-4 ">{{form.accountName(class="form-control input-md restrictsize req",style="height:30px",id="accname")}}</div>
+			<div class="col-md-2">Manager-Email :</div>
+			<div class="col-md-4 " >{{form.managerEmail(class="form-control btn btn-primary restrictsize req",style="height:30px",id="managerEmail")}}</div>
+		
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-md-2">Start Date (dd-mm-yy):</div>
+			<div class="col-md-4 ">{{form.dateStart(class="formbutton input-sm datepicker req",style="height:30px",pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])-(0[1-9]|1[012])-[0-9]{2}")}}</div>
+			<div class="col-md-2">End Date (dd-mm-yy):</div>
+			<div class="col-md-4 ">{{form.dateEnd(class="formbutton input-sm datepicker req",style="height:30px",pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])-(0[1-9]|1[012])-[0-9]{2}")}}</div>
+		
+		</div>
+			<br>
+		<div class="row">
+			
+				<div class="col-md-2">Description :</div>
+				<div class="col-md-4 ">{{form.description(class="form-control input-sm restrictsize",style="height:30px")}}</div>
+				<div class="col-md-2">Contract-Company :</div>
+				<div class="col-md-4 ">{{form.contractCompany(class="form-control input-sm restrictsize req",style="height:30px")}}</div>
+		
+		</div>
+		<br>
+		
+		
+		<div class="row">
+			<div class="col-md-2">Contract-Region :</div>
+			<div class="col-md-4 ">{{form.contractRegion(class="form-control input-sm restrictsize",style="height:30px")}}</div>
+			<div class="col-md-2">Contract-Entity :</div>
+			<div class="col-md-4 ">{{form.contractEntity(class="form-control input-sm restrictsize",style="height:30px")}}</div>
+			
+		</div>
+		<br>	
+		
+		<div class="row">
+			<div class="col-md-6"></div>
+			<div class="col-md-2" >Id :</div>
+			<div class="col-md-4 ">{{form.id(class="form-control input-xs restrictsize",  style="height:30px;width:77px;text-align:center",readonly=true)}}</div>
+			
+		</div>
+		
+		
+
+
+	</br><center>{{ form.submit(class="btn btn-success btnspacing",id="btnSubmit") }}</center>
+	</div>
+</form>
+<script type="text/javascript">
+	
+	// var flag = sessionStorage.getItem("flag");
+	
+
+	// function disabledfun() {
+
+
+	// 	sessionStorage.setItem("flag", "true");
+
+	// }
+
+	// $(window).on("load", function () {
+
+
+	// 	console.log(flag);
+	// 	if (flag) {
+	// 		sessionStorage.removeItem("flag");
+			
+	// 		$("#managerEmail").attr('disabled', true);
+			
+	// 	}
+	// })
+
+	$(function () {
+		$(".datepicker").datepicker({
+	
+	 dateFormat: 'dd-mm-y',
+     timeFormat: 'HH:mm',
+     onSelect: function(dateText, inst) {
+         $('#'+inst.id).attr('value',dateText);
+    }
+		});
+	});
+	$('#accname').focus()
+	$(".req").attr("required", true);
+	
+</script>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "basehrms.html" %}
+{% block styles %}
+ 
+<style type="text/css">
+   .backgroundImage{
+		
+        height:-webkit-fill-available;
+		
+    }
+    
+.dropdown1 {
+   
+    margin-left: 424px;
+   
+}
+    
+   
+</style>
+{% endblock %}
+{% block content %}
+	<div id="form_container">	
+		<h3><center><i>HRMS Management Link</i></center></h2>
+		
+  
+   <div class="dropdown dropdown1" style=" margin-top: 225px; ">
+         <button class="btn btn-warning dropdown-toggle" style="width: 377px;" type="button" data-toggle="dropdown" >Asset Type
+         <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <li><a href='/hrms/listadd/Assetstatu'>Updated/Add Asset Status</a></li>
+             <li><a  href='/hrms/listadd/Assetcategory'>Updated/Add Asset Category</a></li>
+             <li><a href='/hrms/listadd/Assetcondition'>Updated/Add Asset Condition</a></li>
+             <li><a  href='/hrms/listadd/Assetrole'>Updated/Add Asset Role</a></li>
+             <li><a  href='/hrms/listadd/Postatu'>Updated/Add Asset Postatus</a></li>
+             <li><a  href='/hrms/listadd/Demandstatu'>Updated/Add Demandstatus</a></li>
+         </ul>
+     </div>
+
+      <div class="dropdown dropdown1"style=" margin-top: 30px;">
+         <button class="btn btn-warning dropdown-toggle"  type="button" data-toggle="dropdown" style="width: 377px;" >Department
+         <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <li><a href='/hrms/listadd/Departmant'>Updated/Add Departments</a></li>
+             <li><a  hrehref='/hrms/listadd/Designation'>Updated/Add Designation</a></li>
+             <li><a href='/hrms/listadd/Role'>Updated/Add Role</a></li>
+              <li><a href='/hrms/listadd/Relationship'>Updated/Add Relationship</a></li>
+              <li><a href='/hrms/listadd/ExpenseGroup'>Updated/Add ExpenseGroup</a></li>
+             <li><a href='/hrms/listadd/AddressType'>Updated/Add Address Types</a></li>
+         </ul>
+     </div>
+    <div class="dropdown dropdown1"style=" margin-top: 30px;">
+         <button class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown" style="width: 377px;">Qualification
+         <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+           
+             <li><a href='/hrms/listadd/CertificationType'>Updated/Add CertificationType</a></li>
+             <li><a href='/hrms/listadd/QualificationType'>Updated/Add QualificationType</a></li>
+             <li><a href='/hrms/listadd/SkillCategory'>Updated/Add SkillCategory</a></li>
+             <li><a href='/hrms/listadd/UniversityType'>Updated/Add UniversityType</a></li>
+            <li><a href='/hrms/listadd/Quotestatu'>Updated/Add Quotestatus</a></li>
+         </ul>
+     </div>
+        </div>
+
+		
+	
+{% endblock %}

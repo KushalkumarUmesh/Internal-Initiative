@@ -1,0 +1,78 @@
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+   /* position: relative;*/
+   /* min-height: 100%;*/
+  }
+  body {
+    /* Margin bottom by footer height */
+    /* margin-bottom: 60px; */
+  }
+  .footer {
+   
+    margin: 0 auto !important;
+    text-align: center !important;
+    width: 100% !important;
+    /* height: 40px; *
+    /* left: 0; */
+    /* Set the fixed height of the footer here */
+    
+    background-color: #f5f5f5;
+  }
+/* .container-fluid{
+    min-height: 70%;
+    min-height: -webkit-calc(100% - 186px);
+    min-height: -moz-calc(100% - 186px);
+    min-height: calc(100% - 186px);
+} */
+  
+  
+  /* Custom page CSS
+  -------------------------------------------------- */
+  /* Not required for template or sticky footer method. */
+  
+  body > .container {
+    padding: 60px 15px 0;
+  }
+  .container .text-muted {
+    margin: 20px 0;
+  }
+  
+  .footer > .container {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+  
+  code {
+    font-size: 80%;
+  }
+  
+
+  .navbar-default{
+    background-color: white;
+  }
+  .navbar-default .container{
+      width:90%;
+  }
+  .navbar-nav{
+      float: right;
+  }
+  .navbar-default .navbar-nav>li>a{
+      color:#757171;
+  }
+  .navbar-brand{
+      color: white !important;
+  }
+  .footer-green{
+    color: green;
+  }
+  a.navbar-brand{
+      padding:9px;
+  }
+  a.navbar-brand img{
+      height: 32px;
+  }
+  ul{
+    list-style-type: none;
+    padding-left:10px;
+  }

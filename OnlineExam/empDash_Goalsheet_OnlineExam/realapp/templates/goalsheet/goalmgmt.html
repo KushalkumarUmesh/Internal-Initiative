@@ -1,0 +1,56 @@
+
+{% extends "baseexam.html" %}
+{% block styles %}
+<style type="text/css">
+  .backgroundImage{
+		background-image: url("../../static/images/as.jpg") !important;
+        height:-webkit-fill-available;
+		
+	}
+
+</style>
+<script language="javascript">
+  
+    function Recreate() {
+       window.location.href ='/goals/dropall';
+      }
+       
+   </script>
+{% endblock %}
+{% block content %}
+	<div id="form_container">	
+    <center><h2><i>GoalSheet Administration</i></h2></center>
+     <p style="padding-top: 245px;"><a href="/goals/mastergoalssectionlist" style="padding-left: 55px;">List/Add Goals Section</a></p>
+         <p><a href='/goals/templatelist'style="padding-left: 52px;">List/Add Templates</a></p>
+         <p><a href='/goals/assigngoals'style="padding-left: 45px;">Assign Goals to Team Members</a></p>
+         <p><a href='/goals/goalsetupdate'style="padding-left: 40px;">My Goals - Login</a></p>
+         <p><a href='/goals/goalsheetsformanager'style="padding-left: 34px;">View/Approve/Return </a></p>
+         <p><a href='/goals/goalsummaryformanager'style="padding-left: 30px;">Summary For Managers </a></p>
+         <p><a href='/goals/managegoalsheets'style="padding-left: 22px;">GoalSheets by Status-Not tested</a></p>
+         <p><a style="color:crimson; padding-left: 60px;" data-toggle="modal" data-target="#recreate">----------Empty and recreate the DB</a></p>
+	
+    </div>
+     <!-- Modal -->
+<div id="recreate" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div  style="background-color: darkgrey;"class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Recreation confirmation</h4>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to Recreate Database?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="Recreate()">Ok</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+  
+{% endblock %}
+

@@ -1,0 +1,813 @@
+{% extends "basegoals.html" %} {% block styles %}
+<!-- <falg implemented code> -->
+
+<style type="text/css">
+	.backgroundImage {
+		background-image: none !important;
+	}
+
+	.table>tbody>tr>td {
+		padding: 2px;
+	}
+
+	.formFormat {
+		display: flex;
+		flex-flow: row;
+		justify-content: space-between;
+	}
+
+	.formPadding {
+		padding-top: 5px;
+		padding-bottom: 2px;
+	}
+
+	.commentPadding {
+
+		resize: none;
+	}
+
+	.formButton {
+		margin-right: 10px;
+	}
+
+	#tableborder {
+		border: 2px solid gray;
+		padding: 10px;
+		border-radius: 25px;
+		box-shadow: 5px 10px;
+	}
+</style>
+
+<script language="javascript">
+	var goal_id = '';
+	var goal_state = '';
+	var task_id = '';
+	var state = '';
+
+	function goalsheetapp_retCalcelbtn(){
+		 
+		$("#goalsheetReturn").val('');
+	}
+
+		document.addEventListener("DOMContentLoaded", function() {
+		
+		uploadfile_btn_check();
+        
+    });
+
+	function uploadfile_btn_check(){
+		$(".find_all_id").each(function(index){
+			var tsak_check_id = $(this).attr('id')
+
+			$.ajax({
+			contentType : 'application/json; charset=utf-8',
+			url: "/goals/taskfilemeta/"+ tsak_check_id,
+			type:'GET',
+			async:false,
+			dataType: 'text',
+			success: function (response) {
+				var str = response;
+			
+			if(str === "No File Available"){
+				
+				
+				$('#downloadBtn_id'+tsak_check_id).css("background-color", "#5bc0de");
+				$('#downloadBtn_id'+tsak_check_id).css("border-color", "#5bc0de");
+				
+			}else{
+				
+				$('#downloadBtn_id'+tsak_check_id).css("background-color", "#5cb85c");
+				$('#downloadBtn_id'+tsak_check_id).css("border-color", "#5cb85c");
+			}
+			
+			}
+		
+	  });
+			// taskid_arr.push( $(this).attr('id'));
+			// console.log("taskid",taskid_arr);
+		})
+	}
+
+	//####### For Future Use ###############
+	// var goalsheet_id = '';
+	// var loged_user = '';
+	//For Goal-level Approve Return Button
+	function approve_return_btn(id, value) {
+		goal_id = id;
+		goal_state = value;
+		console.log(goal_id, state);
+		if (goal_state == 'Returned') {
+			edit();
+		}
+		else {
+			targetset();
+		}
+	}
+	//For Task-level Approve  Radio Button
+	function approve_return_radio(id) {
+		task_id = id;
+		state = $('input[name=' + task_id + ']:checked').val();
+		if (state == 'Returned') {
+			edit();
+		}
+		else {
+			targetset();
+		}
+
+	}
+
+	//View rating screen
+
+	function targetset() {
+		//####### For Future Use ###############
+		//  goalsheet_id = $("#goalsheetid").text();
+		//  loged_user = $("#logeduser").text();
+
+
+		var csrf_token = $('#csrf_token').val();
+		if (task_id != "" && goal_id == "") {
+			//Ajax call for radio btn ie,Return Approve 
+			// var target=document.getElementById("targetdata").value;
+
+			var target_val =
+			{
+
+				"Feedback": document.getElementById("Reason").value,
+				"Task_id": task_id,
+				"Status": state
+			};
+			console.log('Task-level->' + target_val.Reason, target_val.Task_id, target_val.status);
+			// $("#targetcolumn").insertAfter(target_val);
+
+			$.ajax({
+				type: 'POST',
+				contentType: 'application/json; charset=utf-8',
+				url: "{{ url_for('tasklevelupdate') }}",
+				cookies: { 'csrftoken': csrf_token },
+				headers: { 'X-CSRF-TOKEN': csrf_token },
+				data: JSON.stringify(target_val),
+				async: false,
+				success: function (data) {
+					document.getElementById('Reason').value = "";
+					task_id = '';
+					state = '';
+					location.reload();
+				}
+
+			});
+
+			//####### For Future Use ###############
+			// goalsheet_id = '';
+			// loged_user = '';
+		}
+
+		else {
+			//Ajax call for radio btn ie,Return Approve 
+
+			var goal_target_val =
+			{
+				"Feedback": document.getElementById("Reason").value,
+				"Goal_id": goal_id,
+				"Status": goal_state
+
+			}
+			console.log('Goal-level->' + goal_target_val.Reason, goal_target_val.Goal_id, goal_target_val.Goal_status);
+
+			$.ajax({
+				type: 'POST',
+				contentType: 'application/json; charset=utf-8',
+				url: "{{ url_for('goallevelupdate') }}",
+				cookies: { 'csrftoken': csrf_token },
+				headers: { 'X-CSRF-TOKEN': csrf_token },
+				async: false,
+				data: JSON.stringify(goal_target_val),
+				success: function (data) {
+					document.getElementById('Reason').value = "";
+					goal_id = '';
+					goal_state = '';
+					location.reload();
+				}
+			});
+
+
+
+			//####### For Future Use ###############
+			// goalsheet_id = '';
+			// loged_user = '';
+
+		}
+
+	}
+
+	//For Bootstrap Model using radio button
+	function edit() {
+		//modal id i.e TargetSet
+		$('#TargetSet').modal('show');
+		//modal inputfield id i.e targetdata
+		// $('#targetdata').attr('placeholder',title);
+	}
+	//For Bootstrap Model using goal-level return button
+	function Returned_Btn() {
+		$('#Returnbtn').modal('show');
+	}
+	$(window).on("load", function () {
+
+		var action = $('#actionid').text()
+		if (action == 0) {
+			$("#actionid").css("display", "none");
+		}
+	})
+
+
+
+	// 	var flag = false;
+	// 	var rowCount = $('#myTable tr').length;
+	// 	var dataArray = [];
+	// 	var name = '';
+	// 	$('#myTable tr').each(function () {
+	// 		$(this).find('#completionstatus1').each(function () {
+	// 			// alert($(this).text());
+	// 			var test = $(this).text();
+	// 			if (test == 'Approved'); {
+	// 				flag = true;
+
+	// 			}
+	// 			if (flag) {
+	// 					$(this).find('#Appro').attr('disabled', true);
+	// 					$(this).find('#Retur').attr('disabled', true);
+	// 				}	
+	// 			flag = false;
+	// 		});
+	// 		name = $(this).find('.Appro').attr('id');
+	// 				alert(name);
+
+
+
+
+
+	// 	});
+	// });
+
+
+
+	// var current_status = status;
+	// var TaskID = TaskID;
+	// console.log(current_status, TaskID);
+
+	// if (current_status == "Approved") {
+	// 	$('#' + TaskID).attr('disabled', true);
+	// }
+	function feedbacKform(id, status) {
+
+		var desc = $('#' + id).html();
+		task_id = id;
+		state = status;
+		var fetchfeeback;
+		var str = "{{ url_for('getTaskEmpFeedback') }}";
+		str = str + "?Task_id=" + id;
+		$("#feedbackheader").html(desc);
+		$.ajax({
+			contentType: 'application/json; charset=utf-8',
+			url: str,
+			async: false,
+			dataType: 'json',
+			success: function (response) {
+				fetchfeeback = response;
+			}
+
+
+		});
+		//For Empty Employ Feedback for perticular task
+		$('.employee_fb_list').empty();
+		//populated json data in dc lead feedback modal
+		var count = Object.keys(fetchfeeback).length;
+		if (count) {
+			for (var temp in fetchfeeback) {
+
+
+				var temp_arr = fetchfeeback[temp];
+
+
+				$('.employee_fb_list').append('<li><i>' + temp_arr[1] + '<span style="float:right;color:gray">Dt:' + temp_arr[0] + '</span></i></li>');
+
+
+			}
+		}
+		else {
+			$('.employee_fb_list').append('<li style="color:red"><i>No Comment is Avaliable For This Task</i></li>');
+		}
+
+		$('#feedbackform').modal('show');
+
+	}
+
+
+	function feedbacKformsubmit() {
+
+
+
+
+
+		var csrf_token = $('#csrf_token').val();
+
+		var target_val =
+		{
+
+			"Feedback": document.getElementById("dc_feedback").value,
+			"Task_id": task_id,
+			"Status": state
+		};
+		console.log('Task-level->' + target_val.Feedback, target_val.Task_id, target_val.Status);
+		// $("#targetcolumn").insertAfter(target_val);
+
+		$.ajax({
+			type: 'POST',
+			contentType: 'application/json; charset=utf-8',
+			url: "{{ url_for('tasklevelupdate') }}",
+			cookies: { 'csrftoken': csrf_token },
+			headers: { 'X-CSRF-TOKEN': csrf_token },
+			data: JSON.stringify(target_val),
+			success: function (data) {
+				document.getElementById('dc_feedback').value = "";
+				task_id = '';
+				state = '';
+
+			}
+
+		});
+
+
+
+	}
+
+	//redirect to rating screen
+	function ratingscreen(emailid){
+		
+		window.location.href = '/goals/showrating/'+emailid;
+
+	}
+
+
+	function feedbackScreen(empId) {
+
+		var empid = {
+			"empid": empId
+		}
+
+		$.ajax({
+			type: 'GET',
+			contentType: 'application/json; charset=utf-8',
+			url: "/goals/feedbackviewmanager",
+
+			data: empid,
+
+			success: function (response) {
+				$(".renderfeedback").replaceWith(response);
+			}
+
+		});
+
+	}
+	function goalsheetapprove_btn(id) {
+		if (id == 1) {
+			$("#approvemodal").empty();
+			$("#approvemodal").append('Please click on “Return to Employee” as one/more tasks have been returned by you. If you still “Approve”,  the Goalsheet will be approved and the tasks which you have returned will be considered as “approved”.');
+		}
+		else {
+			$("#approvemodal").empty();
+		}
+		$('#approval').modal('show');
+	}
+
+
+    
+
+	//to Download file exist on task
+	function filedownload(id){
+		
+		 
+		var desc = $('#' + id).html();
+		task_id = id;
+		state = status;
+		var fetchfeeback;
+		var str = "{{ url_for('getTaskEmpFeedback') }}";
+		str = str + "?Task_id=" + task_id;
+		$("#fileuploadheader").html(desc);
+		$("#uplaodfileoption").hide();
+		$('#upload_popup_btn').hide();
+		
+		$.ajax({
+			contentType : 'application/json; charset=utf-8',
+			url: "/goals/taskfilemeta/"+ task_id,
+			type:'GET',
+			async:false,
+			dataType: 'text',
+			success: function (response) {
+				var str = response;
+			
+			if(str === "No File Available"){
+				toastr.info('None of file is uploaded in this task yet')
+				$('#downloadlink').html('<b style="color:red">'+str+'</b>');
+			}else{
+				
+				$('#downloadlink').html('Download <a href="/goals/taskfiledownload/'+task_id+'" onclick="downloadedtoastr()">'+str+'</a>');
+			}
+
+			$('#downloadlink').css({'font-size':'x-large','text-align':'center'})
+			
+			}
+		
+	  });
+
+	  $('#fileupload').modal('show');
+	}
+	function downloadedtoastr(){
+		toastr.success('File Downloaded Successfully')
+		$('#fileupload').modal('hide');
+	}
+	function resetuploadbtn(){
+		//not in use 
+	}
+	
+</script>
+{% endblock %} {% block content %}
+</br>
+<form id="form_1333" class="appnitro formFormat  formPadding " method="post" action="">
+	<div class="container" style="margin: 0%;width: 100%;">
+		<div class="row">
+			<div class="col-md-8 col-xl-8">
+				{{ form.hidden_tag() }}
+				<!-- {{form.reportee(class="btn btn-default",style="height: 44px;width: 340px;")}} 
+				{{ form.selected(class="btn btn-primary  btn-lg",style="margin-left:6px") }}  -->
+				<button class="btn btn-lg btn-primary"><a href="/goals/goalsheetsformanager_reportees" style="    color: white;    text-decoration: none;float: left;">Back
+						to Reportees Status</a></button>
+			</div>
+			<div class="col-md-4 col-xl-4">
+				{% if goalSheet.minimum_tasks_exist %}
+					{% if goalSheet.enable_approve %}
+						{% if goalSheet.returned_task_exists %}
+							{% if emp_level %}
+							<input type="button" class="btn btn-success btn-lg " value="Approve" style="margin-left: 10%;" onclick="goalsheetapprove_btn(1)"
+							target='_blank'>
+							{% else %}
+							<input type="button" class="btn btn-success btn-lg " value="Reviewed" style="    margin-left: 18%;" onclick="goalsheetapprove_btn(1)"
+							target='_blank'>
+							{% endif %}
+
+
+						{% else %}
+							{% if emp_level %}
+							<input type="button" class="btn btn-success btn-lg " value="Approve" style="margin-left: 10%;" onclick="goalsheetapprove_btn(2)"
+							target='_blank'>
+							{% else %}
+							<input type="button" class="btn btn-success btn-lg " value="Reviewed" style="margin-left: 18%;" onclick="goalsheetapprove_btn(2)"
+							target='_blank'>
+							{% endif %}
+
+						{% endif %}
+						<input type="button" class="btn btn-danger  btn-lg " value="Return to Employee" style="float:right" data-toggle="modal"
+						data-target="#returntoemployee" target='_blank'>
+					{% else %}
+
+						{% if emp_level %}
+						<input type="button" class="btn btn-success btn-lg " value="Approve" style="margin-left: 10%;" target='_blank'
+						disabled>
+						{% else %}
+						<input type="button" class="btn btn-success btn-lg " value="Reviewed" style="    margin-left: 18%;" target='_blank'
+						disabled>
+						{% endif %}
+
+
+						<input type="button" class="btn btn-danger  btn-lg " value="Return to Employee" style="float:right" data-toggle="modal"
+						data-target="#returntoemployee" target='_blank' disabled>
+					{% endif %}
+				{% else %}
+					{% if emp_level %}
+					<input type="button" class="btn btn-success btn-lg " value="Approve" style="margin-left: 10%;" target='_blank'
+					disabled>
+					{% else %}
+					<input type="button" class="btn btn-success btn-lg " value="Reviewed" style="    margin-left: 18%;" target='_blank'
+					disabled>
+					{% endif %}
+
+					<input type="button" class="btn btn-danger  btn-lg " value="Return to Employee" style="float:right" data-toggle="modal"
+					data-target="#returntoemployee" target='_blank' disabled>
+				{% endif %}
+
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal for approval btn -->
+	<div id="approval" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div style="background-color: black;padding: 2%;" class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" style="color: white"><span style="margin: 3%;" class="glyphicon glyphicon-remove-sign"></button>
+					<h4 class="modal-title" style="color:white">Approval confirmation</h4>
+				</div>
+				<div class="modal-body">
+
+					<p style="color:red" id="approvemodal">
+						Please click on “Return to Employee” as one/more tasks have been returned by you. If you still “Approve”, the
+						Goalsheet will be approved and the tasks which you have returned will be considered as “approved”.
+					</p>
+					{{ form.comments(class="form-control input-sm commentPadding",id="goalsheetReturn",placeholder="Please add mandatory comments") }}
+
+					<h5>Approve Goalsheet for : {{empInfo["FIRST_NAME"]}}</h5>
+
+
+
+				</div>
+				<div class="modal-footer">
+					{{ form.approve(class="btn btn-primary") }}
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="goalsheetapp_retCalcelbtn()">Cancel</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+
+	<!-- Modal for return to employee btn -->
+	<div id="returntoemployee" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div style="background-color: black;padding: 2%;" class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" style="color: white"><span style="margin: 3%;" class="glyphicon glyphicon-remove-sign"></button>
+					<h4 class="modal-title" style="color:white">Return confirmation</h4>
+				</div>
+				<div class="modal-body">
+					{{ form.rejectComments(class="form-control input-sm commentPadding",id="goalsheetReturn",placeholder="Please add mandatory comments") }}
+					<p>
+						<h5> Return Goalsheet to : {{empInfo["FIRST_NAME"]}}</h5>
+					</p>
+				</div>
+				<div class="modal-footer">
+					{{ form.reject(class="btn btn-primary") }}
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="goalsheetapp_retCalcelbtn()">Cancel</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</form>
+</br>
+<div class="renderfeedback">
+	<div class="divMargin " id="tableborder" style="color: black">
+			<span>
+					<p>
+						<span style="font-size:large;">
+							<b>Employee Details</b>		
+						</span>
+					
+						<span style="float: right;font-size: large;border: 1px solid #752b2b;margin-right: 2%;padding: 4px;border-radius: 8px;">
+								Rating:{{goalSheet.finalRating}}
+						</span>
+						<!-- <span data-toggle="tooltip" data-placement="bottom" title="Score/MaxScore" style="float: right;font-size: large;padding: 6px;margin-right: 2%">
+							<span style="color:green">
+								{{goalSheet.score}}
+							</span>
+							<span>/</span>
+							<span style="color:red">
+								{{goalSheet.maxscore}}
+							</span>
+						</span> -->
+					</p>
+				</span>
+		<table class="table table-border table-striped">
+			<tr>
+
+				<td class="test">Employee(ID): {{empInfo["FIRST_NAME"]}}({{empInfo["EmployeeID"]}})</td>
+				<td>1st Level Manager: {{empInfo["Manager"]}}</td>
+				<td>Designation: {{empInfo["Designation"]}}</td>
+
+			</tr>
+			<tr>
+
+				<td>Department: {{empInfo["Project/Department"]}}</td>
+				<td>2nd Level Manager: {{empInfo["Manager2"]}}</td>
+				<td>Assessment Year: {{empInfo["Assessment Year"]}}</td>
+
+			</tr>
+			<tr>
+				<td>GoalSheet Status: {{goalSheet.status}}</td>
+				{% if goalSheet.minimum_tasks_exist %}
+				{% if goalSheet.actionId %}
+				<td><a href="/goals/goalSheetAction?goalSheetId={{goalSheet.id}}&actionId={{goalSheet.actionId}}">{{goalSheet.actionString}}</a></td>
+				{% else %}
+				<td>{{goalSheet.actionString}}</td>
+				{% endif %}
+				{% else %}
+				<td style="color:red">Atleast one task should exist !!!!</td>
+				{% endif %}
+
+				<td>Current Phase: {{goalSheet.phase}}</td>
+
+			</tr>
+			<!-- //####### For Future Use ############### -->
+			 <!-- <tr>
+				<td id="logeduser" style="display:none">{{ current_user.username }}</td>
+				<td id="goalsheetempid" >{{goalSheet.empid}}</td>
+			</tr> -->
+							
+		</table>
+	</div>
+	<br>
+	<div class="divMargin " id="tableborder" style="color: black">
+		<div class="row">
+			<div class="col-md-6">
+					<p><span style="font-size: large;">
+							<b>Goal Details</b>		
+						</span></p>
+			</div>
+			<div class="col-md-6" style="text-align: right;padding-right: 3%">
+				<button class="btn btn-warning" onclick="feedbackScreen({{empInfo['EmployeeID']}})" style="margin-right: 2%;"
+				 data-toggle="tooltip" data-placement="bottom" title="View Comments"><span class="glyphicon glyphicon-eye-open"></button>
+					{% if goalSheet.enable_end_year_self %}	
+					<button class="btn btn-warning" onclick="ratingscreen({{empInfo['EmployeeID']}})" data-toggle="tooltip" data-placement="bottom" title="Rating" ><span class="glyphicon glyphicon-star"></button>
+					{% endif %}	
+				</div>
+		</div>
+
+		<table class="table table-border table-striped" id="myTable">
+			<tr style=" background-color:black; color:white">
+				<td></td>
+				<td data-toggle="tooltip" data-placement="bottom" title="Goal Title"><b>Goal Title</b></td>
+				<td style="text-align:center" data-toggle="tooltip" data-placement="bottom" title="Weightage(Mandatory)">Weightage(M)</td>
+				<td data-toggle="tooltip" data-placement="bottom" title="Start Date">Start Date</td>
+				<td data-toggle="tooltip" data-placement="bottom" title="End Date">End Date</td>
+				<td></td>
+				<td></td>
+				<td></td>
+
+
+			</tr>
+
+
+
+
+			{% for i in range(0, num) -%}
+			{% set item = goalSections[i] -%}
+			<tr style=" background-color:#A9A9A9">
+				<td style="width:120px"><b><i>Goal Section:</i></b></td>
+				<td>{{item.title}}</td>
+				<td style="text-align:center">{{item.weight}}</td>
+				<td></td>	
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+
+
+			</tr>
+			{% for g in goals[i] -%}
+			<tr style=" background-color:wheat">
+				<td style="margin-right:5px; width:50px"><b>Goal:</b></td>
+				<td style="width:450px">{{g.title}}</td>
+				<td style="text-align: center">{{g.weight}}({{g.manadator}})</td>
+				<td style="width:100px">{{g.dateStart.strftime('%m-%d-%y')}}</td>
+				<td style="width:100px">{{g.dateEnd.strftime('%m-%d-%y')}}</td>
+				<td style="width:125px;text-align:center">{% if g.enable_edit %}<a href="/goals/tasksaddupdate/{{g.id}}" onload="test('{{g.completionstatus}}')">Add/Update
+						Tasks</a>
+					{% else %}
+					<a href="/goals/tasksaddupdate/{{g.id}}">Manage Tasks</a>{% endif %}
+				</td>
+				<td style="width:100px;text-align:center">{% if g.enable_manager_approve %}<button class="btn btn-success btn-xs"
+					 value="Approved" onclick="approve_return_btn('{{g.id}}',this.value)">Approve</button>
+					{% else %}
+					<button class="btn btn-success btn-xs" disabled>Approve</button>{% endif %}
+				</td>
+				<td style="width:100px;text-align:center">
+					{% if g.enable_manager_approve %}
+					<button class="btn btn-danger btn-xs" value="Returned" onclick="approve_return_btn('{{g.id}}',this.value)">Return</button>
+					{% else %}
+					<button class="btn btn-danger btn-xs" disabled>Return</button>{% endif %}
+				</td>
+			</tr>
+
+			<tr>
+				{% for t in alltasks[g.id] -%}
+			<tr style=" background-color: rgba(245, 222, 179, 0.61);">
+				<td style="text-align:center"><b>Task:</b></td>
+				<td id="{{t.id}}" class="find_all_id">{{t.description}}</td>
+				<td style="text-align:center">{{t.weight}}({{t.manadator}})</td>
+				<td>{{t.dateStart.strftime('%m-%d-%y')}}</td>
+				<td>{{t.dateEnd.strftime('%m-%d-%y')}}</td>
+				<td style="text-align:center">
+					{% if goalSheet.enable_self %}
+					<button class="btn btn-info btn-sm" style="    margin-right: 2%;" value="Feedback" onclick="feedbacKform('{{t.id}}','{{t.completionstatus}}')"
+					 data-toggle="tooltip" data-placement="bottom"  title="Feedback on Task"><span class="glyphicon glyphicon-comment"></button>
+					{% endif %}	
+					{% if goalSheet.task_file_download_enable %}
+						<button class="btn btn-info btn-sm" value="Download" id="downloadBtn_id{{t.id}}"  onclick="filedownload('{{t.id}}')"
+					 data-toggle="tooltip" data-placement="bottom" title="Download doc related to current Task"><span class="glyphicon glyphicon-download"></button>
+					{% endif %}
+				</td>
+				
+				
+				<td style="text-align:center">
+
+					{% if g.enable_task_approve and t.enable_manager_approve %}
+					{% if t.completionstatus == "Approved" %}
+					<label class="container-fluid">
+						<input type="radio" checked="checked" value="Approved" id="{{t.id}}" name={{t.id}} class="Appro" onchange="approve_return_radio('{{t.id}}')">
+
+					</label>
+					{% else %}
+					<label class="container-fluid">
+						<input type="radio" value="Approved" id="{{t.id}}" name={{t.id}} class="Appro" onchange="approve_return_radio('{{t.id}}')">
+
+					</label>
+					{% endif %}
+					{% else %}
+					<label class="container-fluid">
+						<input type="radio" checked="checked" value="Approved" name={{t.id}} disabled>
+
+					</label>
+					{% endif %}
+				</td>
+				<td style="text-align:center">
+					{% if t.completionstatus == "Returned" %}
+					<label class="container-fluid">
+						<input type="radio" name={{t.id}} value="Returned" checked="checked" onchange="approve_return_radio('{{t.id}}')"
+						 class="Retur" id="{{t.id}}">
+
+					</label>
+					{% elif g.enable_task_approve and t.enable_manager_approve %}
+					<label class="container-fluid">
+						<input type="radio" name={{t.id}} value="Returned" onchange="approve_return_radio('{{t.id}}')" class="Retur" id="{{t.id}}">
+
+					</label>
+
+					{% else %}
+					<label class="container-fluid">
+						<input type="radio" name={{t.id}} value="Returned" onclick="edit('{{t.id}}')" disabled>
+
+					</label>
+					{% endif %}
+				</td>
+
+			</tr>
+			<tr style=" background-color: rgba(245, 222, 179, 0.29);">
+				<td style="text-align:right;"><b>Activity:</b></td>
+				<td>{{t.personalNotes}}</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+
+
+			</tr>
+			{%- endfor %}
+			</tr>
+			{%- endfor %}
+			</tr>
+			{%- endfor %}
+			</tr>
+		</table>
+	</div>
+	</br>
+</div>
+
+
+<!-- Modal using for radio button ie, Returned radio btn-->
+<div id="TargetSet" class="modal fade" role="dialog">
+	<div class="modal-dialog" style="margin-top:190px">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div style="background-color: black;padding: 2%;" class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" style="color: white"><span style="margin: 3%;" class="glyphicon glyphicon-remove-sign"></button>
+				<h4 class="modal-title" style="color:white">Return Confirmation </h4>
+			</div>
+			<div class="modal-body">
+				<div>
+					<p style="color:red">
+						Warning: Goalsheet Approval overrides Task Return.
+					</p>
+					<form>
+
+						<input type="text" class="form-control input-xs" id="Reason" placeholder="Please Add Comment To Return Task">
+
+					</form>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success" data-dismiss="modal" onclick="targetset()">Submit</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+
+
+
+	{% endblock %}

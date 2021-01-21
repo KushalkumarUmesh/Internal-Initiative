@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+	<div id="form_container">
+		<h1><a>{{exam}}: Test assignment page.</a></h1>
+		<form id="form_1333" class="appnitro"  method="post" action="">
+					<div class="form_description"></div>
+				{{ form.hidden_tag() }}
+				<table class="table table-border">
+
+				<tr><td>{{form.candiateEmail.label}}: </td><td> {{form.candiateEmail}}</td></tr>
+				<tr><td>{% if form.candiateEmail.errors %} {{form.candiateEmail.errors}} {% endif %}</tr></td></tr>
+
+				<tr><td>{{form.group.label}}: </td><td> {{form.group}}</td></tr>
+				<tr><td>{% if form.group.errors %} {{form.group.errors}} {% endif %}</tr></td></tr>
+
+
+				<tr>
+					<td>{{form.dtStart.label}}: </td><td> {{form.dtStart}}</td>
+				{% if form.dtStart.errors %} {% for error in form.dtStart.errors %} <span style="color: red;">[{{ error }}]</span> {% endfor %} {% endif %}
+				</tr>			
+
+				<tr><td>{{form.dtDue.label}}: </td><td>{{form.dtDue}}</td>		
+				<tr><td>{% if form.dtDue.errors %} {% for error in form.dtDue.errors %} <span style="color: red;">[{{ error }}]</span> {% endfor %} {% endif %}</tr></td></tr>				
+			</table>		
+			{{ form.submit() }}
+		</form>	
+	</div>
+{% endblock %}

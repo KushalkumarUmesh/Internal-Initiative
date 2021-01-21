@@ -1,0 +1,33 @@
+{% extends "basegoals.html" %}
+{% block styles %}
+<style type="text/css">
+    .backgroundImage{
+		background-image: none;
+    }
+	
+	.tdPadding {
+    margin-bottom: 15px;
+    margin-left: 50px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+	<h3><strong>Update Template {{id}} </strong></h3>
+	<form id="form_1333" class="appnitro"  method="post" action="">
+		{{ form.hidden_tag() }}
+		<table >
+			</br><tr >
+				<td style="margin-top:19px">Title </td>
+				<td  >{{form.title(class="form-control input-sm restrictsize tdPadding")}}</td>
+			</tr>
+			<tr>
+				<td style="margin-top:19px">Description </td>
+				<td  style="margin-top:19px" >{{form.description(class="form-control input-sm restrictsize tdPadding")}}</td>
+			</tr>
+			
+	    </table>
+		{{ form.submit(class="btn btn-success") }}
+	</form>	
+
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "baseproj.html" %}
+
+{% block styles %}
+<style type="text/css">
+.backgroundImage {
+		background-image: none;
+	}
+.butMargin{
+       width: 365px;
+    height: 30px;
+}
+
+.addButMar{
+    margin-left: 30px;
+    height: 31px;
+    width: 67px;
+}
+</style>
+{% endblock %}
+{% block content %}
+	<h3><center style="padding-top:25px">Initiate BCS Data Check</center></h3>
+	<form action = "" method = "POST" >
+		{{ form.hidden_tag() }}
+		
+		
+	
+		
+	<div class="container">
+		<div class="row" style="margin-top: 5%;">
+				
+			<div class="col-lg-12 col-md-12 col-sm-6 col-xs-3" style="background-color:   rgba(161, 178, 194, 0.34);box-shadow:5px 10px;border-radius:5px;">
+				<div class="card" style="height:100%">
+				 
+				  <div class="card-body">
+					<h4 class="card-title">BcsDataCheck</h4>
+					<div class="container-fluid">
+						<div class="row ">
+							<div class="col-md-2">Employee :</div>
+							<div class="col-md-3 ">{{form.candiateEmail(class="form-control btn btn-primary restrictsize req",style="height:30px",id="PmEmail")}}</div>
+						</div>
+						<div class="row ">
+                        <div class="col-md-2">Date (*) :</div>
+                        <div class="col-md-3 " >{{form.date(class="form-control input-sm datepicker restrictsize req",style="height:30px", required=true)}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">{{form.allEmps}}Process ALL employees (ignore the employee drop down above)</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">{{form.emailToEmps}}Send Email To Employee(s)</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">{{form.emailToPmo}}Send Email To PMO</div>
+                    </div>
+                        
+                        
+                    </div>
+                    </div>
+				  </div>
+				</div>
+			  </div>
+			  
+			
+
+			  <div class="col-md-12 col-sm-12 col-lg-12" style="text-align:center;margin-top: 5%;">
+				<h4><center style="padding-top:25px;color:red">Please ensure that latest data is uploaded!! Please validate your own data first before the blast-o-gram.</center></h4>
+				<input type=submit class="btn btn-success" value=Submit>
+			  </div>
+		</div>
+	</div>
+		
+	</form>
+	<script type="text/javascript">
+	$(function () {
+		$(".datepicker").datepicker({
+
+			dateFormat: 'dd-mm-y',
+			timeFormat: 'HH:mm',
+			onSelect: function (dateText, inst) {
+				$('#' + inst.id).attr('value', dateText);
+			}
+		})
+	});
+	
+	
+	</script>
+
+{% endblock %}

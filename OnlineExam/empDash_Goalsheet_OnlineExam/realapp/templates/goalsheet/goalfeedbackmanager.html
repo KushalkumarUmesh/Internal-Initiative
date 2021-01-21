@@ -1,0 +1,156 @@
+{% block styles %}
+<!-- <falg implemented code> -->
+<style type="text/css">
+    .backgroundImage {
+        background-image: none;
+    }
+
+    .table>tbody>tr>td {
+        padding: 2px;
+    }
+
+    #tableborder {
+        border: 2px solid gray;
+        padding: 10px;
+        border-radius: 25px;
+        box-shadow: 5px 10px;
+    }
+</style>
+<script>
+    function getBackEmployee()
+    {
+        window.location.href = '/goals/goalsetupdate';
+    }
+                                                                                                                                                                                                
+</script>
+{% endblock %}
+{% block content %}
+<div class="divMargin " id="tableborder" style="color: black">
+	<h4><strong>Employee Details</h4>
+			<table class="table table-striped table-dark">
+				<tr>
+					
+					<td>EmployeeID: {{empInfo["EmployeeID"]}}</td>
+					<td>Current Role: {{empInfo["Current Role"]}}</td>
+					<td>Designation: {{empInfo["Designation"]}}</td>
+					
+				</tr>
+				<tr>
+					
+					<td>Department: {{empInfo["Project/Department"]}}</td>
+					<td>Assessing Manager: {{empInfo["Manager"]}}</td>
+					<td>Assessment Year: {{empInfo["Assessment Year"]}}</td>
+					
+				</tr>
+				<tr>					
+					<td>GoalSheet Status: {{goalSheet.status}}</td>
+					<!-- {% if goalSheet.status == "Assigned" or goalSheet.status == "Returned" -%}
+					 <td>{% if goalSheet.enable_mid_year_self %}<a href ='/goals/goalrequestapproval/{{goalSheet.id}}'>Mid-year Self Review</a>
+					{% elif goalSheet.enable_end_year_self %}<a href ='/goals/goalrequestapproval/{{goalSheet.id}}'>End-year Self Review</a>
+					{% elif goalSheet.enable_end_year_closure %}<a href ='/goals/goalrequestapproval/{{goalSheet.id}}'>End-year closure</a>
+					{% else %}<a href ='/goals/goalrequestapproval/{{goalSheet.id}}'>Request Approval</a>
+					{% endif -%}</td> 
+					<td></td>
+					<td></td>
+					{% endif -%}					 -->
+					<td></td>
+					<td></td>
+				
+					
+				</tr>
+				
+                           
+				  
+            </table>
+             <h4><strong>GoalSheet Feedback</h4>
+                <table class="table table-border table-striped">
+              
+                  {% for scmnts in sheetCmnts -%}
+                 <tr style=" background-color:white;">
+                     <td style="width: 18%;">{{scmnts.commentorName}}</td>
+                     <td style="color: #05afc1;width: 65%;">{{scmnts.feedback}}</td>
+                     <td style="text-align:center">{{scmnts.dateRecorded.strftime('%d-%m-%y')}}</td>
+                 </tr>
+                  {%- endfor %}
+              </table>
+          
+    </div>
+        <br>
+<div class="divMargin " id="tableborder" style="color: black">
+  
+    <h4><b>Goal Details</b></h4>
+     
+	            
+			  
+          
+    <table class="table table-border table-striped" id="myTable">
+        <tr style=" background-color:black; color:white">
+            <td style="width:16%"></td>
+            <td style="width:67%"><b>Goal Title</b></td>
+            <td style="text-align:center">Date</td>
+        </tr>
+          {% for scmnts in sheetCmnts -%}
+                 <tr style=" background-color:white;">
+                     <td style="padding-left: 20px;">{{scmnts.commentorName}}</td>
+                     <td style="color: #C8A527  ;">{{scmnts.feedback}}</td>
+                     <td style="text-align:center">{{scmnts.dateRecorded.strftime('%d-%m-%y')}}</td>
+                 </tr>
+                                            
+                                       
+               {%- endfor %}
+                {% for i in range(0, num) -%} 
+		            {% set item = goalSections[i] -%} 
+                    <tr style=" background-color:#A9A9A9">
+                        <td ><b><i>Goal Section:</i></b></td>
+                        <td>{{item.title}}</td>
+                        <td></td>
+                       
+                    </tr>
+                    {% for g in goals[i] -%}
+                        <tr style=" background-color:wheat">
+                            <td ><b>Goal:</b></td>
+                            <td >{{g.title}}</td>
+                            <td></td>
+
+                        </tr>
+                         {% for gcmnts in goalCmnts[g.id] -%}
+                                            <tr style=" background-color:white;">
+                                                <td style="padding-left: 20px;">{{gcmnts.commentorName}}</td>
+                                                <td style="color: #C8A527;padding-left: 25px;">{{gcmnts.feedback}}</td>
+                                                <td style="text-align:center">{{gcmnts.dateRecorded.strftime('%d-%m-%y')}}</td>
+                                            </tr>
+                                            
+                                       
+                             {%- endfor %}	
+
+                        <tr>
+                            {% for t in alltasks[g.id] -%}
+                                            <tr style=" background-color: rgba(245, 222, 179, 0.61);">
+                                                <td style="padding-left: 20px;"><b>Task:</b></td>
+                                                <td>{{t.description}}</td>
+                                                <td></td> 
+                                            </tr>
+                                    {% for tcmnts in taskCmnts[t.id] -%}
+                                            <tr style=" background-color:white;">
+                                                <td style="padding-left: 20px;">{{tcmnts.commentorName}}</td>
+                                                <td style="color: blue; padding-left: 39px;">{{tcmnts.feedback}}</td>
+                                                <td style="text-align:center">{{tcmnts.dateRecorded.strftime('%d-%m-%y')}}</td>
+                                            </tr>
+                                            
+                                       
+                                    {%- endfor %}	
+                            {%- endfor %}	
+                        </tr>
+                       		
+
+                
+           
+                    {%- endfor %}			   
+  
+       
+                {%- endfor %}	
+       
+    </table>
+</div>
+<br>
+{% endblock %}

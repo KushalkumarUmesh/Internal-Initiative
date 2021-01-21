@@ -1,0 +1,34 @@
+{% extends "basegoals.html" %}
+{% block styles %}
+<style type="text/css">
+    .backgroundImage{
+		background-image: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+	<h3><center>Goal Sheets Management</center></h3>
+	<table class="table table-border  table-striped">
+			<tr  >
+				<tr style=" background-color:#A9A9A9">
+					<td>Team Member Email</td>
+					<td>Goal Sheet Status</td>
+					<td>Year</td>				
+					<td>Goal Template Assigned</td>
+					<td>Goal Sheet Action</td>
+				</tr>
+			</tr>
+			{% for item in goalSheets -%}
+			<tr>
+				<td>{{item.emailId}}</td>
+				<td>{{item.status}}</td>
+				<td>{{item.managerComments}}</td>				
+				<td>{{item.title}}</td>
+				<td><a href='/goals/managegoalsheets/{{item.id}}'class="btn btn-primary btn-xs" >View/Approve/Return</a></td>
+			</tr>
+			{%- endfor %}
+
+		</table>
+
+{% endblock %}

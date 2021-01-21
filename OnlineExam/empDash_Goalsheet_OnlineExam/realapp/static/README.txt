@@ -1,0 +1,1 @@
+This directory stores all the STATIC files served by Flask. These include CSS, JS and other files.

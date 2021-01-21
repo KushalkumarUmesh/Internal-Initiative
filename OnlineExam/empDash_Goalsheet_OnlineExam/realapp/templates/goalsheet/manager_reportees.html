@@ -1,0 +1,97 @@
+{% extends "basegoals.html" %}
+{% block styles %}
+<style>
+.backgroundImage {
+	background-image: none !important;
+}
+.tableborder {
+	border: 2px solid gray;
+	padding: 10px;
+	border-radius: 25px;
+	
+}
+.tableborderename {
+	border: 2px ridge;
+	padding: 10px;
+	border-radius: 25px;
+	
+}
+</style>
+
+<script type="text/javascript">
+
+	$(document).ready(function () {
+			$('#viewtable').DataTable();
+	});
+	var focus;
+
+	function focusfun(){
+		sessionStorage.setItem("focus","yes");
+
+	}
+	$(window).on("load", function () {
+		focus = sessionStorage.getItem("focus");
+		if(focus == "yes"){
+			$("#ass_manager").focus();
+		}
+		sessionStorage.removeItem("focus");
+
+	});
+
+</script>
+{% endblock %}
+
+{% block content %}
+		<br>
+		<br>	
+		<div class="tableborder">
+			<h3 style="  margin-top: 0px;"><strong><center>Reportees Status</center></strong></h3>
+			<table id="viewtable" class="display" style="width:100%">
+					<thead style="background-color:rgb(27, 25, 25) !important;color: white;">
+							<tr>    <td>Employee Name</td>
+									<td>Assessing Manager</td>
+									
+									<td>Goalsheet Status</td>
+									<td>Assessment Year</td>				
+									
+									<td></td>
+								
+							</tr>
+					</thead>
+					<tbody>
+
+							
+								{% for item in gsList -%}
+									<tr>
+                                        <td>{{item.empName}}</td>
+										<td>{{item.assessingManagerEmail}}</td>
+										
+										<td style="text-align: center">{{item.status}}</td>
+                                        <td style="text-align: center">{{item.assessmentYear}}</td>													
+                                    	<td style="text-align: center" ><a href='/goals/goalsheetsformanager/{{item.empEmail}}' class="btn btn-success btn-xs" onclick="focusfun()">Update</a></td>
+									</tr>
+								{%- endfor %}
+									
+							
+						
+
+
+					</tbody>
+					<tfoot>
+							<tr>
+									<td>Employee Email</td>
+									<td>Manager Email</td>
+									<td style="text-align: center">Goalsheet Status</td>
+									<td  style="text-align: center">Assessment Year</td>				
+									
+									<td></td>
+							</tr>
+					</tfoot>
+
+
+			</table>
+		</div>
+		<br>
+		
+  
+{% endblock %}

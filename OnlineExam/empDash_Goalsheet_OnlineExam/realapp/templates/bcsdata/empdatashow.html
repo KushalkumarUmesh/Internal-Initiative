@@ -1,0 +1,76 @@
+{% extends "baseproj.html" %} {% block styles %}
+
+<style type="text/css">
+	.backgroundImage {
+		background-image: none;
+	}
+
+	.table>tbody>tr>td {
+		padding: 2px;
+	}
+
+	.btnspacing {
+		margin-left: 100px;
+	}
+
+	.restrictsize {
+		resize: none !important;
+	}
+</style>
+<script>
+$(document).ready(function(){
+	
+    $("tr:even").css("background-color", "rgba(141, 97, 78, 0.48);");
+	 $("tr:odd").css("background-color", "rgba(200, 179, 170, 0.57);");
+	 
+});
+</script>
+
+{% endblock %} {% block content %}
+<h3><strong><center>Utilization Summary</center></strong></h3>
+<table class="table table-border">	
+	<tr>
+		<td>AvailableHours:{{bcsUtilSummary["AvailableHours"]}}</td>
+		<td>BookedHours:{{bcsUtilSummary["BookedHours"]}}</td>
+		<td>BilledHours:{{bcsUtilSummary["BilledHours"]}}</td>
+		<td>LeaveHours:{{bcsUtilSummary["LeaveHours"]}}</td>
+	</tr>
+</table>
+
+<h3><strong><center>Booking Errors and Warnings</center></strong></h3>
+<table class="table table-border" style="width: 1574px;">
+	
+	{% for item in mesgSet -%}
+	<tr>
+		<td style="text-align:left" >{{item}}</td>
+	</tr>
+	{%- endfor %}
+</table>
+<h3><strong><center>Project Bookings</center></strong></h3>
+<table class="table table-border" style="width: 1574px;">	
+	{% for item in bcsProjSummary.keys() -%}
+	<tr>
+		<td style="text-align:left" >{{bcsProjSummary[item]}}</td>
+	</tr>
+	{%- endfor %}
+</table>
+
+<script type="text/javascript">
+	$(function () {
+		$(".datepicker").datepicker({dateFormat: 'dd-mm-y',
+     timeFormat: 'HH:mm'});
+	});
+	$(".req").attr("required", true);
+
+
+	$('#roledesc').focus()
+	$('body').on('reload',  function () {
+				debugger
+				$('#roletable').focus()
+				
+			});
+
+
+	
+</script>
+{% endblock %}

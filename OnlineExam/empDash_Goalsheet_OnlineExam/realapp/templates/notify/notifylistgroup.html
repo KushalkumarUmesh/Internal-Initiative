@@ -1,0 +1,58 @@
+{% extends "baseexam.html" %}
+{% block content %}
+<style type="text/css">
+
+	.restrictsize {
+		resize: none !important;
+	}
+</style>
+	<h3><center>List Groups</center></h3>
+	<table class="table table-border">
+			<tr class="examlist-header">
+			<td>ID</td>
+			<td>Group Name</td>
+			<td>Description</td>
+			<td>Click to See email list</td>
+			<td>Delete Group</td>
+			</tr>
+			{% for item in items -%}
+			<tr class="each-exam ">
+				<td>{{item.groupId}}</td>
+				<td>{{item.groupName}}</td>
+				<td>{{item.description}}</td>
+				<td><a href='/listemailsingroup/{{item.groupId}}'>emails in {{item.groupName}}</a></td>
+				<td><a href='/deletegroup/{{item.groupId}}'>!!!Delete {{item.groupName}}!!!</a></td>
+			</tr>
+			{%- endfor %}
+	</table>		
+	<form id="form_1333" class="appnitro"  method="post" action="">
+		{{ form.hidden_tag() }}
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="row">
+					<div  class="col-lg-3">
+						{{form.item.label}}
+					</div>
+					<div  class="col-lg-3">
+						{{form.item(cols="35", rows="1",class="form-control restrictsize")}}
+					</div>
+				</div>
+			</div>
+			<br>
+			<br>
+			<div class="col-lg-12">
+				<div class="row">
+					<div  class="col-lg-3">
+						{{form.itemdesc.label}}
+					</div>
+					<div  class="col-lg-3">
+						{{form.itemdesc(cols="35", rows="3",class="form-control restrictsize")}}
+					</div>
+				</div>
+			</div>
+		></br><div style="padding-left: 333px;padding-bottom: 50px">
+		{{ form.submit(class="btn btn-success", style="width:75px") }}
+			</div>
+		</div>
+	</form>	
+{% endblock %}

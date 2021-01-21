@@ -1,0 +1,774 @@
+{% extends "basegoals.html" %} {% block styles %}
+<!-- <falg implemented code> -->
+<style type="text/css">
+	.backgroundImage {
+		background-image: none;
+	}
+
+	.table>tbody>tr>td {
+		padding: 2px;
+	}
+
+	.btnspacing {
+		margin-left: 125px;
+		width: 242px;
+		margin-top: 9px;
+		margin-bottom: 10px;
+	}
+
+	.restrictsize {
+		resize: none !important;
+	}
+
+	#tableborder {
+		border: 2px solid gray;
+		padding: 10px;
+		border-radius: 15px;
+	}
+	.tableborderinstruction {
+		border: 2px solid black;
+		padding: 10px;
+		border-radius: 70px;
+		box-shadow: 10px 10px;
+	}
+	#tableborder {
+		border: 2px solid gray;
+		padding: 10px;
+		border-radius: 25px;
+		box-shadow: 5px 10px;
+	}
+	.fa {
+    margin: 5px;
+    display: inline-block;
+    font-size: 56px;
+    cursor: pointer;
+    color: gray;
+}
+	
+</style>
+<script language="javascript">
+
+	
+$(window).on('load',function(){
+	 
+	var goal_sheet_id = $("#goalsheetid").html();
+      var url_str="/goals/goalSheetRatingList?Sheet_id="+goal_sheet_id;
+	$.ajax({  
+		contentType : 'application/json; charset=utf-8',
+			url: url_str,
+			async: false,
+			dataType: 'json',
+			success: function (response) {
+				
+                var data=response;
+                console.log("ajax response ",data)
+					overallratingclickFunction((data[0]+10));
+					$('#Overall_comments').val(data[1]);
+			}
+		})
+		//for download link
+		Sheet_id = $("#goalsheetid").html();
+		$.ajax({
+			contentType : 'application/json; charset=utf-8',
+			url: "/goals/sheetfilemeta/"+ Sheet_id,
+			type:'GET',
+			async:false,
+			dataType: 'text',
+			success: function (response) {
+				var str = response;
+			
+			if(str === "No File Available For Downloading"){
+				
+				$('#downloadlinkaftersubmit').html('<b style="color:red">'+str+'</b>');
+			}else{
+				
+				$('#downloadlinkaftersubmit').html('Download <a href="/goals/sheetfiledownload/'+Sheet_id+'" onclick="downloadedtoastr()">'+str+'</a>');
+			}
+			
+			}
+		
+	  });
+})
+
+//task level rating
+
+	var self_assessment = 0;
+	var self_rating = 0;
+	var csrf_token = '';
+	var task_comment = '';
+
+	function taskRating(taskid,rating,assessment){
+		
+		task_id = '';
+		task_id = taskid;
+		self_assessment = 0;
+		self_rating = 0;
+		self_assessment = assessment;
+		self_rating = rating;
+
+		$("#taskLevel_comment").show();
+		$('#charNum10').text(400);
+		Task_ratingcomments=$('#comment'+taskid).html()
+		console.log('Comment',Task_ratingcomments)
+		$('#task_comments').val(Task_ratingcomments);
+		
+	    csrf_token = $('#csrf_token').val();
+		var desc = $('#' + taskid).html();
+		$("#ratingmodelheader").html(desc);
+		document.getElementById("assessmentRange").style.background = "#d3d3d3";
+		document.getElementById("assessmentRange").value = self_assessment;
+		document.getElementById("assessmentvalue").innerHTML = self_assessment;
+		for(var i=1;i<=10;i++){
+			document.getElementById(i).style.color = "gray";
+		}
+		for(var i=1;i<=self_rating;i++){
+			document.getElementById(i).style.color = "#ff9b00";
+		}
+		$('#Rating').modal('show');
+		
+		
+	}
+
+	function selfassessment(){
+		 
+		var slider = document.getElementById("assessmentRange");
+		var output = document.getElementById("assessmentvalue");
+		output.innerHTML = slider.value;
+		slider.oninput = function() {
+  		output.innerHTML = this.value;
+		}
+		self_assessment = slider.value
+		document.getElementById("assessmentRange").style.background = "#d3d3d3";
+		// if(slider.value<=30){
+		// 	document.getElementById("assessmentRange").style.background = "#ff0000";
+		// }else if(slider.value>30 && slider.value<=60){
+		// 	document.getElementById("assessmentRange").style.background = "#ff9b00";
+		// }else if(slider.value>60){
+		// 	document.getElementById("assessmentRange").style.background = "green";
+		// }else{
+		// 	document.getElementById("assessmentRange").style.background = "#d3d3d3";
+		// }
+	}
+
+	
+	function ratingclickFunction(d) {
+
+		self_rating = d;
+		for (var i = 1; i <= 10; i++) {
+			if (i <= self_rating) {
+				document.getElementById(i).style.color = "#ff9b00";
+			} else {
+				document.getElementById(i).style.color = "gray";
+			}
+		}
+
+	}
+
+	function ratingmouserating(e) {
+		for (var i = 1; i <= e; i++) {
+			if (i <= self_rating) {
+			// document.getElementById(i).style.color = "red";
+			} else {
+				document.getElementById(i).style.color = "rgba(255, 155, 0, 0.33)";
+			}
+		}
+	}
+
+	function ratingleaveFunction() {
+		for (var i = 1; i <= 10; i++) {
+			if (i <= self_rating) {
+				document.getElementById(i).style.color = "#ff9b00";
+			} else {
+				document.getElementById(i).style.color = "gray";
+			}
+		}
+	}
+	function rating_ajax(){
+
+		task_comment= $('#task_comments').val();
+		console.log("comments",task_comment);
+		var target_rating = new FormData(); 
+		
+		target_rating.append( 'Task_id',task_id); 
+		target_rating.append( 'Task_rating',self_rating);
+		target_rating.append( 'Task_assessment',self_assessment);  
+		if(task_comment != ''){
+			target_rating.append( 'Task_comment',task_comment);  
+		}
+		target_rating.append( 'csrf_token',csrf_token);
+		$.ajax({  
+			url:"{{ url_for('taskRatingUpdate') }}",
+			type: 'POST',
+			// cookies: { 'csrftoken': csrf_token },
+			// headers: { 'CSRFToken': csrf_token },
+			data: target_rating ,
+			processData: false,
+			contentType: false,
+            success: function( data,xhr){
+				
+				if(data != "Updated with Comments"){
+					toastr.error('Error !! Login again.');
+					
+				}else{
+					toastr.success('Task Rating Saved');
+				}
+				 
+				setTimeout(function () {location.reload()},600); 
+				   }
+        });  
+
+	}
+
+	 function countChar(val) {
+             
+        var len = val.value.length;
+        if (len >= 3000){
+            $("#charcountdiv").css("color","red");
+        }else{
+            $("#charcountdiv").css("color","black");
+        }
+        if (len >= 4001) {
+          val.value = val.value.substring(0, 4001);
+        } else {
+          $('#charNum').text(4000 - len);
+        }
+      };
+
+	  //goalsheet level rating function
+
+	  var overall_self_rating=0;
+	  
+
+	  function overallmouserating(val){
+		
+		  e = val-10;
+		  for (var i = 1; i <= e; i++) {
+			if (i <= overall_self_rating) {
+			// document.getElementById(i).style.color = "red";
+			} else {
+				document.getElementById((i+10)).style.color = "rgba(255, 155, 0, 0.33)";
+			}
+		}
+	  }
+
+	  function overallratingclickFunction(val) {
+		   
+		overall_self_rating = val-10;
+		for (var i = 1; i <= 10; i++) {
+			if (i <= overall_self_rating) {
+				document.getElementById((i+10)).style.color = "#ff9b00";
+			} else {
+				document.getElementById((i+10)).style.color = "gray";
+			}
+		}
+		
+
+		}
+		
+		
+
+		
+		function overallratingleaveFunction() {
+			 
+		for (var i = 1; i <= 10; i++) {
+			if (i <= overall_self_rating) {
+				document.getElementById((i+10)).style.color = "#ff9b00";
+			} else {
+				document.getElementById((i+10)).style.color = "gray";
+			}
+		}
+	}
+
+	//overall reating ajax call
+	function overall_rating_ajax(){
+	
+		var Goalsheet_comment= $('#Overall_comments').val()
+		var goal_sheet_id = $("#goalsheetid").html();
+		csrf_token = $('#csrf_token').val();
+		sessionStorage.setItem('overall_rating_submit','true');
+		
+		var target_rating = new FormData(); 
+		
+		target_rating.append( 'Sheet_id',goal_sheet_id);
+		target_rating.append( 'Sheet_rating',overall_self_rating);
+		target_rating.append( 'Sheet_comments',Goalsheet_comment);  
+		target_rating.append( 'csrf_token',csrf_token);
+		$.ajax({  
+			url:"{{ url_for('goalSheetRatingList') }}",
+			type: 'POST',
+			
+			data: target_rating ,
+			processData: false,
+			contentType: false,
+            success: function( data ){
+
+				if(data != "Updated"){
+					toastr.error('Error !! Login again.');
+					
+				}else{
+					toastr.success('Goalsheet Rating Saved'); 
+				}
+				
+				setTimeout(function () {location.reload()},1000); 
+				   }
+        });  
+
+	}
+//this executes after user hit submit button of overgoalsheet reating
+	function overallratingclickFunction1(val) {
+		   
+		overall_self_rating = val-20;
+		for (var i = 1; i <= 10; i++) {
+			if (i <= overall_self_rating) {
+				document.getElementById((i+20)).style.color = "#ff9b00";
+			} else {
+				document.getElementById((i+20)).style.color = "gray";
+			}
+		}
+	}
+
+	 function sweetalertoverall_rating() {
+      swal({
+        title: "Are you sure?",
+        text: "Once submitted, you will not be able to make any further changes.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+        .then((willDelete) => {
+          if (willDelete) {
+            swal("!! Rating submited successfully", {
+              icon: "info",
+            })
+
+            setTimeout(overall_rating_ajax, 400);
+
+          }
+        });
+    }
+	
+	//this variable to make sheet level upload file ajax.
+	var Sheet_id = '';
+
+	// this function is for upload file at goalsheet level
+	function sheetUploadBtn(){
+	    Sheet_id = $("#goalsheetid").html();
+		
+		var fetchfeeback;
+		
+		
+		
+		
+		$.ajax({
+			contentType : 'application/json; charset=utf-8',
+			url: "/goals/sheetfilemeta/"+ Sheet_id,
+			type:'GET',
+			async:false,
+			dataType: 'text',
+			success: function (response) {
+				var str = response;
+			
+			if(str === "No File Available"){
+				toastr.info('None of file is uploaded in this task yet')
+				$('#downloadlink').html('<b style="color:red">'+str+'</b>');
+			}else{
+				
+				$('#downloadlink').html('Download <a href="/goals/sheetfiledownload/'+Sheet_id+'" onclick="downloadedtoastr()">'+str+'</a>');
+			}
+			
+			}
+		
+	  });
+		$('#sheetUpload').modal('show');
+	}
+
+	function downloadedtoastr(){
+		toastr.success('File Downloaded Successfully')
+	}
+
+	function sheetUploadfileajax(){
+	
+		var csrf_token = $('#csrf_token').val();
+	 
+		 var uploadedfile =  $('#sheetFileuploadinput')[0].files[0] ;
+		 var fileToUpload = new FormData(); 
+		 fileToUpload.append( 'Sheet_id',Sheet_id); 
+		 fileToUpload.append( 'csrf_token',csrf_token); 
+		 fileToUpload.append( 'fileToSave' ,uploadedfile );
+ 
+		
+		 
+		$.ajax({  
+			 url:"{{ url_for('sheetFileUpload') }}",
+			 type: 'POST',
+			 data: fileToUpload ,
+			 processData: false,
+			 contentType: false,
+			 success: function( data ){
+
+				 if(data != "File Uploaded"){
+					toastr.error('Error !! Login again.');
+					
+				}else{
+					toastr.success('File Uploaded Successfully'); 
+				}
+				
+				
+					}
+		 });  
+		 resetuploadbtn();      
+		 
+	 }
+   
+	 function resetuploadbtn(){
+	
+	$('#sheetFileuploadinput').val(null);
+	}
+
+	function reset_rating_btn(){
+		$('#task_comments').val('');
+	}
+
+	function existTask_comment(id){
+	
+		$('.taskLevel_comment_popup').empty();
+		console.log('taskid',id);
+		var csrf_token = $('#csrf_token').val();
+		var task_id_comments = new FormData(); 
+		task_id_comments.append( 'Task_id',id);
+		task_id_comments.append( 'csrf_token',csrf_token);
+
+
+		$.ajax({ 
+		
+			url:"{{ url_for('getTaskCommentsJson') }}",
+			type: 'POST',
+			async:false,
+			data: task_id_comments,
+			processData: false,
+			contentType: false,
+			success: function (response) {
+				var str = JSON.parse(response);
+				$.each(str,function(index){
+					console.log("str name",str[index].name);
+					$('.taskLevel_comment_popup').append('<li><span style="color:#8b0000;font-size: initial;"><b>' + str[index].name +'</b></span>: <span style="color:#333">'+str[index].feedback +'</span><span style="float:right;color:#333"><b>Dt: ' + str[index].date + '</b></span></li>');
+					
+				})
+		
+			
+			}
+		
+	  });
+		
+		$('#taskLevel_Comments').modal('show');
+	}
+
+</script>
+{% endblock %} {% block content %}
+</br>
+<form id="form_1333" class="appnitro formFormat  formPadding " method="post" action="">
+	{{ form.hidden_tag() }} 
+</form>
+<div class="divMargin " id="tableborder" style="color: black">
+	<span>
+		<p>
+			<span style="font-size:large;">
+				<b>Employee Details</b>		
+			</span>
+		
+			
+		</p>
+	</span>
+	
+	<table class="table table-striped table-dark">
+		<tr>
+
+			<td>EmployeeID:  {{empInfo["FIRST_NAME"]}}({{empInfo["EmployeeID"]}})</td>
+			<td>1st Level Manager: {{empInfo["Manager"]}}</td>
+			<td>Designation: {{empInfo["Designation"]}}</td>
+
+		</tr>
+		<tr>
+
+			<td>Department: {{empInfo["Project/Department"]}}</td>
+			<td>2nd Level Manager: {{empInfo["Manager2"]}}</td>
+			<td>Assessment Year: {{empInfo["Assessment Year"]}}</td>
+			
+
+		</tr>
+		
+		<tr>
+			<td>GoalSheet Status: {{goalSheet.status}}</td>
+			<td style="display: none">{{goalSheet.actionId}}</td>
+			<td style="display: none" id="goalsheetid">{{goalSheet.id}}</td>
+			<td></td>
+			<td></td>
+
+		</tr>
+
+	</table>
+</div>
+<br>
+<div class="divMargin " id="tableborder" style="color:black;background-color: rgba(211, 211, 211, 0.23921568627450981);">
+	<h3><strong><center>Rating</center></strong></h3>
+	<table class="table table-border">
+		<tr style="background-color:#A9A9A9">
+			<!-- <td style="width:2%">ID</td> -->
+			<td style="width:8%;text-align:center"></td>
+			<td style="width:32%;text-align:center">Goal Title</td>
+			<td style="width:13%;text-align:center">Employee</td>
+			<td style="width:13%;text-align:center">Manager</td>
+			<td style="width:13%;text-align:center">DC Lead</td>
+			<td style="width:13%;text-align:center">Management</td>
+            <td style="width:15%;text-align:center">Give Rating</td>
+		</tr>
+
+		<!-- ///////////////// this row is for Average rating ////////////////////////////-->
+		<tr style="background-color: black;color:white">
+			{% if authLevel >= 2  %}
+			<td style="text-align:center;font-size: 155%" ></td>
+			<td style="text-align:center;font-size: 155%" >Max Sheet Score - {{totalWeight}}<span data-toggle="tooltip" data-placement="bottom" title="% Completion of Task:"><i class="fa fa-percent" style="color: #ff8100;font-size: 92%;" ></i></span></td>
+			<td style="text-align:center;font-size: 155%">{{sheetRatings[0]|round(2, 'floor')}}<span data-toggle="tooltip" data-placement="bottom" title="% Completion of Task:"><i class="fa fa-percent" style="color: #ff8100;font-size: 92%;" ></i></span></td>
+			<td style="text-align:center;font-size: 155%">{{sheetRatings[1]|round(2, 'floor')}}<span data-toggle="tooltip" data-placement="bottom" title="% Completion of Task:"><i class="fa fa-percent" style="color: #ff8100;font-size: 92%;" ></i></span> </td>
+			<td style="text-align:center;font-size: 155%">{{sheetRatings[2]|round(2, 'floor')}}<span data-toggle="tooltip" data-placement="bottom" title="% Completion of Task:"><i class="fa fa-percent" style="color: #ff8100;font-size: 92%;" ></i></span> </td>
+
+			<td style="text-align:center;font-size: 155%">{{sheetRatings[3]|round(2, 'floor')}}<span data-toggle="tooltip" data-placement="bottom" title="% Completion of Task:"><i class="fa fa-percent" style="color: #ff8100;font-size: 92%;" ></i></span></td>
+            <td style="text-align:center;font-size: 155%"> </td>
+			{% endif %}	
+
+
+		</tr>
+		<!-- /////////////// this row is for task level rating /////////////////////////////-->
+		{% for d in alltasks.keys() -%}
+		{% for t in alltasks[d] -%}
+			
+		<!-- <tr style="background-color: rgba(245, 222, 179, 0.29)">
+			
+			<td >{{t.id}}</td>
+			<td >{{t.description}}</td>
+			<td style="text-align:center">{{t.selfAssessment}}<span data-toggle="tooltip" data-placement="bottom" title="% Completion of Task:"><i class="fa fa-percent" style="color: #ff9b00;font-size: initial;" ></i></span> {{t.selfRating}}<span data-toggle="tooltip" data-placement="bottom" title="Task Assessment in meeting expectations:" ><i class="fa fa-star" aria-hidden="true" style="color: #ff9b00;font-size: initial;"></i></span></td>
+			<td style="text-align:center">{{t.l1Assessment}}<span data-toggle="tooltip" data-placement="bottom" title="% Completion of Task:"><i class="fa fa-percent" style="color: #ff9b00;font-size: initial;" ></i></span> {{t.l1Rating}}<span data-toggle="tooltip" data-placement="bottom" title="Task Assessment in meeting expectations:" ><i class="fa fa-star" aria-hidden="true" style="color: #ff9b00;font-size: initial;"></i></span></td>
+			<td style="text-align:center">{{t.l2Assessment}}<span data-toggle="tooltip" data-placement="bottom" title="% Completion of Task:"><i class="fa fa-percent" style="color: #ff9b00;font-size: initial;" ></i></span> {{t.l2Rating}}<span data-toggle="tooltip" data-placement="bottom" title="Task Assessment in meeting expectations:" ><i class="fa fa-star" aria-hidden="true" style="color: #ff9b00;font-size: initial;"></i></span></td>
+			<td style="text-align:center">{{t.l3Assessmen}}<span data-toggle="tooltip" data-placement="bottom" title="% Completion of Task:"><i class="fa fa-percent" style="color: #ff9b00;font-size: initial;" ></i></span> {{t.l3Rating}}<span data-toggle="tooltip" data-placement="bottom" title="Task Assessment in meeting expectations:" ><i class="fa fa-star" aria-hidden="true" style="color: #ff9b00;font-size: initial;"></i></span></td>
+            <td style="text-align:center">{{t.pubAssessment}}<span data-toggle="tooltip" data-placement="bottom" title="% Completion of Task:"><i class="fa fa-percent" style="color: #ff9b00;font-size: initial;" ></i></span> {{t.pubRating}}<span data-toggle="tooltip" data-placement="bottom" title="Task Assessment in meeting expectations:" ><i class="fa fa-star" aria-hidden="true" style="color: #ff9b00;font-size: initial;"></i></span></td>   
+
+		</tr> -->
+		{%- endfor %}
+		{%- endfor %}
+
+		<!-- ///////////////////// implement below goals , goalsection,task////////////////////// -->
+		{% for i in range(0, num) -%} 
+		{% set item = goalSections[i] -%} 
+		<tr style=" background-color:#A9A9A9">
+			<td ><b><i>Goal Section:</i></b></td>
+			<td>{{item.title}}</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		   
+		</tr>
+		{% for g in goals[i] -%}
+			<tr style=" background-color:wheat">
+				<td ><b>Goal:</b></td>
+				<td >{{g.title}}</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+
+			</tr>
+			
+
+			<tr>
+				{% for t in alltasks[g.id] -%}
+								<tr style=" background-color: rgba(245, 222, 179, 0.61);">
+									<td style="padding-left: 20px;"><b>Task:</b></td>
+									<td id="{{t.id}}">{{t.description}}</td>
+									<td style="text-align:center">{{t.selfAssessment}}<span data-toggle="tooltip" data-placement="bottom" title="% Completion of Task:"><i class="fa fa-percent" style="color: #ff9b00;font-size: initial;" ></i></span> {{t.selfRating}}<span data-toggle="tooltip" data-placement="bottom" title="Task Assessment in meeting expectations:" ><i class="fa fa-star" aria-hidden="true" style="color: #ff9b00;font-size: initial;"></i></span></td>
+									<td style="text-align:center">{{t.l1Assessment}}<span data-toggle="tooltip" data-placement="bottom" title="% Completion of Task:"><i class="fa fa-percent" style="color: #ff9b00;font-size: initial;" ></i></span> {{t.l1Rating}}<span data-toggle="tooltip" data-placement="bottom" title="Task Assessment in meeting expectations:" ><i class="fa fa-star" aria-hidden="true" style="color: #ff9b00;font-size: initial;"></i></span></td>
+									<td style="text-align:center">{{t.l2Assessment}}<span data-toggle="tooltip" data-placement="bottom" title="% Completion of Task:"><i class="fa fa-percent" style="color: #ff9b00;font-size: initial;" ></i></span> {{t.l2Rating}}<span data-toggle="tooltip" data-placement="bottom" title="Task Assessment in meeting expectations:" ><i class="fa fa-star" aria-hidden="true" style="color: #ff9b00;font-size: initial;"></i></span></td>
+									<td style="text-align:center">{{t.l3Assessment}}<span data-toggle="tooltip" data-placement="bottom" title="% Completion of Task:"><i class="fa fa-percent" style="color: #ff9b00;font-size: initial;" ></i></span> {{t.l3Rating}}<span data-toggle="tooltip" data-placement="bottom" title="Task Assessment in meeting expectations:" ><i class="fa fa-star" aria-hidden="true" style="color: #ff9b00;font-size: initial;"></i></span></td>
+									<td style="text-align:center">
+										{% if ratingEditable  %}
+											{% if t.popUpRating == 0 %}
+											<button class="btn btn-info btn-sm" value="Rating" style="    margin-left: 2%;" onclick="taskRating('{{t.id}}','{{t.popUpRating}}','{{t.popUpAssessment}}')"
+											data-toggle="tooltip" data-placement="bottom" title="Rating on Task"><span class="glyphicon glyphicon-star"></button>
+											{% else %}
+											<button class="btn btn-success btn-sm" value="Rating" style="    margin-left: 2%;" onclick="taskRating('{{t.id}}','{{t.popUpRating}}','{{t.popUpAssessment}}')"
+											data-toggle="tooltip" data-placement="bottom" title="Rating on Task"><span class="glyphicon glyphicon-star"></button>
+											{% endif %}	
+										{% endif %}	
+									
+										<button class="btn btn-info btn-sm" value="Rating" style="    margin-left: 2%;" onclick="existTask_comment('{{t.id}}')"
+											data-toggle="tooltip" data-placement="bottom" title="View Previous Comments"><span class="glyphicon glyphicon-info-sign"></button>
+									</td>
+									<td id="comment{{t.id}}" style="display:none">{{t.popUpComment}}</td>
+
+								</tr>
+						
+				{%- endfor %}	
+			</tr>
+				   
+
+	
+
+		{%- endfor %}			   
+
+
+	{%- endfor %}	
+		
+		
+        
+		
+
+	</table>
+
+	<br>
+	<div class="row" style="margin:0%;border: 2px solid darkred; border-radius: 21px;padding: 1%;">
+	{% if ratingEditable  %}
+		<div class="col-md-5 col-sm-5 col-xs-5 col-lg-5" style="padding:0px">
+		 
+			<div id="goalsheetrating" style="text-align:center">
+				<span><p><b>Overall Employee Recommendation:</b></p></span>
+				<span><i class="fa fa-star"  data-toggle="tooltip" data-placement="bottom" title="Fail" style="font-size: 38px;" aria-hidden="true" id="11" onmouseenter="overallmouserating(this.id)" onclick="overallratingclickFunction(this.id)" onmouseleave="overallratingleaveFunction()"></i></span>
+				<span><i class="fa fa-star"  data-toggle="tooltip" data-placement="bottom" title="Poor" style="font-size: 38px;" aria-hidden="true" id="12" onmouseenter="overallmouserating(this.id)" onclick="overallratingclickFunction(this.id)" onmouseleave="overallratingleaveFunction()"></i></span>
+				<span><i class="fa fa-star"  data-toggle="tooltip" data-placement="bottom" title="Good" style="font-size: 38px;" aria-hidden="true" id="13" onmouseenter="overallmouserating(this.id)" onclick="overallratingclickFunction(this.id)" onmouseleave="overallratingleaveFunction()"></i></span>
+				<span><i class="fa fa-star"  data-toggle="tooltip" data-placement="bottom" title="Good +" style="font-size: 38px;" aria-hidden="true" id="14" onmouseenter="overallmouserating(this.id)" onclick="overallratingclickFunction(this.id)" onmouseleave="overallratingleaveFunction()"></i></span>
+				<span><i class="fa fa-star"  data-toggle="tooltip" data-placement="bottom" title="Very Good" style="font-size: 38px;" aria-hidden="true" id="15" onmouseenter="overallmouserating(this.id)" onclick="overallratingclickFunction(this.id)" onmouseleave="overallratingleaveFunction()"></i></span>
+				<span><i class="fa fa-star"  data-toggle="tooltip" data-placement="bottom" title="Very Good +" style="font-size: 38px;" aria-hidden="true" id="16" onmouseenter="overallmouserating(this.id)" onclick="overallratingclickFunction(this.id)" onmouseleave="overallratingleaveFunction()"></i></span>
+				<span><i class="fa fa-star"  data-toggle="tooltip" data-placement="bottom" title="Excellent" style="font-size: 38px;" aria-hidden="true" id="17" onmouseenter="overallmouserating(this.id)" onclick="overallratingclickFunction(this.id)" onmouseleave="overallratingleaveFunction()"></i></span>
+				<span><i class="fa fa-star"  data-toggle="tooltip" data-placement="bottom" title="Excellent +" style="font-size: 38px;" aria-hidden="true" id="18" onmouseenter="overallmouserating(this.id)" onclick="overallratingclickFunction(this.id)" onmouseleave="overallratingleaveFunction()"></i></span>
+				<span><i class="fa fa-star"  data-toggle="tooltip" data-placement="bottom" title="Outstanding" style="font-size: 38px;" aria-hidden="true" id="19" onmouseenter="overallmouserating(this.id)" onclick="overallratingclickFunction(this.id)" onmouseleave="overallratingleaveFunction()"></i></span>
+				<span><i class="fa fa-star"  data-toggle="tooltip" data-placement="bottom" title="Outstanding +" style="font-size: 38px;" aria-hidden="true" id="20" onmouseenter="overallmouserating(this.id)" onclick="overallratingclickFunction(this.id)" onmouseleave="overallratingleaveFunction()"></i></span>
+				</div>
+		</div>
+		<div class="col-md-2 col-sm-2 col-xs-2 col-lg-2" style="text-align:center;" >
+			<button class="btn btn-link" data-toggle="tooltip" data-placement="bottom" title="Doc Upload/Download" onclick="sheetUploadBtn()"><span style="font-size: 440%;    color: black;" class="glyphicon glyphicon-level-up"></span><br>Project Evaluation Doc</button>
+		</div>
+		<div class="col-md-5 col-sm-5 col-xs-5 col-lg-5" >
+		 
+			<textarea class="form-control input-md countCharacterAdd" id="Overall_comments" style="margin: 2%;
+			width: -webkit-fill-available;margin-bottom: 0%;margin-top: 5%;height: 74px;" placeholder="Enter Your Comment Here..." onkeyup="countChar(this)",maxlength="1000"></textarea>
+		</div>
+	
+	
+		
+
+		<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12" style="text-align:right" id="charcountdiv">
+			<p><span  id="charNum">4000</span> characters remaining</p>
+		</div>
+		<p id="downloadlinkaftersubmit" style="display:none"></p>
+
+	
+		
+		<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12" style="text-align:center">
+			<button type="button" class="btn btn-success btn-lg" onclick="sweetalertoverall_rating()">Submit</button>
+		</div>
+		{% else %}
+		<div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" >
+		 
+				<div id="goalsheetrating" style="text-align:center" style="padding:0px">
+					<span><p><b>Overall Employee Recommendation:</b></p></span>
+					<span><i class="fa fa-star"  data-toggle="tooltip" data-placement="bottom" title="Fail" style="font-size: 35px;" aria-hidden="true" id="11"></i></span>
+					<span><i class="fa fa-star"  data-toggle="tooltip" data-placement="bottom" title="Poor" style="font-size: 35px;" aria-hidden="true" id="12" ></i></span>
+					<span><i class="fa fa-star"  data-toggle="tooltip" data-placement="bottom" title="Good" style="font-size: 35px;" aria-hidden="true" id="13" ></i></span>
+					<span><i class="fa fa-star"  data-toggle="tooltip" data-placement="bottom" title="Good +" style="font-size: 35px;" aria-hidden="true" id="14"></i></span>
+					<span><i class="fa fa-star"  data-toggle="tooltip" data-placement="bottom" title="Very Good" style="font-size: 35px;" aria-hidden="true" id="15" ></i></span>
+					<span><i class="fa fa-star"  data-toggle="tooltip" data-placement="bottom" title="Very Good +" style="font-size: 35px;" aria-hidden="true" id="16"></i></span>
+					<span><i class="fa fa-star"  data-toggle="tooltip" data-placement="bottom" title="Excellent" style="font-size: 35px;" aria-hidden="true" id="17"></i></span>
+					<span><i class="fa fa-star"  data-toggle="tooltip" data-placement="bottom" title="Excellent +" style="font-size: 35px;" aria-hidden="true" id="18"></i></span>
+					<span><i class="fa fa-star"  data-toggle="tooltip" data-placement="bottom" title="Outstanding" style="font-size: 35px;" aria-hidden="true" id="19"></i></span>
+					<span><i class="fa fa-star"  data-toggle="tooltip" data-placement="bottom" title="Outstanding +" style="font-size: 35px;" aria-hidden="true" id="20"></i></span>
+					</div>
+			</div>
+			<div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" >
+			 
+				<textarea class="form-control input-md countCharacterAdd" id="Overall_comments" style="margin: 2%;
+				width: -webkit-fill-available;margin-bottom: 0%;" placeholder="Comment not present on goalsheet level..." disabled></textarea>
+			</div>
+			<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+				<b><p id="downloadlinkaftersubmit" style="float:right"></p></b>
+			</div>
+			
+
+		</div>
+		
+		
+			
+			
+			
+		{% endif %}
+		
+	</br>
+
+	</div>
+	
+	<br>
+
+
+</div>
+</br>
+
+
+
+<div id="sheetUpload" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+	  <!-- Modal content-->
+	  <div class="modal-content">
+		<div style="background-color: black;padding: 2%;" class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" style="color: white"><span style="margin: 3%;" class="glyphicon glyphicon-remove-sign"></button>
+		  <h4 class="modal-title"  style="color: white    ">Project Evaluation Document</h4>
+		</div>
+		<div class="modal-body">
+		  <div>
+			<div id="uplaodfileoption">
+				<p style="color:blue">Only one file per Sheet can be uploaded</p>
+				<input type="file" id="sheetFileuploadinput" />
+			</div>
+		  
+			<br>
+		   
+			 
+			  <p id="downloadlink"></p>
+		  
+		  </div>
+		  <div class="modal-footer" style="padding-bottom: 0px;">
+			<button type="button" id="upload_popup_btn" class="btn btn-success" data-dismiss="modal" onclick="sheetUploadfileajax()">Upload</button>
+			<button type="button" class="btn btn-default" data-dismiss="modal" onclick="resetuploadbtn()">Cancel</button>
+		  </div>
+		</div>
+  
+	  </div>
+	</div>
+	</div>
+
+	<div id="taskLevel_Comments" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+		  <!-- Modal content-->
+		  <div class="modal-content">
+			<div style="background-color: black;padding: 2%;" class="modal-header">
+			  <button type="button" class="close" data-dismiss="modal" style="color: white"><span style="margin: 3%;" class="glyphicon glyphicon-remove-sign"></button>
+			  <h4 class="modal-title"  style="color: white    ">Comments</h4>
+			</div>
+			<div class="modal-body">
+			  <div>
+				
+				<ul class="taskLevel_comment_popup" style="list-style-type: disc;">
+			  
+			  </div>
+			  <div class="modal-footer" style="padding-bottom: 0px;">
+				
+				<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="resetuploadbtn()">Close</button>
+			  </div>
+			</div>
+	  
+		  </div>
+		</div>
+		</div>
+			
+
+{% endblock %}
+
