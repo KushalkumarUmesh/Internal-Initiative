@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+	<h1><a>Editor for table: {{table}}</a></h1>
+	<table class="table table-border">
+			<tr>
+			<td>{{eleItems[0]}}</td>
+			<td>{{eleItems[1]}}</td>
+			<td>UPDATE</td>
+			</tr>
+			{% for item in itemSet -%}
+			<tr>
+				<td>{{item.ID}}</td>
+				<td>{{item.element}}</td>
+				<td><a href="/hrms/listupdate/resp?table={{table}}&id={{item.ID}}" >Update</a></td>
+			</tr>
+			{%- endfor %}
+
+		</table>		
+	<form id="form_1333" class="appnitro"  method="post" action="">
+		{{ form.hidden_tag() }}
+		{{form.element}}
+		{{ form.submit() }}
+	</form>	
+
+{% endblock %}

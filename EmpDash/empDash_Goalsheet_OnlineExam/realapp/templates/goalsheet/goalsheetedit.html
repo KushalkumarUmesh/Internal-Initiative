@@ -1,0 +1,164 @@
+{% extends "basegoals.html" %}
+{% block styles %}
+<style>
+.backgroundImage {
+	background-image: none !important;
+}
+.tableborder {
+	border: 2px solid gray;
+	padding: 10px;
+	border-radius: 25px;
+	
+}
+.tableborderename {
+	border: 2px ridge;
+	padding: 10px;
+	border-radius: 25px;
+	
+}
+</style>
+
+<script type="text/javascript">
+
+	$(document).ready(function () {
+			$('#viewtable').DataTable();
+	});
+	var focus;
+
+	function focusfun(){
+		sessionStorage.setItem("focus","yes");
+
+	}
+	$(window).on("load", function () {
+		focus = sessionStorage.getItem("focus");
+		if(focus == "yes"){
+			$("#ass_manager").focus();
+		}
+		sessionStorage.removeItem("focus");
+
+	});
+
+</script>
+{% endblock %}
+
+{% block content %}
+		<br>
+		<br>	
+		<div class="tableborder">
+			<h3 style="  margin-top: 0px;"><strong><center>Employees Details Edit</center></strong></h3>
+			<table id="viewtable" class="display" style="width:100%">
+					<thead style="background-color:rgb(27, 25, 25) !important;color: white;">
+							<tr>
+									<td>Employee Email</td>
+									<td>Manager Email</td>
+									<td>Goalsheet Status</td>
+									<td>Assessment Year</td>				
+									<td>Goalsheet Type</td>
+									<td></td>
+								
+							</tr>
+					</thead>
+					<tbody>
+
+							
+								{% for item in goalSheets -%}
+									<tr>
+										<td>{{item.emailId}}</td>
+										<td>{{item.current_manager}}</td>
+										<td>{{item.status}}</td>
+										<td>{{item.year}}</td>				
+										<td>{{item.title}}</td>
+										<td><a href='/goals/sheetupdate/{{item.id}}' class="btn btn-success btn-xs" onclick="focusfun()">Update</a></td>
+									</tr>
+								{%- endfor %}
+									
+							
+						
+
+
+					</tbody>
+					<tfoot>
+							<tr>
+									<td>Employee Email</td>
+									<td>Manager Email</td>
+									<td>Goalsheet Status</td>
+									<td>Assessment Year</td>				
+									<td>Goalsheet Type</td>
+									<td></td>
+							</tr>
+					</tfoot>
+
+
+			</table>
+		</div>
+		<br>
+		<br>
+			<form id="form_1333" class="appnitro formFormat formPadding "   method="post" action="">
+					{{ form.hidden_tag() }}
+
+				<div class="container">
+						<div class="row ">
+							<div class="col-md-3"></div>
+							<div class="col-md-6 tableborderename">
+								<div class="col-md-4" style="text-align: center">
+									<label>Employee Email => </label>
+								</div>
+								<div class="col-md-8 " style="text-align: center">
+									<b><i>{{form.emailId}}</i></b>
+								</div>
+							</div>
+							<div class="col-md-3">
+				
+								<div class="col-md-1">
+										<label></label>
+									</div>
+									<div class="col-md-11">
+										{{form.id(class="form-control input",style="display:none")}}
+									</div>
+								</div>
+							</div>
+							<br>
+
+						<div class="row">
+								<div class="col-md-2">
+									<label>Assessing Manager</label>
+								</div>
+								<div class="col-md-4">
+									{{form.assessingManager(class="form-control input btn btn-primary",id="ass_manager")}}
+								</div>
+								{% if current_user.is_admin  %}
+								
+								<div class="col-md-2">
+										<label>GoalSheet Status</label>
+									</div>
+									<div class="col-md-4">
+										{{form.status(class="form-control input btn btn-primary")}}
+									</div>
+								{% else %}
+								<div class="col-md-2">
+									
+								</div>
+								<div class="col-md-4">
+									{{form.Update(class="btn btn-success",style="margin-left: 30px;")}}
+								</div>
+
+								{% endif %}
+							</div>
+							<br>
+							{% if current_user.is_admin  %}
+								<br>
+								<div class="row">
+									<div class="col-md-5"></div>
+									<div class="col-md-2">{{form.Update(class="btn btn-success",style="margin-left: 30px;")}}</div>
+									<div class="col-md-5"></div>
+								</div>
+							{% endif %}
+				</div>
+
+			
+			
+			</form>	
+			<br>
+			<br>
+  
+{% endblock %}

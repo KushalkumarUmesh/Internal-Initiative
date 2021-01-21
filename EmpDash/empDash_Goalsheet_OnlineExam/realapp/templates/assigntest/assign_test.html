@@ -1,0 +1,51 @@
+{% extends "baseexam.html" %}
+ {% block styles %}
+ 
+<style>
+	.restrictsize {
+		resize: none !important;
+	}
+	.formPadding {
+   
+    margin-left: 100px;
+    width: 200px;
+    height: 30px;
+}
+.buttonMargin
+{
+	    margin-top: 40px;
+    margin-left: 275px;
+}
+</style>
+{% endblock %}
+{% block content %}
+	<div id="form_container">
+		<h3><a><center>{{exam}}: Test assignment page.</center></a></h3>
+		<form id="form_1333" class="appnitro"  method="post" action="">
+					<div class="form_description"></div>
+				{{ form.hidden_tag() }}
+				<table style="margin-top: 43px;">
+
+				<tr><td></br>{{form.candiateEmail.label}}: </td><td > {{form.candiateEmail(class="formPadding req")}}</td></tr>
+				<tr><td>{% if form.candiateEmail.errors %} {{form.candiateEmail.errors}} {% endif %}</tr></td></tr>
+
+				<tr>
+					<td></br>{{form.dtStart.label}}: </td><td></br> {{form.dtStart(class="form-control startdate  formPadding input-sm datepicker req")}}</td>
+						{% if form.dtStart.errors %} {% for error in form.dtStart.errors %} <span style="color: red;">[{{ error }}]</span> {% endfor %} {% endif %}
+				</tr>			
+
+				<tr><td></br>{{form.dtDue.label}}: </td><td ></br>{{form.dtDue(class="form-control formPadding input-sm datepicker req")}}</td>		
+				<tr><td>{% if form.dtDue.errors %} {% for error in form.dtDue.errors %} <span style="color: red;">[{{ error }}]</span> {% endfor %} {% endif %}</tr></td></tr>				
+			</table>
+
+			{{ form.submit(class="btn btn-success buttonMargin") }}
+		</form>	
+	</div>
+	<script type="text/javascript">
+		$(function () {
+			$(".datepicker").datepicker();
+		});
+		$(".req").attr("required", true);
+		debugger
+	</script>
+{% endblock %}

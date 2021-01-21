@@ -1,0 +1,60 @@
+
+{% extends "baseexam.html" %}
+<style type="text/css">
+	
+</style>
+
+{% block content %}
+	<h3><strong><center>Test Assignments Status</center></strong></h3>
+	<table class="table table-border">
+		<thead class="examlist-header">
+			<tr>
+				<td>Test Name</td>
+				{% if current_user.is_admin %}
+				<td>Email ID</td>
+				{% endif %}
+				<td>Start Date</td>
+				<td>Due Date</td>
+				<td>Result</td>
+				<td>Pass Score</td>
+				<td>Act. Scored</td>
+				<td>Status</td>
+
+				{% if not current_user.is_admin %}
+					<td>Link to Test</td>
+				{% endif %}
+			</tr>
+		</thead>
+		<tbody>
+			{% for i in tnames -%}
+			<tr class="each-exam ">
+				<td>{{tnames[loop.index0].testName}}</td>
+				{% if current_user.is_admin %}
+				<td>{{tnames[loop.index0].candiateEmail}}</td>
+				{% endif %}
+				<td>{{tnames[loop.index0].dtStart.strftime('%d-%b-%y')}}</td>
+				<td>{{tnames[loop.index0].dtDue.strftime('%d-%b-%y')}}</td>
+				<td>{{tnames[loop.index0].resultStatus}}</td>
+				<td style="text-align: center">{{tnames[loop.index0].passNum}}</td>
+				{% if tnames[loop.index0].examStatus == "Completed" %}
+				<td style="text-align: center">{{tnames[loop.index0].score}}</td>
+				{% else %}
+				<td style="text-align: center">NA</td>				
+				{% endif %}
+				<td>{{tnames[loop.index0].examStatus}}</td>
+
+				{% if not current_user.is_admin %}
+					{% if tnames[loop.index0].examStatus != "Completed" %}
+					<td><a href="/exam/startexam/{{tnames[loop.index0].examId}}">Start Exam</a></td>
+					{% else %}
+					<td>Done</td>				
+					{% endif %}
+				{% endif %}
+			</tr>
+				{%- endfor %}
+	
+		</tbody>
+			
+		</table>		
+	
+{% endblock %}

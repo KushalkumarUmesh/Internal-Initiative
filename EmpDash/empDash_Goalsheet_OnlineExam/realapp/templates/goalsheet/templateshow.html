@@ -1,0 +1,50 @@
+{% extends "basegoals.html" %}
+{% block styles %}
+<style type="text/css">
+    .backgroundImage{
+		background-image: none !important;
+	}
+		
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+	<center><h3>List Templates</h3></center>
+	<table class="table table-border table-striped" style="border: 1px solid black;">
+			<tr  style=" background-color:#A9A9A9">
+			<td>Id</td>
+			<td>Title</td>
+			<td>Description</td>
+			<td  style="text-align:center">Update</td>
+			<td  style="text-align:center">Add Goals to Template</td>
+			</tr>
+			{% for item in itemSet -%}
+			<tr>
+				<td>{{item.id}}</td>
+				<td>{{item.title}}</td>
+				<td>{{item.description}}</td>
+				<td style="text-align:center"><a href="/goals/templateUpdate/{{item.id}}"class="btn btn-success btn-sm">Update</a></td>
+				<td  style="text-align:center"><a href="/goals/templategoals/{{item.id}}"class="btn btn-info  btn-sm" >List Goals</a></td>
+			</tr>
+			{%- endfor %}
+
+		</table>		
+	<form id="form_1333" class="appnitro"  method="post" action="">
+		{{ form.hidden_tag() }}
+		
+		<table>
+			<tr >
+				<br/><td style="width:200px; text-align:center">Title</td>
+				<td  style="width:300px">{{form.title(class="form-control input-sm")}}</td>
+			</tr>
+			
+			<tr>				
+				<td style="padding-left:86px"><br/>Description</td>
+				<td><br/>{{form.description(class="form-control input-sm")}}</td>
+			</tr>
+	
+		</table>
+		<br/>{{ form.submit(class="btn btn-primary", style="margin-left:87px") }}
+	</form>	
+{% endblock %}

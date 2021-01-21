@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+	<div id="form_container">	
+		<h1><a>Welcome to Online Exam Home Page</a></h1>
+		<p>Here the following options:</p>
+		<p><a href="exam/listtests">List availble Tests and assign Tests</a></p>
+		<p><a href="exam/listassignments">List Tests assigned and view Question Set</a></p>
+
+		<P><a href="/listgroups">Group Management </a></P>
+		<p>Still Under development:</p>
+		<p><a href="exam/takeexam">Take an exam</a></p>
+		<p>user : {{ current_user.name }}</p>
+		<p><a href="exam/candidates">List Candidates</a></p>
+		
+	</div>
+{% endblock %}

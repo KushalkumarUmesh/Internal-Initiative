@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+<h1><a>Question Paper</a></h1>
+<div class="row">
+	<div class="col-lg-2">
+		<b>Total Marks: 50</b>
+	</div>
+	<div class="col-lg-2">
+		<b>Qualifying marks:30 </b>
+	</div>
+	<div class="col-lg-3">
+		<b>Welcome : srini@msg-global.com</b>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-2">
+		<b>Test Name: {{exam.testName}}</b>
+	</div>
+	<div class="col-lg-2">
+		<b>Candidate Name:{{exam.candidateEmail}} </b>
+	</div>
+	<div class="col-lg-2">
+		<b>Number of Questions:{{exam.numQuestions}}</b>
+	</div>
+</div>
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th colspan="2">
+				Questions
+			</th>
+		</tr>
+	</thead>
+	
+	<tbody>
+		{% for q in ques -%}
+		<tr>
+			<td>
+				Q {{loop.index}}
+			</td>
+			<td>
+				{{q.question}}
+			</td>						
+		</tr>
+		<tr>
+			<td rowspan="4">
+				Ans
+			</td>
+			<td>
+				<input type="radio" name={{q.id}} value="A" /> {{q.optionA}}
+			</td>						
+		</tr>
+		<tr>
+			<td>
+				<input type="radio" name={{q.id}} value="B" /> {{q.optionB}}
+			</td>						
+		</tr>
+		<tr>
+			<td>
+				<input type="radio" name={{q.id}} value="C" /> {{q.optionC}}
+			</td>						
+		</tr>
+		<tr>
+			<td>
+				<input type="radio" name={{q.id}} value="D" /> {{q.optionD}}
+			</td>						
+		</tr>
+		{%- endfor %}
+	</tbody>
+	
+</table>	
+{% endblock %}

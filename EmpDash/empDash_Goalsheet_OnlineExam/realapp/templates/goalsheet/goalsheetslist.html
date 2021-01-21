@@ -1,0 +1,78 @@
+{% extends "basegoals.html" %}
+{% block styles %}
+<style type="text/css">
+   .backgroundImage{
+		background-image:none !important;
+   }
+	
+	.Marg {
+
+    margin-top: 30px;
+}
+.ParaPadding {
+    padding-top: 10px;
+}
+.FormPadding {
+    padding-bottom: 30px;
+}
+.uplPadding {
+    padding-top: 4px;
+}
+.table>tbody>tr>td{
+		padding:2px;
+	}
+
+</style>
+{% endblock %}
+
+{% block content %}
+	<h3><strong><center> Assigned Goalsheet</center></strong></h3>
+	<table class="table table-border table-striped">
+		    <tr style="background-color:#D9D9D9">
+					<td>Team Member Email</td>
+					<td>Goalsheet Status</td>
+					<td>Assessment Year</td>				
+					<td>Goalsheet Type</td>
+					<td></td>
+			</tr>
+				
+			{% for item in goalSheets -%}
+			<tr>
+				<td>{{item.emailId}}</td>
+				<td>{{item.status}}</td>
+				<td>{{item.year}}</td>				
+				<td>{{item.title}}</td>
+				<td><a href='/goals/deletegoalsheet/{{item.emailId}}' class="btn btn-danger btn-xs">Delete-Be Careful!!</a></td>
+			</tr>
+			{%- endfor %}
+
+		</table>
+		<h4 style="background-color:#D9D9D9"><strong> Assign Goalsheet - Individual</strong></h4></hr>
+	<form action = "/goals/assigngoals" method = "POST" 
+		enctype = "multipart/form-data">
+		{{ form.hidden_tag() }}
+		<div>
+							<p>Goalsheet Template :{{form.templateList}}</p> 
+							<p>Member	: {{form.candiateEmail}}</p>
+								{{form.addemail(class="btn btn-success "	)}}	
+							
+							
+		</div>
+	</form>
+	</br><h4 class="ButtonMarg" style="background-color:#D9D9D9"><strong>Assign Goalsheets to multiple employees (Excel File Upload)</strong></h4>
+	<div  class="ParaPadding">
+		<p>Alternatively, you can Upload an MS-XLSX file which contains ONE SHEET with a column with "Email" as a column header (i.e. text:Email, in Row-1)</p>
+		<p><span style="color:red">WARNING: All candidates with valid e-mails in the list will be assigned a Goal-Sheet with the template selected, RIGHT AWAY!!</p>
+	</div>
+	<form action = "/goals/assigngoalsfromfile" method = "POST" 
+		enctype = "multipart/form-data">
+		</br>{{ form1.hidden_tag() }}
+		<div>
+		{{form1.templateList(class="btn btn-primary")}}
+		</br><input type=file class="uplPadding" name=file>
+		</br><input type=submit class="btn btn-success" value=Upload>
+		</div>
+	
+	</form>
+
+{% endblock %}

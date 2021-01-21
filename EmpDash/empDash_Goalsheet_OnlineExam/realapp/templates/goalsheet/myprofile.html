@@ -1,0 +1,146 @@
+{% extends "basegoals.html" %} {% block styles %}
+<style type="text/css">
+	.backgroundImage {
+		background-image: none !important;
+	}
+
+
+
+	.divMargin {
+		padding-top: 10px;
+	}
+
+	.colMargin {
+		margin-left: 200px;
+	}
+
+	.table-box {
+		border-collapse: separate;
+		border: 1px solid;
+	}
+	#tableborder {
+    border: 2px solid gray;
+    padding: 10px;
+    border-radius: 25px;
+}
+</style>
+
+<script>
+$(document).ready(function(){
+    $("tr:even").css("background-color", "#1C2833");
+	 $("tr:odd").css("background-color", "#2C3E50");
+});
+</script>
+
+{% endblock %} {% block content %}
+<br>
+<div class="divMargin "  id="tableborder"  style="color: white">
+	<table class="table table-border table-striped" >
+		<tr>
+			<h4 style="color:black"><strong>Personal Details :</strong></h4>
+		</tr>
+		<tr>
+			<td style="width:180px"><label> FirstName : </label></td>
+			<td style="width:250px"><label>{{msgDict['FIRST_NAME']}}</label></td>
+
+			<td style="width:180px"> <label>LastName :</label></td>
+			<td style="width:250px"><label>{{msgDict['LAST_NAME']}}</label></td>
+
+		</tr>
+		<tr>
+			<td><label>Employee No :</label></td>
+			<td><label>{{msgDict['EMPLOYEE_ID']}}</label></td>
+
+			<td><label>Designation:</label></td>
+			<td><label>{{msgDict['DESIGNATION']}}</label></td>
+
+		</tr>
+		<tr>
+			<td><label>Email-Id :</label></td>
+			<td><label>{{msgDict['PERSONAL_EMAIL_ID']}}</label></td>
+
+			<td><label>Gender:</label></td>
+			<td><label>{{msgDict['GENDER']}}</label></td>
+
+		</tr>
+		<tr>
+			<td><label>Date of Birth:</label></td>
+			<td><label>{{msgDict['DATA_OF_BIRTH']}}</label></td>
+
+			<td><label>Contact No :</label></td>
+			<td><label>{{msgDict['MOBILE_NO']}}</label></td>
+
+
+		</tr>
+		<tr>
+			<td><label>Date of Joining :</label></td>
+			<td><label>{{msgDict['DATE_OF_JOINING']}}</label></td>
+
+			<td><label>Aadhar Card No :</label></td>
+			<td><label>{{msgDict['AADHAR_NO']}}</label></td>
+
+
+		</tr>
+		<tr>
+			<td><label>Pan Card No :</label></td>
+			<td><label>{{msgDict["PAN_NO"]}}</label></td>
+
+			<td><label>Address :</label></td>
+			<td><label>{{msgDict['Home Address-LINE1']}}</label></td>
+
+		</tr>
+		<tr>
+			<td><label>Passport No :</label></td>
+			<td><label>{{msgDict["PASSPORT"]}}</label></td>
+
+			<td><label>Passport Exp_Date :</label></td>
+			<td><label>Not Available</label></td>
+
+		</tr>
+		</tr>
+		<tr>
+			<td><label>PF No :</label></td>
+			<td><label>{{msgDict["PF_NO"]}}</label></td>
+
+			<td></td>
+			<td></td>
+
+		</tr>
+
+
+	</table>
+</div>
+<br>
+<div class="divMargin "  id="tableborder"  style="color: white">
+	<table class="table table-border table-striped" frame="box">
+		<tr>
+			<h4 style="color:black"><strong>Management Details :</strong></h4>
+		</tr>
+		<tr>
+			<td style=" width:180px;"><label>Manager Name :</label></td>
+			<td style="  width:250px;"><label>{{msgDict['MANAGER_NAME']}}</label></td>
+
+			<td style="  width:180px;"><label>Department Name :</label></td>
+			<td style="  width:250px;"><label>{{msgDict['DEPARTMENT']}}</label></td>
+
+		</tr>
+		<tr>
+			<td><label>DC Lead :</label></td>
+			<td><label>{{msgDict['DC_LEAD']}}</label></td>
+
+			<td><label>Manager Email-Id :</label></td>
+			<td><label>{{msgDict['MANAGER_EMAIL']}}</label></td>
+
+		</tr>
+		<tr>
+			<td><label>Manager's Emp No :</label></td>
+			<td><label>{{msgDict['MANAGER_EMPID']}}</label></td>
+
+
+			<td></td>
+			<td></td>
+
+	</table>
+</div>
+
+{% endblock %}

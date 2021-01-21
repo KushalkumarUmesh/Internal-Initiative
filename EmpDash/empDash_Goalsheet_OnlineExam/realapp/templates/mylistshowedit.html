@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+	<h1><a>Test Assignments Status2</a></h1>
+	<form id="form_1333" class="appnitro"  method="post" action="">
+			<table class="table table-border">
+			<tr>
+			<td>ID</td>
+			<td>Department Name</td>
+			<td>Update</td>
+			</tr>
+			{% for i in range(0, num) -%}
+			{% set item = form.items[i] -%}
+			<tr>
+				<td>{{item.id}}</td>
+				<td>{{item.element}}</td>
+				<td><a href="/hrms/deptlistedit/{{i}}" method='POST' >Update</a></td>
+			</tr>
+			{%- endfor %}
+
+		</table>		
+		{{ form.hidden_tag() }}
+		{{form.newitem}}
+		{{ form.submit() }}
+	</form>	
+
+{% endblock %}

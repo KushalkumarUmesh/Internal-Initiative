@@ -1,0 +1,40 @@
+
+{% extends "base.html" %}
+{% block styles %}
+<style type="text/css">
+    .backgroundImage{
+        height:-webkit-fill-available;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% if session['logged_in'] %}
+<p>You're logged in already!</p>
+{% else %}
+<div class="card">
+  <form method="POST"> 
+      {{ form.hidden_tag() }}
+      <div class="container login-grid">
+        <h3 class="text-center text-white">Login</h3>
+        <div class="row">
+          <div class="col-lg-12">
+              <input type="username" class="form-control" name="username" placeholder="MSG-Email e.g.arun.k@msg-global.com">
+          </div>
+          <br>
+          <br>
+          <div class="col-lg-12">
+              <input type="password" class="form-control" name="password" placeholder="HRMS Password">
+          </div>
+          <br>
+          <br>
+          <div class="col-lg-12 text-center" >
+              <input type="submit" class="btn login-btn text-white" value="Log in" >
+          </div>
+        </div>
+      </div>
+    </form>
+</div>
+
+{% endif %}
+{% endblock %}

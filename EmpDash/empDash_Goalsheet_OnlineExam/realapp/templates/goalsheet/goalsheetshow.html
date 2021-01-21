@@ -1,0 +1,645 @@
+{% extends "basegoals.html" %} {% block styles %}
+<style type="text/css">
+	.backgroundImage {
+		background-image: none !important;
+	}
+
+	.table>tbody>tr>td {
+		padding: 2px;
+	}
+
+	#tableborder {
+		border: 2px solid gray;
+		padding: 10px;
+		border-radius: 25px;
+		box-shadow: 5px 10px;
+	}
+</style>
+<script language="javascript">
+	var task_id = '';
+	var state = '';
+	var taskid_arr= new Array(); 
+	
+	
+	
+	document.addEventListener("DOMContentLoaded", function() {
+		
+		uploadfile_btn_check();
+        
+    });
+
+	function uploadfile_btn_check(){
+		$(".find_all_id").each(function(index){
+			var tsak_check_id = $(this).attr('id')
+
+			$.ajax({
+			contentType : 'application/json; charset=utf-8',
+			url: "/goals/taskfilemeta/"+ tsak_check_id,
+			type:'GET',
+			async:false,
+			dataType: 'text',
+			success: function (response) {
+				var str = response;
+			
+			if(str === "No File Available"){
+				
+				
+				$('#uploadFileBtn'+tsak_check_id).css("background-color", "#5bc0de");
+				$('#uploadFileBtn'+tsak_check_id).css("border-color", "#5bc0de");
+				
+			}else{
+				
+				$('#uploadFileBtn'+tsak_check_id).css("background-color", "#5cb85c");
+				$('#uploadFileBtn'+tsak_check_id).css("border-color", "#5cb85c");
+			}
+			
+			}
+		
+	  });
+			// taskid_arr.push( $(this).attr('id'));
+			// console.log("taskid",taskid_arr);
+		})
+	}
+
+	function askfeedbackscreen(){
+		window.location.href = '/goals/askfeedback';
+	}
+
+	
+
+	// var target_id='';
+	// function targetset() {
+	//   // $("#Emp_table").html('<h3><center>List of all Employee</center></h3><table class="table table-border table-striped"><thead><tr><td style="width:40px">Id<td style="width:40px">Name</td><td style="width:40px">First Name</td><td style="width:40px">Middle Name</td><td style="width:40px">Last Name</td><td style="width:40px">Emp_Id</td><td style="width:40px">Personal Email</td><td style="width:40px">Gender</td><td style="width:40px">DOB</td><td style="width:40px">Contact No</td><td style="width:40px">Designation</td><td style="width:40px">Department</td><td style="width:40px">DC Lead</td><td style="width:40px">Manager Name</td><td style="width:40px">Manager Email</td><td style="width:40px">Manager Emp_id</td><td style="width:40px">Aadhar No</td><td style="width:40px">Pan No</td><td style="width:40px">UAN </td><td style="width:40px">PF_No</td><td style="width:40px">Passport</td><td style="width:40px">Aadhar No Doc</td><td style="width:40px">Pan No Doc</td><td style="width:40px">Passport Doc</td><td style="width:40px"></td><td style="width:40px">Home Address</td><td style="width:40px">City</td></tr></thead><tbody><tr><td>1.</td><td>Shubham</td></tr></tbody></table>');
+	//     
+	//   // var target=document.getElementById("targetdata").value;
+	//   console.log('in submit',target_id);
+	//   var target_val =
+	//     {
+	//       "target": document.getElementById("targetdata").value,
+	//       "id" :  target_id
+	//     };
+	//   // $("#targetcolumn").insertAfter(target_val);
+	//   $.ajax({
+	//     contentType : 'application/json; charset=utf-8',
+	//     url: "{{ url_for('goalTargetUpdate') }}",
+	//     data: target_val,
+	//     async:false,
+	//     success: function (data) {
+	//       $('#targetcolumn').replaceWith(data);
+	//       window.location.reload();
+	//     }
+
+	//   });
+
+	//   document.getElementById('targetdata').value = "";
+
+	// }
+	// function edit(id,title){
+	//   console.log(id);
+	//   target_id = id;
+	//   //modal id i.e TargetSet
+	//   $('#TargetSet').modal('show');
+	//    //modal inputfield id i.e targetdata
+	//   $('#targetdata').attr('placeholder',title);
+	// }
+
+	function feedbacKform(id, status) {
+
+		var desc = $('#' + id).html();
+		task_id = id;
+		state = status;
+		var fetchfeeback;
+		var str = "{{ url_for('getTaskEmpFeedback') }}";
+		str = str + "?Task_id=" + task_id;
+		$("#feedbackheader").html(desc);
+		$.ajax({
+			contentType : 'application/json; charset=utf-8',
+			url: str,
+			async: false,
+			dataType: 'json',
+			success: function (response) {
+				fetchfeeback = response;
+			}
+
+
+		});
+		//For Empty Employ Feedback for perticular task
+		$('.employee_fb_list').empty();
+		//populated json data in dc lead feedback modal
+		var count = Object.keys(fetchfeeback).length;
+		if (count) {
+			for (var temp in fetchfeeback) {
+
+
+				var temp_arr = fetchfeeback[temp];
+
+
+				$('.employee_fb_list').append('<li><i>' + temp_arr[1] + '<span style="float:right;color:gray">Dt:' + temp_arr[0] + '</span></i></li>');
+
+
+			}
+		}
+		else {
+			$('.employee_fb_list').append('<li style="color:red"><i>No Comment is Avaliable For This Task</i></li>');
+		}
+
+		$('#feedbackform').modal('show');
+
+	}
+
+	function feedbacKformsubmit() {
+
+		var target_val =
+		{
+
+			"Feedback": document.getElementById("dc_feedback").value,
+			"Task_id": task_id,
+			"Status": state
+		};
+		console.log('Task-level->' + target_val.Feedback, target_val.Task_id, target_val.Status);
+		$.ajax({
+			contentType : 'application/json; charset=utf-8',
+			url: "{{ url_for('tasklevelupdate') }}",
+			data: target_val,
+
+			success: function (data) {
+				document.getElementById('dc_feedback').value = "";
+				task_id = '';
+				state = '';
+			}
+
+		});
+	}
+
+	function feedbackScreen() {
+		window.location.href = '/goals/feedbackview';
+
+	}
+
+		//redirect to rating screen
+		function ratingscreen(emailid){
+		
+		window.location.href = '/goals/showrating/'+emailid;
+
+	}
+
+	function actionsweetalert() {
+		swal({
+			title: "Are you sure ?",
+			text: "An email notification will be sent to your assessing manager and you may be unable to make any further changes.",
+			icon: "warning",
+			buttons: true,
+			dangerMode: true,
+		})
+			.then((willDelete) => {
+				if (willDelete) {
+					swal("!!Submited Successfully", {
+						icon: "success",
+					})
+
+					setTimeout(SubmitRequest, 700);
+
+				}
+			});
+	}
+	function SubmitRequest() {
+		window.location.href = '/goals/goalSheetAction?goalSheetId={{goalSheet.id}}&actionId={{goalSheet.actionId}}';
+	}
+
+	function fileuploademp(id, status){
+		
+
+		var desc = $('#' + id).html();
+		task_id = id;
+		state = status;
+		var fetchfeeback;
+		var str = "{{ url_for('getTaskEmpFeedback') }}";
+		str = str + "?Task_id=" + task_id;
+		$("#fileuploadheader").html(desc);
+		
+		$.ajax({
+			contentType : 'application/json; charset=utf-8',
+			url: "/goals/taskfilemeta/"+ task_id,
+			type:'GET',
+			async:false,
+			dataType: 'text',
+			success: function (response) {
+				var str = response;
+			
+			if(str === "No File Available"){
+				toastr.info('None of file is uploaded in this task yet')
+				$('#downloadlink').html('<b style="color:red">'+str+'</b>');
+			}else{
+				
+				$('#downloadlink').html('Download <a href="/goals/taskfiledownload/'+task_id+'" onclick="downloadedtoastr()">'+str+'</a>');
+			}
+			
+			}
+		
+	  });
+
+
+	
+		$('#fileupload').modal('show');
+	}
+
+	function downloadedtoastr(){
+		toastr.success('File Downloaded Successfully')
+	}
+
+	function uploadfileajax(){
+		 
+		var csrf_token = $('#csrf_token').val();
+	
+		var uploadedfile =  $('#fileuploadinput')[0].files[0] ;
+		var fileToUpload = new FormData(); 
+		fileToUpload.append( 'Task_id',task_id); 
+    	fileToUpload.append( 'csrf_token',csrf_token); 
+        fileToUpload.append( 'fileToSave' ,uploadedfile );
+
+		console.log("upload",fileToUpload);
+        
+       $.ajax({  
+			url:"{{ url_for('taskfileupload') }}",
+			//cookies: { 'csrftoken': csrf_token },
+			//headers: { 'CSRFToken': csrf_token },
+			type: 'POST',
+			data: fileToUpload ,
+			processData: false,
+			contentType: false,
+            success: function( data ){
+				toastr.success('File Uploaded Successfully'); 
+				uploadfile_btn_check();
+				   }
+        });  
+		resetuploadbtn();      
+        
+	}
+
+	function resetuploadbtn(){
+	
+		$('#fileuploadinput').val(null);
+	}  
+
+//for rating and self assessment function
+	var self_assessment = 0;
+	var self_rating = 0;
+	var csrf_token = '';
+
+
+	function Rating(taskid,rating,assessment){
+		 
+		
+		task_id = '';
+		task_id = taskid;
+		self_assessment = 0;
+		self_rating = 0;
+		self_assessment = assessment;
+		self_rating = rating;
+
+	    csrf_token = $('#csrf_token').val();
+		var desc = $('#' + taskid).html();
+		$("#ratingmodelheader").html(desc);
+		document.getElementById("assessmentRange").style.background = "#d3d3d3";
+		document.getElementById("assessmentRange").value = self_assessment;
+		document.getElementById("assessmentvalue").innerHTML = self_assessment;
+		for(var i=1;i<=10;i++){
+			document.getElementById(i).style.color = "gray";
+		}
+		for(var i=1;i<=self_rating;i++){
+			document.getElementById(i).style.color = "#ff9b00";
+		}
+		$('#Rating').modal('show');
+		
+		
+	}
+
+	function selfassessment(){
+		 
+		var slider = document.getElementById("assessmentRange");
+		var output = document.getElementById("assessmentvalue");
+		output.innerHTML = slider.value;
+		slider.oninput = function() {
+  		output.innerHTML = this.value;
+		}
+		self_assessment = slider.value
+		document.getElementById("assessmentRange").style.background = "#d3d3d3";
+		// if(slider.value<=30){
+		// 	document.getElementById("assessmentRange").style.background = "#ff0000";
+		// }else if(slider.value>30 && slider.value<=60){
+		// 	document.getElementById("assessmentRange").style.background = "#ff9b00";
+		// }else if(slider.value>60){
+		// 	document.getElementById("assessmentRange").style.background = "green";
+		// }else{
+		// 	document.getElementById("assessmentRange").style.background = "#d3d3d3";
+		// }
+	}
+
+	
+	function ratingclickFunction(d) {
+
+		self_rating = d;
+		for (var i = 1; i <= 10; i++) {
+			if (i <= self_rating) {
+				document.getElementById(i).style.color = "#ff9b00";
+			} else {
+				document.getElementById(i).style.color = "gray";
+			}
+		}
+
+	}
+
+	function ratingmouserating(e) {
+		for (var i = 1; i <= e; i++) {
+			if (i <= self_rating) {
+			// document.getElementById(i).style.color = "red";
+			} else {
+				document.getElementById(i).style.color = "rgba(255, 155, 0, 0.33)";
+			}
+		}
+	}
+
+	function ratingleaveFunction() {
+		for (var i = 1; i <= 10; i++) {
+			if (i <= self_rating) {
+				document.getElementById(i).style.color = "#ff9b00";
+			} else {
+				document.getElementById(i).style.color = "gray";
+			}
+		}
+	}
+
+	function rating_ajax(){
+		debugger
+		console.log("assessment",self_assessment);
+		console.log("rating",self_rating);
+		var target_rating = new FormData(); 
+		
+		target_rating.append( 'Task_id',task_id); 
+		target_rating.append( 'Task_rating',self_rating);
+		target_rating.append( 'Task_assessment',self_assessment);  
+		target_rating.append( 'csrf_token',csrf_token);
+		$.ajax({  
+			url:"{{ url_for('taskRatingUpdate') }}",
+			type: 'POST',
+			// cookies: { 'csrftoken': csrf_token },
+			// headers: { 'CSRFToken': csrf_token },
+			data: target_rating ,
+			processData: false,
+			contentType: false,
+            success: function( data ){
+				toastr.success('Task Rating Saved'); 
+				setTimeout(function () {location.reload()},600); 
+				   }
+        });  
+		
+
+	}
+
+	
+
+</script>
+<!-- <falg implemented code> -->
+{% endblock %} {% block content %}
+<br>
+<form id="form_1333" class="appnitro formFormat  formPadding " method="post" action="">
+	{{ form.hidden_tag() }} 
+</form>
+<div class="divMargin " id="tableborder" style="color: black">
+	<span>
+		<p>
+			<span style="font-size:large;">
+				<b>Employee Details</b>		
+			</span>
+		
+			<span style="float: right;font-size: large;border: 1px solid #752b2b;margin-right: 2%;padding: 4px;border-radius: 8px;">
+					Rating:{{goalSheet.finalRating}}
+			</span>
+			<!-- <span data-toggle="tooltip" data-placement="bottom" title="Score/MaxScore" style="float: right;font-size: large;padding: 6px;margin-right: 2%">
+				<span style="color:green">
+					{{goalSheet.score}}
+				</span>
+				<span>/</span>
+				<span style="color:red">
+					{{goalSheet.maxscore}}
+				</span>
+			</span> -->
+		</p>
+	</span>
+	
+	<table class="table table-striped table-dark">
+		<tr>
+
+			<td>EmployeeID: {{empInfo["EmployeeID"]}}</td>
+			<td>1st Level Manager: {{empInfo["Manager"]}}</td>
+			<td>Designation: {{empInfo["Designation"]}}</td>
+
+		</tr>
+		<tr>
+
+			<td>Department: {{empInfo["Project/Department"]}}</td>
+			<td>2nd Level Manager: {{empInfo["Manager2"]}}</td>
+			<td>Assessment Year: {{empInfo["Assessment Year"]}}</td>
+
+		</tr>
+		<tr>
+			<td>GoalSheet Status: {{goalSheet.status}}</td>
+			<!-- {% if goalSheet.status == "Assigned" or goalSheet.status == "Returned" -%}
+					 <td>{% if goalSheet.enable_mid_year_self %}<a href ='/goals/goalrequestapproval/{{goalSheet.id}}'>Mid-year Self Review</a>
+					{% elif goalSheet.enable_end_year_self %}<a href ='/goals/goalrequestapproval/{{goalSheet.id}}'>End-year Self Review</a>
+					{% elif goalSheet.enable_end_year_closure %}<a href ='/goals/goalrequestapproval/{{goalSheet.id}}'>End-year closure</a>
+					{% else %}<a href ='/goals/goalrequestapproval/{{goalSheet.id}}'>Request Approval</a>
+					{% endif -%}</td> 
+					<td></td>
+					<td></td>  
+					{% endif -%}					 -->
+			{% if goalSheet.minimum_tasks_exist %} 
+				{% if goalSheet.actionId %}
+					{% if goalSheet.enable_end_year_self and not goalSheet.self_all_tasks_assessment %}
+						<td style="color:red">Self Assess all Tasks and submit.</td>
+					{% else %}						
+					<td>
+						<a href="#" onclick="actionsweetalert()">{{goalSheet.actionString}}</a>
+					</td>
+					{% endif %}
+				{% else %}
+				<td>{{goalSheet.actionString}}</td>
+				{% endif %}
+			{% else %}
+				<td style="color:red">Add at least ONE task to each goal.</td>
+			{% endif %}
+
+			<td>Current Phase: {{goalSheet.phase}}</td>
+			
+
+		</tr>
+		<tr>
+			<td style="display: none">{{goalSheet.actionId}}</td>
+			<td></td>
+			<td></td>
+			<td></td>
+
+		</tr>
+
+	</table>
+</div>
+</br>
+<div class="divMargin " id="tableborder" style="color: black;margin-bottom: 22px;">
+	<div class="row">
+		<div class="col-md-6">
+			<p><span style="font-size: large;">
+					<b>Goal Details</b>		
+				</span></p>
+		</div>
+		<div class="col-md-6" style="text-align: right;padding-right: 3%">
+			<button class="btn btn-warning" onclick="feedbackScreen()" style="margin-right: 2%;" data-toggle="tooltip" data-placement="bottom" title="View Comments"><span class="glyphicon glyphicon-eye-open"></button>
+			{% if goalSheet.ask_feedback_enable %}
+			<button class="btn btn-warning" onclick="askfeedbackscreen()" data-toggle="tooltip" data-placement="bottom" title="Ask for feedback from anyone" style="margin-right: 2%;"><span class="glyphicon glyphicon-send"></button>
+			{% endif %}	
+			{% if goalSheet.phase == 'Assessment' %}	
+			<button class="btn btn-warning" onclick="ratingscreen({{empInfo['EmployeeID']}})" data-toggle="tooltip" data-placement="bottom" title="Rating" ><span class="glyphicon glyphicon-star"></button>
+			{% endif %}			
+	
+		</div>
+	</div>
+
+	<table class="table table-border">
+		<tr style=" background-color:black; color:white">
+			<td style="width:9%"></td>
+			<td style="width:40%" data-toggle="tooltip" data-placement="bottom" title="Goal Title">
+				<b>Goal Title</b>
+			</td>
+			<td></td>
+			<td style="text-align:center" data-toggle="tooltip" data-placement="bottom" title="Weightage(Mandatory)">Weightage(M)</td>
+			<td style="text-align:center" data-toggle="tooltip" data-placement="bottom" title="Start Date">Start Date</td>
+			<td style="text-align:center" data-toggle="tooltip" data-placement="bottom" title="End Date">End Date</td>
+			<!-- {%if goalSheet.enable_mid_year_self -%} -->
+			<td></td>
+			<!-- {% endif -%} -->
+			<td></td>
+			<td></td>
+			<td></td>
+			<td style="text-align:center"></td>
+			
+		</tr>
+
+		<tr>
+			{% for i in range(0, num) -%} {% set item = goalSections[i] -%}
+			<tr style=" background-color:#A9A9A9">
+				<td>
+					<b>
+						<i>Goal Section:</i>
+					</b>
+				</td>
+				<td>{{item.title}}</td>
+				<td></td>
+				<td style="text-align:center">{{item.weight}}</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td style="text-align:center"></td>
+			
+
+				{% for g in goals[i] -%}
+				<tr style=" background-color:wheat">
+					<td style="margin-right:5px;">
+						<b>Goal:</b>
+					</td>
+					<td >{{g.title}}</td>
+					<td></td>
+					<td style="text-align: center">{{g.weight}}({{g.manadator}})</td>
+					<td style="text-align:center">{{g.dateStart.strftime('%d-%m-%y')}}</td>
+					<td style="text-align:center">{{g.dateEnd.strftime('%d-%m-%y')}}</td>
+					<td style="text-align:center">{% if g.enable_edit and goalSheet.enable_self == False %}
+						<a href="/goals/tasksaddupdate/{{g.id}}">Add/Update Tasks</a>
+						{% else %}
+						<a href="/goals/tasksaddupdate/{{g.id}}">Manage Tasks</a>
+						{% endif %}
+					</td>
+					<td></td>
+					<td style="text-align:center"></td>
+					<td style="text-align:center"></td>
+					
+				</tr>
+
+
+
+
+				<tr>
+					{% for t in alltasks[g.id] -%}
+					<tr style=" background-color: rgba(245, 222, 179, 0.61);">
+						<td style="text-align:center">
+							<b>Task:</b>
+						</td>
+						<td id="{{t.id}}" class="find_all_id">{{t.description}}</td>
+						<td></td>
+						<td style="text-align:center">{{t.weight}}({{t.manadator}})</td>
+						<td style="text-align:center">{{t.dateStart.strftime('%d-%m-%y')}}</td>
+						<td style="text-align:center">{{t.dateEnd.strftime('%d-%m-%y')}}</td>
+						<td></td>
+						<td style="text-align:center">
+
+						{% if goalSheet.enable_self %}
+							<button type="button" class="btn btn-info btn-sm" onclick="feedbacKform('{{t.id}}','{{t.completionstatus}}')" data-toggle="tooltip" data-placement="bottom" title="Add Comments"><span class="glyphicon glyphicon-comment"></button>
+						{% endif %}				
+						</td>
+
+						<td style="text-align:center">
+							{% if t.file_upload_enable %}
+							<button type="button" id="uploadFileBtn{{t.id}}" class="btn btn-info btn-sm"  onclick="fileuploademp('{{t.id}}','{{t.completionstatus}}')" data-toggle="tooltip" data-placement="bottom" title="Upload File / Download"><span class="glyphicon glyphicon-upload"></span></button>
+							{% endif %}				
+							
+						</td>
+
+						<td style="text-align:center">
+							{% if goalSheet.enable_end_year_self %}
+								{% if t.selfAssessment == 0 %}
+									{% if t.selfRating == 0 %}
+											<button type="button" class="btn btn-info btn-sm "  onclick="Rating('{{t.id}}','{{t.selfRating}}','{{t.selfAssessment}}')" data-toggle="tooltip" data-placement="bottom" title="Rating"><span class="glyphicon glyphicon-star"></button>				
+										{% else %}
+											<button type="button" class="btn btn-info btn-sm "  onclick="Rating('{{t.id}}','{{t.selfRating}}','{{t.selfAssessment}}')" data-toggle="tooltip" data-placement="bottom" title="Rating"><span class="glyphicon glyphicon-star"></button>
+									{% endif %}
+								{% else %}
+									<button type="button" class="btn btn-success btn-sm "  onclick="Rating('{{t.id}}','{{t.selfRating}}','{{t.selfAssessment}}')" data-toggle="tooltip" data-placement="bottom" title="Rating"><span class="glyphicon glyphicon-star"></button>
+								{% endif %}
+							{% endif %}	
+						</td>
+
+							
+						
+						
+					</tr>
+					<tr style=" background-color: rgba(245, 222, 179, 0.29);">
+						<td style="text-align:right;">
+							<b>Activity:</b>
+						</td>
+						<td>{{t.personalNotes}}</td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					
+
+					</tr>
+
+					{%- endfor %}
+				</tr>
+				{%- endfor %}
+			</tr>
+
+			{%- endfor %}
+		</tr>
+	</table>
+</div>
+
+
+
+
+
+{% endblock %}

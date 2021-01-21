@@ -1,0 +1,30 @@
+{% extends "basegoals.html" %}
+{% block styles %}
+<style type="text/css">
+    .backgroundImage{
+		background-image: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+	<center><h3>Update Goal Section Element {{id}}</h3></center>
+	<table class="table table-border">
+		</table>		
+	<form id="form_1333" class="appnitro"  method="post" action="">
+		{{ form.hidden_tag() }}
+		<table>
+			<tr >
+				<br/><td style="width:200px; text-align:center">Title</td>
+				<td  style="width:300px">{{form.title(class="form-control input-sm")}}</td>
+			</tr>
+			
+			<tr>				
+				<td style="padding-left:86px"><br/>Description</td>
+				<td><br/>{{form.description(class="form-control input-sm")}}</td>
+			</tr>
+	
+		</table>
+		<br/>{{ form.submit(class="btn btn-primary", style="margin-left:87px") }}
+	</form>	
+{% endblock %}

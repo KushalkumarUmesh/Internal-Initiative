@@ -1,0 +1,29 @@
+{% extends "baseexam.html" %}
+{% block styles %}
+<style type="text/css">
+   .backgroundImage{
+		
+        height:-webkit-fill-available;
+		
+	}
+</style>
+{% endblock %}
+{% block content %}
+	<div id="form_container">	
+		<h2><i>Welcome to Online Exam Home Page</i></h2>
+		<p>Based on your profile you have following options:</p>
+		<p><a href="exam/listassignments">List Tests assigned and view Question Set</a></p>
+		{% if current_user.is_authenticated %}
+			{% if current_user.is_admin %}
+			<p style="color:darkred">For Admin Only:</p>
+			<p><a href="exam/listtests">List availble Tests and assign Tests</a></p>
+			<P><a href="/listgroups">Group Management </a></P>
+			
+			<p><a href="/makenormal">Make me a Non-Admin User</a></p>
+		
+			{% endif %}
+		{% endif %}
+
+		
+	</div>
+{% endblock %}

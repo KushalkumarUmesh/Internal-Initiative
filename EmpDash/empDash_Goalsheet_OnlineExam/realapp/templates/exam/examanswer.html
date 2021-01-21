@@ -1,0 +1,103 @@
+{% extends "baseexam.html" %}
+{% block content %}
+<style type="text/css">
+    .backgroundImage{
+		background-image: none !important;
+	}
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script language="javascript">
+var timer2 = "00:20";
+
+ window.onload=function(){ 
+    window.setTimeout(function() { 
+		$('#submit').trigger('click');
+	},Number(timer2.split(':')[1])*1000);
+	}; 
+
+var interval = setInterval(function() {
+
+
+  var timer = timer2.split(':');
+  //by parsing integer, I avoid all extra string processing
+  var minutes = parseInt(timer[0], 10);
+  var seconds = parseInt(timer[1], 10);
+  --seconds;
+  minutes = (seconds < 0) ? --minutes : minutes;
+ 
+
+  if (minutes < 0) clearInterval(interval);
+  seconds = (seconds < 0) ? 59 : seconds;
+  seconds = (seconds < 10) ? '0' + seconds : seconds;
+  //minutes = (minutes < 10) ?  minutes : minutes;
+  $('.countdown').html(minutes + ':' + seconds);
+  timer2 = minutes + ':' + seconds;
+}, 1000);
+	
+</script>
+<h3><center>Question Paper</center></h3>
+<table style="margin-left: 1078px">
+	<tr style="position:fixed">
+		<td style="font-size:17px">Time Left : </td>
+		<td class="countdown" style="color:crimson; font-size:24px"></td>
+	</tr>
+</table>
+
+
+<div class="row">
+	<div style="margin-left:14px">
+		<b>Test Name: {{exam.testName}}</b>
+	</div>
+	<div style="margin-left:14px">
+		<b>Candidate Name: {{exam.candiateEmail}} </b>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-2">
+		<b>No. of questions: {{exam.numQuestions}}</b>
+	</div>
+	<div class="col-lg-2">
+		<b>Qualifying Score: {{exam.passNum}} </b>
+	</div>
+</div>
+
+<form id="form_1333" class="appnitro"  method="post" action="">
+		{{ form.hidden_tag() }}
+		<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th colspan="2">
+					Questions
+				</th>
+			</tr>
+		</thead>
+		
+		<tbody>
+				{% for i in range(numq) -%}
+				{% set q = form.questions[i] -%}
+			<tr>
+				<td>
+					Q {{loop.index}}
+				</td>
+				<td>
+					{{q.ques}}
+				</td>						
+			</tr>
+			<tr>
+				<td>
+					Ans
+				</td>
+				<td>
+					{{q.answer}}
+				</td>						
+			</tr>
+		
+			{%- endfor %}
+		</tbody>
+		
+	</table>	
+	<center  style="padding:10px">{{ form.submit(class="btn btn-success") }}</center>
+</form>	
+
+{% endblock %}

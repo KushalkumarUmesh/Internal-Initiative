@@ -1,0 +1,67 @@
+{% extends "baseexam.html" %}
+{% block content %}
+<script language="javascript">
+  
+		function starttest(url) {
+			var win = window.open(url, '_blank');
+		}
+		function declinetest(url) {
+			var win = window.location.replace(url);
+		}
+		   
+	   </script>
+	   </head>
+	   <body>
+	   
+<h3>Start of Exam {{exam.testName}}</h3>
+
+<p style="color:crimson">Please note that accepting the conditions of the test and clicking the "Accept" button, starts the exam.</p>
+	<a data-toggle="modal" data-target="#starttest1" target='_blank' class="btn btn-success ">Accept and Continue </a>
+	<a  data-toggle="modal" data-target="#starttest2" target='_blank'href  class="btn btn-danger">Decline and take the exam later</a>
+</form>	
+  <!-- Modal -->
+  <div id="starttest1" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+	  
+		  <!-- Modal content-->
+		  <div class="modal-content">
+			<div  style="background-color: darkgrey;"class="modal-header">
+			  <button type="button" class="close" data-dismiss="modal">&times;</button>
+			  <h4 class="modal-title">Start confirmation</h4>
+			</div>
+			<div class="modal-body">
+			  <p><h5>Are you want start the test?</h5></p>
+			</div>
+			<div class="modal-footer">
+			  <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="starttest('{{accept}}')">Ok</button>
+			  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			</div>
+		  </div>
+	  
+		</div>
+	  </div>
+	  <!-- Modal -->
+  <div id="starttest2" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+	  
+		  <!-- Modal content-->
+		  <div class="modal-content">
+			<div  style="background-color: darkgrey;"class="modal-header">
+			  <button type="button" class="close" data-dismiss="modal">&times;</button>
+			  <h4 class="modal-title">Delete confirmation</h4>
+			</div>
+			<div class="modal-body">
+			  <p><h5> You want to decline the test?</h5></p>
+			</div>
+			<div class="modal-footer">
+			  <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="declinetest('{{decline}}')">Ok</button>
+			  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			</div>
+		  </div>
+	  
+		</div>
+	  </div>
+	  
+	  
+
+{% endblock %}

@@ -1,0 +1,63 @@
+.backgroundImage{
+    background-size: cover;
+    background-position: center;
+    background-image: url(../static/images/pen_bg.jpg);
+    margin-top:50px;
+}
+
+.backgroundImage1{
+    background-size: cover;
+    background-position: center;
+    background-image: url(../static/images/as.jpg);
+    margin-top:80px;
+    opacity: 0.9;
+}
+
+.login-grid{
+    width: 400px;
+    margin: auto;
+    margin-top: 100px;
+    background: black;
+    border-radius: 5px;
+}
+.header-login{
+    font-weight:bold;
+    color:black;
+}
+.login-btn{
+    background:#484141;
+    border: 1px solid #484141;
+    margin:20px;
+}
+.text-white{
+    color: white !important;
+}
+.text-black{
+    color: black !important;
+}
+/* header nav css */
+nav a{
+    font-weight: 700;
+    color:#0F4B3B !important;
+}
+.examlist-header{
+    background: black;
+    color: white;
+    font-weight: 700;
+}
+.each-exam{
+    background: #433D3D;
+    font-weight: 700;
+    color: white;
+}
+.topheader{
+    display: flex; 
+    position: absolute;
+    right: 0px;
+   
+    
+}
+.header-top{
+    position: relative;
+
+}

@@ -1,0 +1,520 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Base template</title>
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+  <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+ 
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/static/sticky-footer.css">
+  <link rel="stylesheet" type="text/css" href="/static/custom.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" >
+ 
+
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+   {% block styles %} {%
+  endblock %}
+  <style type="text/css">
+  #contain{
+  
+   margin:5%;
+   width:100%;
+   
+}
+.fa{
+  margin:5px;
+  display:inline-block;
+  font-size: 40px;
+  cursor:pointer;
+  color:gray;
+}
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 15px;
+  border-radius: 5px;   
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%; 
+  background: black;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: black;
+  cursor: pointer;
+}
+  </style>
+
+  <script language="javascript">
+
+   
+
+     $(window).on("load", function () {
+
+//browser check if not crome and mozilla then execute this function
+var ua = window.navigator.userAgent;
+
+var msie = ua.indexOf('MSIE ');
+if (msie > 0) {
+// IE 10 or older => return version number
+
+sweetalertbrowsercheck();
+return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+
+}
+
+var trident = ua.indexOf('Trident/');
+if (trident > 0) {
+// IE 11 => return version number
+var rv = ua.indexOf('rv:');
+sweetalertbrowsercheck();
+return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+
+}
+
+var edge = ua.indexOf('Edge/');
+if (edge > 0) {
+// Edge (IE 12+) => return version number
+sweetalertbrowsercheck();
+return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+
+}
+
+var chrome = ua.indexOf('Chrome/');
+if(navigator.userAgent.indexOf("Chrome") != -1 )
+{
+ 
+ return parseInt(ua.substring(chrome + 5, ua.indexOf('.', chrome)), 10);;
+}
+
+var firefox = ua.indexOf('Firefox/');
+if(navigator.userAgent.indexOf("Firefox") != -1 ) 
+{
+
+  return parseInt(ua.substring(firefox + 5, ua.indexOf('.', firefox)), 10);;
+}
+
+// other browser
+sweetalertbrowsercheck();
+return false;
+})
+
+
+    function sweetalertsignout() {
+      swal({
+        title: "Are you sure you want to logout?",
+        text: "Click OK to logout or Click CANCEL to Stay Login",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+        .then((willDelete) => {
+          if (willDelete) {
+            swal("!! You Logged Out Successfully", {
+              icon: "success",
+            })
+
+            setTimeout(signout, 700);
+
+          }
+        });
+    } 
+
+    //this is for alert box if using internet explor or edge.
+    function sweetalertbrowsercheck(){
+      swal({
+        title: "Please use Chrome or Firefox browser",
+        text: "Please use Chrome or Firefox browser only and access GoalSheet. If you still using browser other then Chrome or Firefox then may be some of feature is not available to you and on every page this alert message will trigger.",
+        icon: "error",
+        buttons: true,
+        dangerMode: true,
+      })
+        .then((willDelete) => {
+          if (willDelete) {
+            swal("!! Please switch to Chrome or Firefox", {
+              icon: "warning",
+            })
+
+            setTimeout(disabledcontrol(), 700);
+
+          }
+        });
+    }
+
+    function disabledcontrol(){
+      $("#viewlink").hide();
+      $("#loginlink").hide();
+      $("#reporteeslink").hide();
+    }
+      
+    
+    function signout() {
+      window.location.href = '/logout/goalsheet';
+    }
+    $('[data-toggle="tooltip"]').tooltip();
+
+    function message() {
+
+      $('#message').modal('show');
+    }
+    
+    $('.countCharacter').keypress(function () {
+     
+
+    if (this.value.length > 400) {
+      return false;
+    }
+    $("#remainingC2").html("Remaining characters : " + (400 - this.value.length));
+  });
+
+  $('.countCharacterAdd').keypress(function () {
+     
+
+    if (this.value.length > 400) {
+      return false;
+    }
+    $("#remainingC").html("Remaining characters : " + (400 - this.value.length));
+  });
+
+  var s = 0;
+
+ function countCharcomment(val) {
+             
+             var len = val.value.length;
+             if (len >= 800){
+                 $("#charcountdiv1").css("color","red");
+             }else{
+                 $("#charcountdiv1").css("color","black");
+             }
+             if (len >= 1001) {
+               val.value = val.value.substring(0, 1001);
+             } else {
+               $('#charNum1').text(1000 - len);
+             }
+           };
+
+           function resetcomment(){
+             $('#dc_feedback').val(null);
+             $('#charNum1').text(1000);
+           }
+
+           function countChar10(val) {
+            
+             var len = val.value.length;
+             if (len > 300){
+                 $("#taskcommentcount").css("color","red");
+             }else{
+                 $("#taskcommentcount").css("color","black");
+             }
+             if (len >= 401) {
+               val.value = val.value.substring(0, 401);
+             } else {
+               $('#charNum10').text(400 - len);
+             }
+           };
+
+        
+  </script>
+</head>
+
+<body>
+
+  <!-- Fixed navbar -->
+  <header>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+            aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img src="https://www.msg-global.com/images/msg-global/msg-global-logo.png" alt="">
+          </a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse header-top">
+          <ul class="topheader" style=" font-size:17px;z-index:1;margin-top:15px;width: 6%;">
+            {% if current_user.is_authenticated %}
+            {% if current_user.is_admin or current_user.is_dclead %}
+            <li style="margin-right: 20%">
+              <a href="/goals/sheetupdate" data-toggle="tooltip" data-placement="bottom" title="Change assessing Manager">
+                <span class="glyphicon glyphicon-retweet"></span>
+              </a>
+            </li>
+            {% endif %}
+            <li style="margin-right: 20%;">
+              <a href="/goals/myprofile" data-toggle="tooltip" data-placement="bottom" title="My Profile!">
+                <span class="	glyphicon glyphicon-user"></span>
+              </a>
+            </li>
+            <li>
+              <a href="#" onclick="sweetalertsignout()" data-toggle="tooltip" data-placement="bottom" title="Sign Out">
+                <span class="glyphicon glyphicon-off"></span>
+              </a>
+            </li>
+
+            {% else %}
+            <li style="margin-right: 25px;" id="loginlink">
+              <a href="/login/goalsheet" data-toggle="tooltip" data-placement="bottom" title="Sign In!">
+                <span class="	glyphicon glyphicon-off"></span>
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+          <ul class="nav navbar-nav" style="margin-right: 6%">
+            {% if current_user.is_authenticated %}
+
+            <li class="header-login"> 
+              <a>Welcome {{ current_user.username }}!</a>
+            </li>
+            <li>
+              <a href="/goals/givefeedback">Feedback</a>
+            </li>
+            {% if current_user.is_admin or current_user.is_dclead or current_user. is_Manager %} 
+            {% if current_user.is_admin %}
+            <li>
+              <a href="/goals/assigngoals">Assign Goals</a>
+            </li>
+            {% endif %}
+            {% if current_user.is_admin or current_user.is_dclead or current_user. is_Manager %} 
+            <li id="reporteeslink">
+              <a href="/goals/goalsheetsformanager_reportees">Reportees Status</a>
+            </li>
+            {% endif %}
+            {% endif %} {% endif %}
+            <li style="margin-right: 2px;" id="viewlink">
+              <a href="/goals/goalsetupdate">View My Goals</a>
+            </li>
+
+
+            <!-- <li><a href="">Mark a Goal Complete</a></li> -->
+          </ul>
+
+          <!-- <li style="
+                font-size: 11px;
+                bottom: 50px;
+                float: NONE !IMPORTANT;
+                left: 475px;
+            "><a href="/login">Sign In</a></li>
+            <li style="
+                font-size: 11px;
+                bottom: 100px;
+                float: NONE !IMPORTANT;
+                left: 404px;
+            "><a href="/login">My Profile</a></li> -->
+          <!--{% if current_user.is_authenticated %}
+              <li><a href="/logout">Sign out</a></li>
+            {% else %}
+            
+            {% endif %}
+              {% if current_user.is_anonymous %}
+              <li><a href="{{ url_for('login') }}">Login</a></li>
+              {% else %}
+              <li><a href="{{ url_for('login') }}">Logout/a></li>
+              {% endif %} -->
+        </div>
+        <!-- <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li class="dropdown-header">Nav header</li>
+                  <li><a href="#">Separated link</a></li>
+                  <li><a href="#">One more separated link</a></li>
+                </ul>
+              </li> -->
+
+      </div>
+      <!--/.nav-collapse -->
+    </nav>
+  </header>
+
+
+  <!-- Begin page content -->
+  <div class="container-fluid backgroundImage" style="min-height:Calc(100vh - 50px);">
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <ul>
+      {% for message in messages %}
+      <li style="margin-top: 15px;">
+        <div class="alert alert-danger alert-dismissible">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+          <strong>{{message}}</strong>.
+        </div>
+      </li>
+
+
+      {% endfor %}
+    </ul>
+    {% endif %} {% endwith %} {% block content %}{% endblock %}
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="text-muted text-center">
+        <b>
+          <span class="footer-green">msg global Solutions</span> &copy; 2018</b>
+      </p>
+    </div>
+  </footer>
+  <!-- Modal using for Feedback form for dc lead exist in managersheetshow.html -->
+  <div id="feedbackform" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div style="background-color: black;padding: 2%;" class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" style="color: white"><span style="margin: 3%;" class="glyphicon glyphicon-remove-sign"></button>
+           <h4 class="modal-title" id="feedbackheader" style="color: white    "> </h4>
+        </div>
+        <div class="modal-body">
+          <div>
+            <form>
+              <label>Previous Comments</label>
+              <ul class="employee_fb_list" style="list-style-type: disc;">
+
+              </ul>
+
+              <br>
+              <label>Feedback</label>
+              <textarea class="form-control input-md countCharacterAdd" id="dc_feedback" onkeyup="countCharcomment(this)" maxlength="1000" placeholder="Enter Your Valuable Feedback Here..."></textarea>
+              <div class="col-md-12 col-sm-12 col-xs-12" style="padding: 0%;" id="charcountdiv1">
+                <p style="float:right"><span  id="charNum1">1000</span> characters remaining</p>
+            </div>
+              <br>
+              <p id="remainingC"></p>
+            </form>
+
+          </div>
+          <div class="modal-footer" style="padding-bottom: 0px;">
+            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="feedbacKformsubmit()">Submit</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="resetcomment()">Cancel</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+ <!-- Modal using for upload file from employee,dc-lead and manager screen -->
+ <div id="fileupload" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div style="background-color: black;padding: 2%;" class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" style="color: white"><span style="margin: 3%;" class="glyphicon glyphicon-remove-sign"></button>
+        <h4 class="modal-title" id="fileuploadheader" style="color: white    "> </h4>
+      </div>
+      <div class="modal-body">
+        <div>
+          <div id="uplaodfileoption">
+              <p style="color:blue">Only one file per Task can be uploaded</p>
+              <input type="file" id="fileuploadinput" />
+          </div>
+        
+          <br>
+         
+           
+            <p id="downloadlink"></p>
+        
+        </div>
+        <div class="modal-footer" style="padding-bottom: 0px;">
+          <button type="button" id="upload_popup_btn" class="btn btn-success" data-dismiss="modal" onclick="uploadfileajax()">Upload</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal" onclick="resetuploadbtn()">Cancel</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  </div>
+
+
+  <!-- Modal using for rating in employee screen and managerscreen -->
+  <div id="Rating" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div style="background-color: black;padding: 2%;" class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" style="color: white"><span style="margin: 3%;" class="glyphicon glyphicon-remove-sign"></button>
+          <h4 class="modal-title" id="ratingmodelheader" style="color: white    "> </h4>
+        </div>
+        <div class="modal-body">
+          <div>
+              <span><i></i><p><b>% Completion of Task:</b></p></span>
+              <input type="range" min="0" max="100" value="0" step="10"   class="slider" id="assessmentRange" data-orientation="vertical" onchange="selfassessment()">
+              <p style="text-align:center">Value: <span id="assessmentvalue">0</span>%</p>
+            <div id="contain">
+              <span><i></i><p><b>Task Assessment in meeting expectations:</b></p></span>
+              <span><i class="fa fa-star" aria-hidden="true" id="1" onmouseenter="ratingmouserating(this.id)" onclick="ratingclickFunction(this.id)" onmouseleave="ratingleaveFunction()"></i></span>
+              <span><i class="fa fa-star" aria-hidden="true" id="2" onmouseenter="ratingmouserating(this.id)" onclick="ratingclickFunction(this.id)" onmouseleave="ratingleaveFunction()"></i></span>
+              <span><i class="fa fa-star" aria-hidden="true" id="3" onmouseenter="ratingmouserating(this.id)" onclick="ratingclickFunction(this.id)" onmouseleave="ratingleaveFunction()"></i></span>
+              <span><i class="fa fa-star" aria-hidden="true" id="4" onmouseenter="ratingmouserating(this.id)" onclick="ratingclickFunction(this.id)" onmouseleave="ratingleaveFunction()"></i></span>
+              <span><i class="fa fa-star" aria-hidden="true" id="5" onmouseenter="ratingmouserating(this.id)" onclick="ratingclickFunction(this.id)" onmouseleave="ratingleaveFunction()"></i></span>
+              <span><i class="fa fa-star" aria-hidden="true" id="6" onmouseenter="ratingmouserating(this.id)" onclick="ratingclickFunction(this.id)" onmouseleave="ratingleaveFunction()"></i></span>
+              <span><i class="fa fa-star" aria-hidden="true" id="7" onmouseenter="ratingmouserating(this.id)" onclick="ratingclickFunction(this.id)" onmouseleave="ratingleaveFunction()"></i></span>
+              <span><i class="fa fa-star" aria-hidden="true" id="8" onmouseenter="ratingmouserating(this.id)" onclick="ratingclickFunction(this.id)" onmouseleave="ratingleaveFunction()"></i></span>
+              <span><i class="fa fa-star" aria-hidden="true" id="9" onmouseenter="ratingmouserating(this.id)" onclick="ratingclickFunction(this.id)" onmouseleave="ratingleaveFunction()"></i></span>
+              <span><i class="fa fa-star" aria-hidden="true" id="10" onmouseenter="ratingmouserating(this.id)" onclick="ratingclickFunction(this.id)" onmouseleave="ratingleaveFunction()"></i></span>
+          </div>
+          <div style="display:none" id="taskLevel_comment">
+            <textarea class="form-control input-md countCharacterAdd" id="task_comments"   placeholder="Enter Your Task-Level Feedback Here..." onkeyup="countChar10(this)", maxlength="400"></textarea>
+            <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12" style="text-align:right" id="taskcommentcount"> 
+            <p><span  id="charNum10">400</span> characters remaining</p>
+            </div>
+          </div>
+         
+              
+          </div>
+          <div class="modal-footer" style="padding-bottom: 0px;">
+            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="rating_ajax()">Submit</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="reset_rating_btn()">Cancel</button>
+          </div>
+        </div>
+  
+      </div>
+    </div>
+    </div>
+
+
+
+
+
+
+</body>
+
+<script language="javascript">
+
+ 
+
+
+</script>
+
+
+</html>
