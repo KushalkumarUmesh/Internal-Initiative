@@ -1,0 +1,21 @@
+{% extends "reviewApp/layoutD.html" %}
+
+{% block content %}
+  <div class="Task">
+    <h1>Checklist Review Task</h1>
+  </div>
+<!-- <div class="center">
+	<h2 style ="font-size:35px;">Select the operation you want to perform:</h2><br>  
+  <form  action="">
+    <ul class="projlist">
+      {% if userlevel == 1 %}
+        <a href="{{ url_for('create_new_project') }}" class="button button1">Create New project</a>
+      {% endif %}
+      {% if userlevel != 3 %}
+        <a href="{{ url_for('edit_existing_project') }}" class="button button2">Edit Existing Project</a>
+      {% endif %}
+      <a href="{{ url_for('update_tracker') }}" class="button button3">Update Tracker</a>
+    </ul>
+  </form>
+</div> -->
+{% endblock %}                 

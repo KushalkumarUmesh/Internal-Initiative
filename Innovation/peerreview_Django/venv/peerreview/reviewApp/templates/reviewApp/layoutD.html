@@ -1,0 +1,35 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>  
+<link rel="stylesheet" type="text/css" href="{% static 'reviewApp/main.css' %}" >
+<body class="loginBody"></body>   
+{% if title %}
+    <title>{{title}}</title>
+{% else %}
+    <title> </title>
+{% endif %}
+</head> 
+<body>
+<div class="header">
+    <div>
+        <a class="Logo" href="/home"><img style="float:left" id="CompanyLogo" src="{% static 'reviewApp/MSG-logo.jpg' %}" height="70"
+                width="150"></a>    
+    </div>
+    <div class="topnav"> 
+        {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}">Logout</a>
+        <a>{{ user.username }}</a>
+        {% endif %}
+    </div>
+</div>
+   
+{% block content %}{% endblock %}
+<div class="footer">
+    <div><span class="name"><b>msg global solution</span> <span class="year">@2020</span></div>
+</div>
+
+</body>
+
+  

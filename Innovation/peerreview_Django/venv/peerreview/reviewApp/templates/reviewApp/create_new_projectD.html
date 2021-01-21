@@ -1,0 +1,256 @@
+{% extends "reviewApp/layoutD.html" %}
+
+{% block content %}
+<div class="header">
+    <h2 style="padding-left:13%";>CREATE PROJECT</h2>
+</div>
+<div class="fullcontainer">
+  <div class="container">
+    <div class="row">
+    <div class="col-xs-12">
+      <form  action="" method="POST">
+        <div>
+            <p class="subheader"><b>Enter Project Name : <input type="text" id="Projname" name="Projectname" ></b></p>
+        </div>
+        <br>
+        <div class="selected-head collapsible"> <b>Select Applicable Checklists/Standards:</b>
+        </div>
+        <br>
+        <br>
+        <div class="content">
+          <div class="head">
+            <input type="checkbox" id="manualtesting" value="Manual Testing" name="manual-chkbox">
+            <label for="manualtest"><b>Manual Testing</b></label>
+          </div>
+          <ul class="checklist" >
+          <li>
+          <input type="checkbox" id="defectchklist" value="Defect Checklist" name="manual-defect-chkbox">
+          <label for="defectchklist">Defect Checklist</label></li>
+          <li>
+          <input type="checkbox" id="testcasechklist" value="TestCase Checklist" name="manual-testcase-chkbox">
+          <label for="testcasechklist">Test Case Checklist</label></li>
+          <li>
+          <input type="checkbox" id="reqtramatrixchklist" value="Req Traceability" name="manual-reqtrace-chkbox">
+          <label for="reqtramatrixchklist">Requirement Traceability Checklist</label></li>
+          </ul>
+          <div class="head">
+            <input type="checkbox" id="automationtesting" value="Automation Testing" name="auto-chkbox">
+            <label for="autotest"><b>Automation Testing</b></label>
+          </div>
+          <ul class="checklist">
+          <li>
+          <input type="checkbox" id="autostdchklist" value="Automation Standards" name="auto-autostd-chkbox">
+          <label for="autostdchklist">Automation Standards Checklist</label></li>
+          <li>
+          <input type="checkbox" id="pythonchklist" value="Python Standards" name='auto-python-chkbox'>
+          <label for="pythonchklist">Python Standards</label></li>
+          <li>
+          <input type="checkbox" id="javachklist" value="Java Standards" name="auto-java-chkbox">
+          <label for="javachklist">JAVA Standards</label></li>
+          <li>
+          <input type="checkbox" id="c#chklist" value="C# Standards" name="auto-c#-chkbox">
+          <label for="c#chklist">C# Standards</label></li>
+          <li>
+          <input type="checkbox" id="toscachklist" value="TOSCA Standards" name="auto-tosca-chkbox">
+          <label for="toscachklist">TOSCA Standards</label></li>
+          <li>
+          <input type="checkbox" id="ufttchklist" value="UFT Standards" name="auto-uft-chkbox">
+          <label for="ufttchklist">UFT Standards</label></li>
+          </ul>
+          <div class="head">
+            <input type="checkbox" id="management" value="Management" name="mgmt-chkbox">
+            <label for="management"><b>For Management</b></label>
+          </div>
+          <ul class="checklist">
+          <li>
+            <input type="checkbox" id="testplanchklist" value="TestPlan Checklist" name="mgmt-testplan-chkbox">
+            <label for="testplanchklist">Test Plan Checklist</label>
+          </li>
+          <li>
+            <input type="checkbox" id="testreportchklist" value="TestReport Checklist" name="mgmt-testreport-chkbox">
+            <label for="testreportchklist">Test Report Checklist</label>
+          </li>
+          <li>
+          <input type="checkbox" id="testenvchklist" value="Test SetUp Checklist" name="mgmt-testenvtsetup-chkbox">
+          <label for="testenvchklist">Test Environment SetUp Checklist</label>
+          </li>
+          </ul>
+          <div class="head">
+            <input type="checkbox" id="performance" value="Performance Testing" name="performance-chkbox">
+            <label for="performance"><b>Performance Testing</b></label>
+          </div>
+          <div class="head">
+            <input type="checkbox" id="security" value="Security Testing" name="security-chkbox">
+            <label for="security"><b>Security Testing</b></label>
+          </div>
+        </div>
+        <div>
+        <br>
+          <p class="subheader"><b>Select SPOC:
+          <select name="spoc" id="spoclist">
+          <option value=""></option>
+            <option value="manohar">Manohar Janardhana</option>
+            <option value="merlin">Merlin Pradeep</option>
+            <option value="soumya">Soumya Nair</option>
+            <option value="abhijit">Abhijit De</option>
+            <option value="venkat">Venkataraman Rajasekaran</option>
+          </select></b></p>
+        </div>
+        <br>
+        <div class="selected-head collapsible1"> <b>Select Resources to be reviewed :</b></div>
+        <br>
+        <div class="content1">
+          <div class="Available">
+            <select multiple="multiple" id="lstBox1" name="lstBox1" class="form-control" >
+              <option value="Harshita">Harshita</option>
+              <option value="Jyothi">Jyothi</option>
+              <option value="Sai">Sai</option>
+              <option value="Spoorthi">Spoorthi</option>
+              <option value="Pooja">Pooja</option>
+              <option value="Soumya">Soumya</option>
+            </select>
+          </div>
+          <div class="subject-info-arrows text-center">
+            <input type="button" id="btnAllRight" value=">>" class="btn btn-default" /><br />
+            <input type="button" id="btnRight" value=">" class="btn btn-default" /><br />
+            <input type="button" id="btnLeft" value="<" class="btn btn-default" /><br />
+            <input type="button" id="btnAllLeft" value="<<" class="btn btn-default" />
+          </div>
+          <div class="Selected">
+            <select multiple="multiple" id="lstBox2" class="form-control" name="lstBox2"></select>
+          </div>
+          <br>
+          </div>
+          <!-- <div class="selected-head collapsible2"> <b>Select Frequency of Review:</b></div>
+          <br> -->
+          <div>
+            <br>
+            <p class="subheader"><b>SELECT FREQUENCY OF REVIEW:
+                    <select name="spoc" id="daylist" class="required" data-error="Enter frrquency">
+                        <option value="">Select</option>
+                        <option value="Daily">Daily</option>
+                        <option value="Weekly">Weekly</option>
+                        <option value="Bi Weekly">Bi Weekly</option>
+                        <option value="Monthly">Monthly</option>
+                    </select></b>
+            </p>
+          </div>
+          <div class="col-xs-12 text-center"><button class="buttonsubmit" id="submit">SUBMIT</button></div>
+      </form>
+      </div>
+    </div>
+  </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+var locdropdiv = document.querySelector(".content");
+var shwactive = document.querySelector(".collapsible")
+  document.querySelector(".collapsible").addEventListener('click',function() {
+  if(locdropdiv.style.display === "block") {
+  locdropdiv.style.display="none";
+  shwactive.classList.remove("active");
+  }
+  else {
+  locdropdiv.style.display="block";
+  shwactive.classList.add("active");
+  }
+  });
+
+
+var locdropdiv1 = document.querySelector(".content1");
+var shwactive1 = document.querySelector(".collapsible1")
+  document.querySelector(".collapsible1").addEventListener('click',function() {
+  if(locdropdiv1.style.display === "block") {
+  locdropdiv1.style.display="none";
+  shwactive1.classList.remove("active");
+  }
+  else {
+  locdropdiv1.style.display="block";
+  shwactive1.classList.add("active");
+  }
+  });
+
+  var locdropdiv2 = document.querySelector(".content2");
+var shwactive2 = document.querySelector(".collapsible2")
+  document.querySelector(".collapsible2").addEventListener('click',function() {
+  if(locdropdiv2.style.display === "block") {
+  locdropdiv2.style.display="none";
+  shwactive2.classList.remove("active");
+  }
+  else {
+  locdropdiv2.style.display="block";
+  shwactive2.classList.add("active");
+  }
+  });
+
+
+  var solutionLinks = document.querySelectorAll("[type=checkbox]");
+   for (var checkbox of solutionLinks) {
+    checkbox.addEventListener('change', function(event) {
+      if (event.target.checked) {
+    this.parentNode.nextElementSibling.classList.add("show");
+  }
+  else {
+  this.parentNode.nextElementSibling.classList.remove("show");
+  }
+});
+$(document).ready(
+            function() {
+                $('#btnRight').click(
+                    function(e) {
+                        $('#lstBox1 > option:selected').appendTo('#lstBox2');
+                        e.preventDefault();
+                    });
+
+                $('#btnAllRight').click(
+                function(e) {
+                    $('#lstBox1 > option').appendTo('#lstBox2');
+                    e.preventDefault();
+                });
+
+                $('#btnLeft').click(
+                function(e) {
+                    $('#lstBox2 > option:selected').appendTo('#lstBox1');
+                    e.preventDefault();
+                });
+
+                $('#btnAllLeft').click(
+                function(e) {
+                    $('#lstBox2 > option').appendTo('#lstBox1');
+                    e.preventDefault();
+                });
+
+            });
+			$(document).ready(
+            function() {
+                $('#btnRight').click(
+                    function(e) {
+                        $('#lstBox1 > option:selected').appendTo('#lstBox2');
+                        e.preventDefault();
+                    });
+
+                $('#btnAllRight').click(
+                function(e) {
+                    $('#lstBox1 > option').appendTo('#lstBox2');
+                    e.preventDefault();
+                });
+
+                $('#btnLeft').click(
+                function(e) {
+                    $('#lstBox2 > option:selected').appendTo('#lstBox1');
+                    e.preventDefault();
+                });
+
+                $('#btnAllLeft').click(
+                function(e) {
+                    $('#lstBox2 > option').appendTo('#lstBox1');
+                    e.preventDefault();
+                });
+
+            });
+}
+
+</script>
+</div>
+{% endblock %}

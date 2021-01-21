@@ -1,0 +1,19 @@
+{% extends "reviewApp/layoutD.html" %}
+
+{% block content %}
+<!-- <div class="Loginheader" id="myHeader">
+    <h2 style="padding-left:47%;">PEER-REVIEW</h2>
+</div> -->
+<div class="loginbox">
+    <h3><b>Login</b></h3>
+    <form method="POST" action="">
+        {% csrf_token %}
+        <div class="inputbox">
+            {{ form }}
+        </div>
+        <button class="signIn" type="submit" name="submit">Log In</button></input><br><br>
+        <br>
+        <br>
+    </form>
+</div>
+{% endblock %}

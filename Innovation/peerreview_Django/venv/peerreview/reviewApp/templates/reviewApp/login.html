@@ -1,0 +1,48 @@
+<html>
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="Loginheader" id="myHeader">
+    <h2 style="padding-left:47%;">PEER-REVIEW</h2>
+</div>
+<div class="loginbox">
+    <h3><b>Login</b></h3>
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <div class="inputbox">
+            {% if form.email.errors %}
+            <input id="credentials" type="text" class="is-invalid" name="email" required=""
+                name="email"></input><br><br>
+            <div class="invalid-feedback">
+                {% for error in form.email.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% else %}
+            <input id="credentials" type="text" required="" name="email"></input><br><br>
+            {% endif %}
+            <label id="loginLabel">Employee Email </label>
+        </div>
+        <div class="inputbox">
+            {% if form.password.errors %}
+            <input id="credentials" type="Password" class="is-invalid" name="password" required=""></input><br><br>
+            <div class="invalid-feedback">
+                {% for error in form.password.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% else %}
+            <input id="credentials" type="Password" name="password" required=""></input><br><br>
+            {% endif %}
+            <label id="loginLabel">Password </label>
+        </div>
+
+        <button class="signIn" type="submit" name="submit">LogIn</button></input><br><br>
+        <a class="Forgot" href="{{ url_for('reset') }}" target="blank">Forgot Password?</a>
+        <br>
+        <br>
+    </form>
+
+
+</div>
+{% endblock %}
